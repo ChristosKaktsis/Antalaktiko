@@ -107,16 +107,11 @@
                         <Label Text="Επιλογή Όλων" TextColor="{StaticResource Primary}"/>
                         <CheckBox HorizontalOptions="EndAndExpand"/>
                     </StackLayout>
+                    <ActivityIndicator IsRunning="{Binding IsBusy}"/>
                     <dxcv:DXCollectionView HeightRequest="400" SelectionMode="Multiple" Margin="10,0,10,10">
                         <dxcv:DXCollectionView.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>Baboon</x:String>
-                                <x:String>Capuchin Monkey</x:String>
-                                <x:String>Blue Monkey</x:String>
-                                <x:String>Squirrel Monkey</x:String>
-                                <x:String>Golden Lion Tamarin</x:String>
-                                <x:String>Howler Monkey</x:String>
-                                <x:String>Japanese Macaque</x:String>
                             </x:Array>
                         </dxcv:DXCollectionView.ItemsSource>
                         <dxcv:DXCollectionView.ItemTemplate>
