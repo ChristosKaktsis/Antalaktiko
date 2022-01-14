@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
+             x:Class="Antalaktiko.Views.NewAdPage"
+             Shell.TabBarIsVisible="False"
+             Title="Καταχώρηση Αγγελίας">
+    
+    <ScrollView>
+        <Frame Padding="10" Margin="0" HasShadow="False">
+            <StackLayout>
+                <Grid>
+                    <Picker Title="Μάρκα"  />
+                    <Picker Grid.Column="1" Title="Μοντέλο"/>
+                    <editors:DateEdit Grid.Row="1" LabelText="Από" DisplayFormat="yyyy" />
+                    <editors:DateEdit Grid.Row="1" Grid.Column="1" LabelText="Έως" DisplayFormat="yyyy"/>
+                </Grid>
+                <Label  Text="Πόρτες:" FontSize="18" Margin="10,10,10,0"/>
+                <editors:ChoiceChipGroup 
+                     BackgroundColor="Transparent"
+                     IsMultiline="True">
+                    <editors:Chip Text="02"/>
+                    <editors:Chip Text="03"/>
+                    <editors:Chip Text="04"/>
+                    <editors:Chip Text="05"/>
+                </editors:ChoiceChipGroup>
+                <editors:ComboBoxEdit   LabelText="Τύπος Καυσίμου"/>
+                <Label  Text="Κατάσταση ανταλλακτικού:" FontSize="18" Margin="10,10,10,0"/>
+                <editors:ChoiceChipGroup 
+                     BackgroundColor="Transparent"
+                     IsMultiline="True">
+                    <editors:Chip Text="Καινούριο"/>
+                    <editors:Chip Text="Μεταχειρισμένο"/>
+                    <editors:Chip Text="Ιμιτασιόν"/>
+                    <editors:Chip Text="Ανακατασκευασμένο"/>
+                </editors:ChoiceChipGroup>
+                <editors:TextEdit   LabelText="Κωδικός Ανταλλακτικού:"/>
+                <editors:TextEdit  LabelText="Κωδικός Μηχανής:"/>
+                <editors:TextEdit  LabelText="Αριθμός Πλαισίου"/>
+                <editors:MultilineEdit  LabelText="Περιγραφή" HeightRequest="150"/>
+                <Button  Text="Καταχώρηση" CornerRadius="30" Margin="20" WidthRequest="200" HorizontalOptions="Center"/>
+            </StackLayout>
+        </Frame>
+    </ScrollView>
+</ContentPage>

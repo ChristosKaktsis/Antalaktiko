@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Antalaktiko.Views.RegisterPage"
+             xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors" 
+             xmlns:dxcv="http://schemas.devexpress.com/xamarin/2014/forms/collectionview"
+             Shell.PresentationMode="ModalAnimated"
+             >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="editors:TextEdit">
+                <Setter Property="CornerRadius" Value="30"/>
+            </Style>
+            <Style TargetType="editors:ComboBoxEdit">
+                <Setter Property="CornerRadius" Value="30"/>
+            </Style>
+            <Style TargetType="editors:PasswordEdit">
+                <Setter Property="CornerRadius" Value="30"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView>
+        <Grid>
+            <StackLayout>
+                <Frame BackgroundColor="{StaticResource Primary}" HeightRequest="120" CornerRadius="20"/>
+            </StackLayout>
+            <StackLayout>
+                <Frame  Margin="0" HeightRequest="80" HasShadow="False" BackgroundColor="{StaticResource Primary}">
+                    <Label Text="Εγγραφή" FontSize="25"  FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                </Frame>
+            </StackLayout>
+            <StackLayout Margin="0,60,0,0">
+                <Frame Margin="12" Padding="0" CornerRadius="20">
+                    <StackLayout Margin="10" Spacing="15">
+                        <Label Margin="10" Text="Στοιχεία Εταιρίας" FontAttributes="Bold" FontSize="20"/>
+                        <editors:TextEdit PlaceholderText="ΕΠΩΝΥΜΙΑ ΕΤΑΙΡΙΑΣ" StartIcon="company"/>
+                        <editors:TextEdit PlaceholderText="ΙΣΤΟΣΕΛΙΔΑ" StartIcon="website"/>
+                        <editors:TextEdit PlaceholderText="EMAIL" StartIcon="email"/>
+                        <editors:TextEdit  PlaceholderText="ΤΗΛΕΦΩΝΟ"  StartIcon="phone" Keyboard="Telephone"/>
+                        <editors:TextEdit  PlaceholderText="ΑΦΜ"  StartIcon="afm" Keyboard="Numeric"/>
+                        <editors:TextEdit  PlaceholderText="ΦΑΞ"  StartIcon="fax" Keyboard="Telephone"/>
+                        <editors:TextEdit  PlaceholderText="ΚΙΝ ΤΗΛΕΦΩΝΟ"  StartIcon="mobphone" Keyboard="Telephone"/>
+                        <editors:TextEdit PlaceholderText="ΔΙΕΥΘΥΝΣΗ" StartIcon="address"/>
+                        <StackLayout Orientation="Horizontal">
+                            <editors:TextEdit PlaceholderText="ΤΑΧ. ΚΩΔΙΚΑΣ" />
+                            <editors:ComboBoxEdit   LabelText="ΠΕΡΙΟΧΗ" HorizontalOptions="EndAndExpand"/>
+                        </StackLayout>
+                        <editors:ComboBoxEdit LabelText="ΤΥΠΟΣ ΕΤΑΙΡΙΑΣ"/>
+                        
+                    </StackLayout>
+                </Frame>
+                <Frame Margin="12" Padding="0" CornerRadius="20">
+                    <StackLayout Margin="20">
+                        <Label Text="Ανταλλακτικά που ενδιαφέρουν την εταιρία" FontAttributes="Bold" FontSize="17" Margin="0,0,0,10"/>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Όλα" VerticalOptions="Center"/>
+                            <CheckBox HorizontalOptions="EndAndExpand"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" >
+                            <Label Text="Ιμιτασιόν" VerticalOptions="Center"/>
+                            <CheckBox HorizontalOptions="EndAndExpand"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" >
+                            <Label Text="Καινούρια" VerticalOptions="Center"/>
+                            <CheckBox HorizontalOptions="EndAndExpand"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" >
+
+                            <Label Text="Μεταχειρισμένα" VerticalOptions="Center"/>
+                            <CheckBox HorizontalOptions="EndAndExpand"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" >
+                            <Label Text="Ανακατασκευασμένα" VerticalOptions="Center"/>
+                            <CheckBox HorizontalOptions="EndAndExpand"/>
+                        </StackLayout>
+                        <Button Command="{Binding OpenPopUpCommand}" Text="Επιλογή Μάρκας που ενδιαφέρουν την εταιρία"  TextColor="{StaticResource Primary}" BackgroundColor="White" CornerRadius="30" Margin="10"/>
+                        <Button Text="Επιλογή Ανταλλακτικών που ενδιαφέρουν την εταιρία"  TextColor="{StaticResource Primary}" BackgroundColor="White" CornerRadius="30" />
+                    </StackLayout>
+                </Frame>
+                <Frame  Margin="12" Padding="0" CornerRadius="20">
+                    <StackLayout Margin="10" Spacing="15">
+                        <Label Margin="10" Text="Στοιχεία Χρήστη" FontAttributes="Bold" FontSize="20"/>
+                        <editors:TextEdit PlaceholderText="ΟΝΟΜΑ"  StartIcon="user"/>
+                        <editors:TextEdit PlaceholderText="ΕΠΙΘΕΤΟ"  StartIcon="user"/>
+                        <editors:TextEdit PlaceholderText="ΤΗΛΕΦΩΝΟ"  StartIcon="phone" Keyboard="Telephone"/>
+                        <editors:TextEdit PlaceholderText="EMAIL"  StartIcon="email"/>
+                        <editors:PasswordEdit PlaceholderText="ΚΩΔΙΚΟΣ"  StartIcon="password"/>
+                        <editors:PasswordEdit PlaceholderText="ΕΠΙΒΕΒΑΙΩΣΗ"  StartIcon="password"/>
+                        
+                        <Button Text="Αποθήκευση"  FontSize="17" CornerRadius="30"   Padding="15" Margin="10,30,10,0"/>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                            <Label Text="Έχετε ήδη λογαριασμό;" TextColor="{StaticResource Primary}" VerticalOptions="Center"/>
+                            <Button Command="{Binding GoBackCommand}" Text="Κάνε σύνδεση εδώ"  TextColor="{StaticResource Primary}" BackgroundColor="White" CornerRadius="30"/>
+                        </StackLayout>
+                        
+                    </StackLayout>
+                </Frame>
+                
+            </StackLayout>
+            <!--popup-->
+            <StackLayout BackgroundColor="Gray" Opacity="0.7" IsVisible="{Binding IsPopUpOpen}"/>
+            <Frame IsVisible="{Binding IsPopUpOpen}" VerticalOptions="End" HorizontalOptions="Center" HeightRequest="650" BackgroundColor="White" Margin="30,0,30,300" Padding="0" CornerRadius="20">
+                <StackLayout Margin="12">
+                    <Label Text="Επιλογή μάρκας" FontSize="20" FontAttributes="Bold"/>
+                    <editors:TextEdit PlaceholderText="Αναζήτηση" CornerRadius="20"/>
+                    <StackLayout Orientation="Horizontal" Margin="10,20,10,0">
+                        <Label Text="Επιλογή Όλων" TextColor="{StaticResource Primary}"/>
+                        <CheckBox HorizontalOptions="EndAndExpand"/>
+                    </StackLayout>
+                    <dxcv:DXCollectionView HeightRequest="400" SelectionMode="Multiple" Margin="10,0,10,10">
+                        <dxcv:DXCollectionView.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Baboon</x:String>
+                                <x:String>Capuchin Monkey</x:String>
+                                <x:String>Blue Monkey</x:String>
+                                <x:String>Squirrel Monkey</x:String>
+                                <x:String>Golden Lion Tamarin</x:String>
+                                <x:String>Howler Monkey</x:String>
+                                <x:String>Japanese Macaque</x:String>
+                            </x:Array>
+                        </dxcv:DXCollectionView.ItemsSource>
+                        <dxcv:DXCollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5">
+                                    <Frame BorderColor="{StaticResource BackGround}">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="Item" VerticalOptions="Center"/>
+                                            <CheckBox HorizontalOptions="EndAndExpand" />
+                                        </StackLayout>
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </dxcv:DXCollectionView.ItemTemplate>
+                    </dxcv:DXCollectionView>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="20">
+                        <Button Text="Καθαρισμός" TextColor="{StaticResource Primary}"  BackgroundColor="White"/>
+                        <Button Command="{Binding OpenPopUpCommand}" Text="OK"  CornerRadius="30"/>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+        </Grid>
+
+    </ScrollView>
+
+</ContentPage>

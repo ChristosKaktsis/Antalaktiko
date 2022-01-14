@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
+             mc:Ignorable="d"
+             x:Class="Antalaktiko.Views.LoginPage"
+             Shell.NavBarIsVisible="False"
+             >
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200"/>
+            </Grid.RowDefinitions>
+            <Frame HasShadow="false">
+                <Image Source="logo.png"/>
+            </Frame>
+            <StackLayout Grid.Row="1" Margin="30" Spacing="20">
+                <editors:TextEdit PlaceholderText="Ηλεκτρονική Διεύθυνση" CornerRadius="30" StartIcon="email" Keyboard="Email" />
+                <editors:PasswordEdit PlaceholderText="Συνθηματικό"  CornerRadius="30" StartIcon="password"/>
+                <Button Text="Σύνδεση"  CornerRadius="30" Margin="0,20,0,0" Command="{Binding LoginCommand}"/>
+                <Button Text="Ξεχάσατε τον κωδικό σας;" BackgroundColor="White" TextColor="{StaticResource Primary}" TextTransform="None"/>
+                <StackLayout VerticalOptions="EndAndExpand" HorizontalOptions="Center" Orientation="Horizontal">
+                    <Label Text="Νέος χρήστης;" FontAttributes="Bold" VerticalOptions="Center"/>
+                    <Button Text="Εγγραφή" Background="white" TextColor="{StaticResource Primary}"  CornerRadius="30" Command="{Binding RegisterCommand}"/>
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
