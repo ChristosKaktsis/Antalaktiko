@@ -20,5 +20,19 @@ namespace Antalaktiko.Views
             InitializeComponent();
             BindingContext = _viewModel = new RegisterViewModel();
         }
+        protected override  void OnAppearing()
+        {
+            base.OnAppearing();
+            _viewModel.OnAppearing();
+        }
+        private void SearchText_TextChanged(object sender, EventArgs e)
+        {
+            BrandCollectionView.FilterString = "Contains([Name], '" + SearchText.Text + "')";
+        }
+
+        private void SearchPartText_TextChanged(object sender, EventArgs e)
+        {
+            PartsCollectionView.FilterString = "Contains([Title], '" + SearchPartText.Text + "')";
+        }
     }
 }

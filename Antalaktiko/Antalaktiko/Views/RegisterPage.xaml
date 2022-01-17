@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Antalaktiko.Views.RegisterPage"
              xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors" 
-             xmlns:dxcv="http://schemas.devexpress.com/xamarin/2014/forms/collectionview"
+             xmlns:dxcv="http://schemas.devexpress.com/xamarin/2014/forms/collectionview" 
+             xmlns:local="clr-namespace:Antalaktiko.ViewModels" 
+             xmlns:model="clr-namespace:Antalaktiko.Models"
              Shell.PresentationMode="ModalAnimated"
              >
     <ContentPage.Resources>
@@ -19,7 +21,7 @@
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ScrollView>
+    <ScrollView x:DataType="local:RegisterViewModel">
         <Grid>
             <StackLayout>
                 <Frame BackgroundColor="{StaticResource Primary}" HeightRequest="120" CornerRadius="20"/>
@@ -42,8 +44,8 @@
                         <editors:TextEdit  PlaceholderText="ΚΙΝ ΤΗΛΕΦΩΝΟ"  StartIcon="mobphone" Keyboard="Telephone"/>
                         <editors:TextEdit PlaceholderText="ΔΙΕΥΘΥΝΣΗ" StartIcon="address"/>
                         <StackLayout Orientation="Horizontal">
-                            <editors:TextEdit PlaceholderText="ΤΑΧ. ΚΩΔΙΚΑΣ" />
-                            <editors:ComboBoxEdit   LabelText="ΠΕΡΙΟΧΗ" HorizontalOptions="EndAndExpand"/>
+                            <editors:ComboBoxEdit LabelText="ΤΑΧ. ΚΩΔΙΚΑΣ" ItemsSource="{Binding TKItems}" SelectedItem="{Binding SelectedTK,Mode=OneWayToSource}" DisplayMember="Ονοματκ" IsFilterEnabled="True" FilterMode="Contains"/>
+                            <editors:TextEdit   PlaceholderText="ΠΕΡΙΟΧΗ" Text="{Binding SelectedRegion,Mode=OneWay}" HorizontalOptions="EndAndExpand"/>
                         </StackLayout>
                         <editors:ComboBoxEdit LabelText="ΤΥΠΟΣ ΕΤΑΙΡΙΑΣ"/>
                         
@@ -74,7 +76,7 @@
                             <CheckBox HorizontalOptions="EndAndExpand"/>
                         </StackLayout>
                         <Button Command="{Binding OpenPopUpCommand}" Text="Επιλογή Μάρκας που ενδιαφέρουν την εταιρία"  TextColor="{StaticResource Primary}" BackgroundColor="White" CornerRadius="30" Margin="10"/>
-                        <Button Text="Επιλογή Ανταλλακτικών που ενδιαφέρουν την εταιρία"  TextColor="{StaticResource Primary}" BackgroundColor="White" CornerRadius="30" />
+                        <Button Command="{Binding OpenPartsPopUpCommand}" Text="Επιλογή Ανταλλακτικών που ενδιαφέρουν την εταιρία"  TextColor="{StaticResource Primary}" BackgroundColor="White" CornerRadius="30" />
                     </StackLayout>
                 </Frame>
                 <Frame  Margin="12" Padding="0" CornerRadius="20">
@@ -86,41 +88,37 @@
                         <editors:TextEdit PlaceholderText="EMAIL"  StartIcon="email"/>
                         <editors:PasswordEdit PlaceholderText="ΚΩΔΙΚΟΣ"  StartIcon="password"/>
                         <editors:PasswordEdit PlaceholderText="ΕΠΙΒΕΒΑΙΩΣΗ"  StartIcon="password"/>
-                        
+
                         <Button Text="Αποθήκευση"  FontSize="17" CornerRadius="30"   Padding="15" Margin="10,30,10,0"/>
                         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                             <Label Text="Έχετε ήδη λογαριασμό;" TextColor="{StaticResource Primary}" VerticalOptions="Center"/>
                             <Button Command="{Binding GoBackCommand}" Text="Κάνε σύνδεση εδώ"  TextColor="{StaticResource Primary}" BackgroundColor="White" CornerRadius="30"/>
                         </StackLayout>
-                        
+
                     </StackLayout>
                 </Frame>
-                
             </StackLayout>
             <!--popup-->
+            
+            <!--BrandsPopUp-->
             <StackLayout BackgroundColor="Gray" Opacity="0.7" IsVisible="{Binding IsPopUpOpen}"/>
-            <Frame IsVisible="{Binding IsPopUpOpen}" VerticalOptions="End" HorizontalOptions="Center" HeightRequest="650" BackgroundColor="White" Margin="30,0,30,300" Padding="0" CornerRadius="20">
+            <Frame IsVisible="{Binding IsPopUpOpen}" VerticalOptions="End" HorizontalOptions="Center" HeightRequest="550" BackgroundColor="White" Margin="30,0,30,400" Padding="0" CornerRadius="20">
                 <StackLayout Margin="12">
                     <Label Text="Επιλογή μάρκας" FontSize="20" FontAttributes="Bold"/>
-                    <editors:TextEdit PlaceholderText="Αναζήτηση" CornerRadius="20"/>
+                    <editors:TextEdit x:Name="SearchText" PlaceholderText="Αναζήτηση" CornerRadius="20" TextChanged="SearchText_TextChanged"/>
                     <StackLayout Orientation="Horizontal" Margin="10,20,10,0">
                         <Label Text="Επιλογή Όλων" TextColor="{StaticResource Primary}"/>
-                        <CheckBox HorizontalOptions="EndAndExpand"/>
+                        <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding IsAllBrandsChecked,Mode=TwoWay}"/>
                     </StackLayout>
-                    <ActivityIndicator IsRunning="{Binding IsBusy}"/>
-                    <dxcv:DXCollectionView HeightRequest="400" SelectionMode="Multiple" Margin="10,0,10,10">
-                        <dxcv:DXCollectionView.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>Baboon</x:String>
-                            </x:Array>
-                        </dxcv:DXCollectionView.ItemsSource>
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
+                    <dxcv:DXCollectionView x:Name="BrandCollectionView" HeightRequest="300"  Margin="10,0,10,10" ItemsSource="{Binding BrandItems}">
                         <dxcv:DXCollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="5">
-                                    <Frame BorderColor="{StaticResource BackGround}">
+                                <Grid Margin="5" x:DataType="model:Brand">
+                                    <Frame BorderColor="{StaticResource BackGround}" Padding="5">
                                         <StackLayout Orientation="Horizontal">
-                                            <Label Text="Item" VerticalOptions="Center"/>
-                                            <CheckBox HorizontalOptions="EndAndExpand" />
+                                            <Label Text="{Binding Name}" FontSize="17" VerticalOptions="Center"/>
+                                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding IsChecked}"/>
                                         </StackLayout>
                                     </Frame>
                                 </Grid>
@@ -128,8 +126,39 @@
                         </dxcv:DXCollectionView.ItemTemplate>
                     </dxcv:DXCollectionView>
                     <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="20">
-                        <Button Text="Καθαρισμός" TextColor="{StaticResource Primary}"  BackgroundColor="White"/>
+                        <Button Command="{Binding ClearSelectedBrandCommand}" Text="Καθαρισμός" TextColor="{StaticResource Primary}"  BackgroundColor="White"/>
                         <Button Command="{Binding OpenPopUpCommand}" Text="OK"  CornerRadius="30"/>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+            <!--PartsPopUp-->
+            <StackLayout BackgroundColor="Gray" Opacity="0.7" IsVisible="{Binding IsPartsPopUpOpen}"/>
+            <Frame IsVisible="{Binding IsPartsPopUpOpen}" VerticalOptions="End" HorizontalOptions="Center" HeightRequest="550" BackgroundColor="White" Margin="30,0,30,400" Padding="0" CornerRadius="20">
+                <StackLayout Margin="12">
+                    <Label Text="Επιλογή ανταλλακτικού" FontSize="20" FontAttributes="Bold"/>
+                    <editors:TextEdit x:Name="SearchPartText" PlaceholderText="Αναζήτηση" CornerRadius="20" TextChanged="SearchPartText_TextChanged"/>
+                    <StackLayout Orientation="Horizontal" Margin="10,20,10,0">
+                        <Label Text="Επιλογή Όλων" TextColor="{StaticResource Primary}"/>
+                        <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding IsAllPartsChecked,Mode=TwoWay}"/>
+                    </StackLayout>
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
+                    <dxcv:DXCollectionView x:Name="PartsCollectionView" HeightRequest="300"  Margin="10,0,10,10" ItemsSource="{Binding PartItems}">
+                        <dxcv:DXCollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5" x:DataType="model:Part">
+                                    <Frame BorderColor="{StaticResource BackGround}" Padding="5">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="{Binding Title}" FontSize="17" VerticalOptions="Center"/>
+                                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding IsChecked}"/>
+                                        </StackLayout>
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </dxcv:DXCollectionView.ItemTemplate>
+                    </dxcv:DXCollectionView>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="20">
+                        <Button Command="{Binding ClearSelectedPartsCommand}" Text="Καθαρισμός" TextColor="{StaticResource Primary}"  BackgroundColor="White"/>
+                        <Button Command="{Binding OpenPartsPopUpCommand}" Text="OK"  CornerRadius="30"/>
                     </StackLayout>
                 </StackLayout>
             </Frame>

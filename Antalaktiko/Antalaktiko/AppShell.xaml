@@ -35,8 +35,12 @@
     <TabBar>
         <ShellContent Title="Αρχική" Icon="house.png" Route="StartPage" ContentTemplate="{DataTemplate local:StartPage}" />
         <ShellContent Title="Ιστορικό" Icon="hourglass.png" Route="HistoryPage" ContentTemplate="{DataTemplate local:HistoryPage}" />
-        <ShellContent Title="Αγαπημένα" Icon="icon_about.png"  ContentTemplate="{DataTemplate local:FavoritesPage}" />
+        <ShellContent Title="Αγαπημένα" Icon="heart.png"  ContentTemplate="{DataTemplate local:FavoritesPage}" />
         <ShellContent Title="Ενδιαφέρον" Icon="star.png"  ContentTemplate="{DataTemplate local:InterestPage}" />
+        <ShellContent Title="Προφίλ" Icon="user.png"  ContentTemplate="{DataTemplate local:ProfilePage}" />
+        <ShellContent Title="Εταιρείες" Icon="company.png"  ContentTemplate="{DataTemplate local:CompaniesPage}" />
+        <ShellContent Title="Επικοινωνία" Icon="contact.png"  ContentTemplate="{DataTemplate local:ContactPage}" />
+        <ShellContent Title="Αποσύνδεση" Icon="logout.png" Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />
     </TabBar>
 
     <!--

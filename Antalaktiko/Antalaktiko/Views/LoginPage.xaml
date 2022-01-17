@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              x:Class="Antalaktiko.Views.LoginPage"
              Shell.NavBarIsVisible="False"
-             >
+             Shell.TabBarIsVisible="False">
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>

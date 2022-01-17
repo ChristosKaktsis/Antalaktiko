@@ -2,10 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:dxcv="http://schemas.devexpress.com/xamarin/2014/forms/collectionview" 
-             xmlns:vm="clr-namespace:Antalaktiko.ViewModels"
+             xmlns:vm="clr-namespace:Antalaktiko.ViewModels" xmlns:model="clr-namespace:Antalaktiko.Models"
              x:Class="Antalaktiko.Views.StartPage"
              Title="Αρχική">
-    <RefreshView x:DataType="vm:StartViewModel">
+    <RefreshView x:DataType="vm:StartViewModel" Command="{Binding LoadPostItemsCommand}" IsRefreshing="{Binding IsBusy,Mode=TwoWay}">
         <Grid>
             <StackLayout>
                 <SearchBar Placeholder="Αναζήτηση..."
@@ -16,18 +16,7 @@
                    HorizontalTextAlignment="Center"
                    FontSize="Medium"
                    FontAttributes="Italic" />
-                <CollectionView>
-                    <CollectionView.ItemsSource>
-                        <x:Array Type="{x:Type x:String}">
-                            <x:String>Baboon</x:String>
-                            <x:String>Capuchin Monkey</x:String>
-                            <x:String>Blue Monkey</x:String>
-                            <x:String>Squirrel Monkey</x:String>
-                            <x:String>Golden Lion Tamarin</x:String>
-                            <x:String>Howler Monkey</x:String>
-                            <x:String>Japanese Macaque</x:String>
-                        </x:Array>
-                    </CollectionView.ItemsSource>
+                <CollectionView ItemsSource="{Binding PostItems}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <SwipeView>
@@ -43,20 +32,22 @@
                                 </SwipeView.RightItems>
                                 <!-- Content -->
                                 <Frame BorderColor="{StaticResource BackGround}" Padding="10">
-                                    <StackLayout Orientation="Horizontal">
+                                    <StackLayout Orientation="Horizontal" x:DataType="model:Post">
                                         <StackLayout VerticalOptions="Center">
-                                            <Frame BackgroundColor="LightBlue" CornerRadius="30" HasShadow="False"/>
+                                            <Frame Padding="10" BackgroundColor="{Binding BackGround}" CornerRadius="30" HasShadow="False">
+                                                <Label Text="{Binding Type}" TextColor="{Binding TextColor}" FontSize="18" FontAttributes="Bold"/>
+                                            </Frame>
                                         </StackLayout>
                                         <StackLayout  HorizontalOptions="FillAndExpand">
                                             <StackLayout Orientation="Horizontal">
                                                 <Label Text="Audi A4 2016" FontSize="16" FontAttributes="Bold" HorizontalOptions="StartAndExpand"/>
-                                                <Label Text="από:Antalaktiko.gr"/>
+                                                <Label Text="{Binding AuthorDesc,StringFormat='Από:{0}'}"/>
                                             </StackLayout>
-                                            <Label Text="Description"/>
+                                            <Label Text="{Binding Description}"/>
                                             <StackLayout Orientation="Horizontal" >
-                                                <Label Text="17/12/2021 18:30:02" TextColor="{StaticResource BackGroundDark}" HorizontalOptions="StartAndExpand"/>
+                                                <Label Text="{Binding Date}" TextColor="{StaticResource BackGroundDark}" HorizontalOptions="StartAndExpand"/>
                                                 <Label Text="Αριθμός Αγγελίας" WidthRequest="125" VerticalOptions="End"/>
-                                                <Label Text="98893" FontAttributes="Bold" WidthRequest="45" VerticalOptions="End"/>
+                                                <Label Text="{Binding Id}" FontAttributes="Bold" WidthRequest="51" VerticalOptions="End"/>
                                             </StackLayout>
                                         </StackLayout>
 

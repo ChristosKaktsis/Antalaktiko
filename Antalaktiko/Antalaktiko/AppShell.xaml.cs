@@ -16,6 +16,5 @@ namespace Antalaktiko
             Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
             Routing.RegisterRoute(nameof(NewAdPage), typeof(NewAdPage));
         }
-
     }
 }

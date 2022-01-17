@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors" 
+             xmlns:local="clr-namespace:Antalaktiko.ViewModels"
+             x:Class="Antalaktiko.Views.ProfilePage"
+             Shell.NavBarHasShadow="False"
+             Title="Προφίλ">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="editors:TextEdit">
+                <Setter Property="CornerRadius" Value="30"/>
+            </Style>
+            <Style TargetType="editors:ComboBoxEdit">
+                <Setter Property="CornerRadius" Value="30"/>
+            </Style>
+            <Style TargetType="editors:PasswordEdit">
+                <Setter Property="CornerRadius" Value="30"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView >
+        <Grid>
+            <StackLayout>
+                <Frame BackgroundColor="{StaticResource Primary}" HeightRequest="50" CornerRadius="20"/>
+            </StackLayout>
+            <StackLayout>
+                <Frame  Margin="0" HeightRequest="10" HasShadow="False" BackgroundColor="{StaticResource Primary}">
+                    
+                </Frame>
+            </StackLayout>
+            <StackLayout Margin="0,20,0,0">
+                <Frame Margin="12" Padding="0" CornerRadius="20">
+                    <StackLayout Margin="10" Spacing="15">
+                        <Label Margin="10" Text="Στοιχεία Εταιρίας" FontAttributes="Bold" FontSize="20"/>
+                        <editors:TextEdit PlaceholderText="ΕΠΩΝΥΜΙΑ ΕΤΑΙΡΙΑΣ" StartIcon="company"/>
+                        <editors:TextEdit PlaceholderText="EMAIL" StartIcon="email"/>
+                        <editors:TextEdit  PlaceholderText="ΤΗΛΕΦΩΝΟ"  StartIcon="phone" Keyboard="Telephone"/>
+                        <editors:TextEdit  PlaceholderText="ΦΑΞ"  StartIcon="fax" Keyboard="Telephone"/>
+                        <editors:TextEdit PlaceholderText="ΔΙΕΥΘΥΝΣΗ" StartIcon="address"/>
+                        <StackLayout Orientation="Horizontal">
+                            <editors:ComboBoxEdit LabelText="ΤΑΧ. ΚΩΔΙΚΑΣ"  FilterMode="Contains"/>
+                            <editors:TextEdit   PlaceholderText="ΠΕΡΙΟΧΗ"  HorizontalOptions="EndAndExpand"/>
+                        </StackLayout>
+                        <editors:ComboBoxEdit LabelText="ΤΥΠΟΣ ΕΤΑΙΡΙΑΣ"/>
+                        <Button Text="Αποθήκευση"  FontSize="17" CornerRadius="30"   Padding="15" Margin="10,30,10,0"/>
+
+                    </StackLayout>
+                </Frame>
+                <Frame  Margin="12" Padding="0" CornerRadius="20">
+                    <StackLayout Margin="10" Spacing="15">
+                        <Label Margin="10" Text="Στοιχεία Χρήστη" FontAttributes="Bold" FontSize="20"/>
+                        <editors:TextEdit PlaceholderText="ΟΝΟΜΑ"  StartIcon="user"/>
+                        <editors:TextEdit PlaceholderText="ΕΠΙΘΕΤΟ"  StartIcon="user"/>
+                        <editors:TextEdit PlaceholderText="ΤΗΛΕΦΩΝΟ"  StartIcon="phone" Keyboard="Telephone"/>
+                        <editors:TextEdit PlaceholderText="EMAIL"  StartIcon="email"/>
+                        <editors:PasswordEdit PlaceholderText="ΑΛΛΑΓΗ ΚΩΔΙΚΟΥ"  StartIcon="password"/>
+                        <editors:PasswordEdit PlaceholderText="ΕΠΙΒΕΒΑΙΩΣΗ"  StartIcon="password"/>
+                        <Button Text="Αποθήκευση"  FontSize="17" CornerRadius="30"   Padding="15" Margin="10,30,10,0"/>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+
+        </Grid>
+
+    </ScrollView>
+
+</ContentPage>

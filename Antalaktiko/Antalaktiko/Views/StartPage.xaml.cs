@@ -20,5 +20,10 @@ namespace Antalaktiko.Views
             InitializeComponent();
             BindingContext = _viewModel = new StartViewModel();
         }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _viewModel.OnAppearing();
+        }
     }
 }
