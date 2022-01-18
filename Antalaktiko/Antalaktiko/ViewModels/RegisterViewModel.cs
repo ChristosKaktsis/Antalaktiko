@@ -12,9 +12,7 @@ namespace Antalaktiko.ViewModels
 {
     class RegisterViewModel : BaseViewModel
     {
-        private bool isPopUpOpen;
-        public IDataManger<Brand> brandManager = new BrandManager();
-        public IDataManger<Part> partManager = new PartManager();
+        private bool isPopUpOpen;      
         private bool isAllChecked;
         private TK selectedTK;
         private string selectedRegion;

@@ -2,22 +2,50 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:dxcv="http://schemas.devexpress.com/xamarin/2014/forms/collectionview" 
-             xmlns:vm="clr-namespace:Antalaktiko.ViewModels" xmlns:model="clr-namespace:Antalaktiko.Models"
+             xmlns:vm="clr-namespace:Antalaktiko.ViewModels" xmlns:model="clr-namespace:Antalaktiko.Models" xmlns:dxe="http://schemas.devexpress.com/xamarin/2014/forms/editors" xmlns:dxp="http://schemas.devexpress.com/xamarin/2014/forms/popup"
              x:Class="Antalaktiko.Views.StartPage"
              Title="Αρχική">
     <RefreshView x:DataType="vm:StartViewModel" Command="{Binding LoadPostItemsCommand}" IsRefreshing="{Binding IsBusy,Mode=TwoWay}">
         <Grid>
             <StackLayout>
-                <SearchBar Placeholder="Αναζήτηση..."
-                   CancelButtonColor="{StaticResource BackGroundDark}"
-                   PlaceholderColor="{StaticResource BackGroundDark}"
-                   TextColor="{StaticResource PrimaryDark}"
-                   TextTransform="Lowercase"
-                   HorizontalTextAlignment="Center"
-                   FontSize="Medium"
-                   FontAttributes="Italic" />
-                <CollectionView ItemsSource="{Binding PostItems}">
-                    <CollectionView.ItemTemplate>
+                <dxp:DXPopup x:Name="filterpopup"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                         AllowScrim="True"
+                         ScrimColor="{StaticResource BackGroundDarkTranc}"
+                         ShadowColor="Black"
+                         ShadowRadius="5"
+                         ShadowHorizontalOffset="5">
+                    <StackLayout Margin="20" WidthRequest="300">
+                        <dxe:ChoiceChipGroup x:Name="choiceChipGroup" HorizontalOptions="Center"
+                                             BackgroundColor="Transparent" 
+                                             IsMultiline="True" 
+                                             AllowDeselect="True"
+                                             SelectionChanged="choiceChipGroup_SelectionChanged">
+                            <dxe:Chip Text="Θέλω να αγωράσω"
+                              />
+                            <dxe:Chip Text="Θέλω να πουλήσω"
+                              />
+                        </dxe:ChoiceChipGroup>
+                        <Button Text="Clear" Clicked="Button_Clicked" CornerRadius="20"/>
+                        <Button Text="Επιλογή" Clicked="ClosePopup_Clicked" CornerRadius="20"/>
+                    </StackLayout>
+                </dxp:DXPopup>
+                
+                <StackLayout Orientation="Horizontal">
+                    <SearchBar Placeholder="Αναζήτηση..."
+                               CancelButtonColor="{StaticResource BackGroundDark}"
+                               PlaceholderColor="{StaticResource BackGroundDark}"
+                               TextColor="{StaticResource PrimaryDark}"
+                               TextTransform="Lowercase"
+                               HorizontalTextAlignment="Center"
+                               FontSize="Medium"
+                               FontAttributes="Italic" />
+                    
+                </StackLayout>
+                <Button Text="Filter" Clicked="OpenPopUp_Clicked" HorizontalOptions="Start" Margin="5" CornerRadius="20"/>
+                <dxcv:DXCollectionView x:Name="PostCollectionView" ItemsSource="{Binding PostItems}">
+                    <dxcv:DXCollectionView.ItemTemplate>
                         <DataTemplate>
                             <SwipeView>
                                 <SwipeView.LeftItems>
@@ -55,8 +83,8 @@
                                 </Frame>
                             </SwipeView>
                         </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                    </dxcv:DXCollectionView.ItemTemplate>
+                </dxcv:DXCollectionView>
             </StackLayout>
             <Button Command="{Binding NewAdCommand}" Text="+" FontSize="30" Padding="0" Margin="20" BackgroundColor="{StaticResource Complementary}" CornerRadius="30" WidthRequest="60" HeightRequest="60" HorizontalOptions="End" VerticalOptions="End"/>
         </Grid>

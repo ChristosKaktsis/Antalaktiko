@@ -1,45 +1,127 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
+             xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors" 
+             xmlns:vm="clr-namespace:Antalaktiko.ViewModels" 
+             xmlns:dxp="http://schemas.devexpress.com/xamarin/2014/forms/popup" xmlns:dxcv="http://schemas.devexpress.com/xamarin/2014/forms/collectionview" xmlns:model="clr-namespace:Antalaktiko.Models"
              x:Class="Antalaktiko.Views.NewAdPage"
              Shell.TabBarIsVisible="False"
              Title="Καταχώρηση Αγγελίας">
     
     <ScrollView>
-        <Frame Padding="10" Margin="0" HasShadow="False">
-            <StackLayout>
-                <Grid>
-                    <Picker Title="Μάρκα"  />
-                    <Picker Grid.Column="1" Title="Μοντέλο"/>
-                    <editors:DateEdit Grid.Row="1" LabelText="Από" DisplayFormat="yyyy" />
-                    <editors:DateEdit Grid.Row="1" Grid.Column="1" LabelText="Έως" DisplayFormat="yyyy"/>
-                </Grid>
-                <Label  Text="Πόρτες:" FontSize="18" Margin="10,10,10,0"/>
-                <editors:ChoiceChipGroup 
+        
+        <StackLayout x:DataType="vm:NewAdViewModel" Padding="10">
+            
+            <dxp:DXPopup x:Name="brandspopup"
+                         AllowScrim="True"
+                         ScrimColor="{StaticResource BackGroundDarkTranc}"
+                         ShadowColor="Black"
+                         ShadowRadius="5"
+                         ShadowHorizontalOffset="5">
+                <StackLayout Margin="20" WidthRequest="300">
+                    <Label Text="Επιλογή μάρκας" FontSize="20" FontAttributes="Bold"/>
+                    <editors:TextEdit x:Name="SearchText" PlaceholderText="Αναζήτηση" CornerRadius="20" TextChanged="SearchText_TextChanged"/>
+                    <dxcv:DXCollectionView x:Name="BrandCollectionView" HeightRequest="300" Margin="10,10,10,10" ItemsSource="{Binding BrandItems}" SelectedItem="{Binding SelectedBrand,Mode=TwoWay}" SelectionMode="Single">
+                        <dxcv:DXCollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5" x:DataType="model:Brand">
+                                    <Frame BorderColor="{StaticResource BackGround}" CornerRadius="10" HasShadow="False">
+                                        <Label Text="{Binding Name}" FontSize="20" VerticalOptions="Center"/>
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </dxcv:DXCollectionView.ItemTemplate>
+                        <dxcv:DXCollectionView.SelectedItemTemplate>
+                            <DataTemplate>
+                                <Frame  x:DataType="model:Brand" BackgroundColor="{StaticResource PrimaryLight}"  CornerRadius="10" HasShadow="False">
+                                    <Label Text="{Binding Name}" FontSize="20" VerticalOptions="Center" />
+                                </Frame>
+                            </DataTemplate>
+                        </dxcv:DXCollectionView.SelectedItemTemplate>
+                    </dxcv:DXCollectionView>
+                    <Button Text="Επιλογή" Clicked="ClosePopup_Clicked" CornerRadius="20"/>
+                </StackLayout>
+            </dxp:DXPopup>
+            <dxp:DXPopup x:Name="modelspopup"
+                         AllowScrim="True"
+                         ScrimColor="{StaticResource BackGroundDarkTranc}"
+                         ShadowColor="Black"
+                         ShadowRadius="5"
+                         ShadowHorizontalOffset="5">
+                <StackLayout Margin="20" WidthRequest="300">
+                    <Label Text="Επιλογή μάρκας" FontSize="20" FontAttributes="Bold"/>
+                    <editors:TextEdit x:Name="SearchTextModels" PlaceholderText="Αναζήτηση" CornerRadius="20" TextChanged="SearchTextModels_TextChanged"/>
+                    <dxcv:DXCollectionView x:Name="ModelsCollectionView" HeightRequest="300" Margin="10,10,10,10" ItemsSource="{Binding ModelItems}" SelectedItem="{Binding SelectedModel,Mode=TwoWay}" SelectionMode="Single">
+                        <dxcv:DXCollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5" x:DataType="model:Model">
+                                    <Frame BorderColor="{StaticResource BackGround}" CornerRadius="10" HasShadow="False">
+                                        <Label Text="{Binding Name}" FontSize="20" VerticalOptions="Center"/>
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </dxcv:DXCollectionView.ItemTemplate>
+                        <dxcv:DXCollectionView.SelectedItemTemplate>
+                            <DataTemplate>
+                                <Frame  x:DataType="model:Model" BackgroundColor="{StaticResource PrimaryLight}"  CornerRadius="10" HasShadow="False">
+                                    <Label Text="{Binding Name}" FontSize="20" VerticalOptions="Center" />
+                                </Frame>
+                            </DataTemplate>
+                        </dxcv:DXCollectionView.SelectedItemTemplate>
+                    </dxcv:DXCollectionView>
+                    <Button Text="Επιλογή" Clicked="CloseModelsPopUp_Clicked" CornerRadius="20"/>
+                </StackLayout>
+            </dxp:DXPopup>
+            <editors:ChoiceChipGroup HorizontalOptions="Center"
                      BackgroundColor="Transparent"
                      IsMultiline="True">
-                    <editors:Chip Text="02"/>
-                    <editors:Chip Text="03"/>
-                    <editors:Chip Text="04"/>
-                    <editors:Chip Text="05"/>
-                </editors:ChoiceChipGroup>
-                <editors:ComboBoxEdit   LabelText="Τύπος Καυσίμου"/>
-                <Label  Text="Κατάσταση ανταλλακτικού:" FontSize="18" Margin="10,10,10,0"/>
-                <editors:ChoiceChipGroup 
+                <editors:Chip Text="Θέλω να πουλήσω"/>
+                <editors:Chip Text="Θέλω να αγοράσω"/>
+            </editors:ChoiceChipGroup>
+            <Grid>
+                <Frame Padding="1" HasShadow="False"  BorderColor="{StaticResource BackGroundDarkTranc}">
+                    <Button Text="{Binding SelectedBrandName,Mode=OneWay}" Clicked="Button_Clicked" FontSize="18"  FontAttributes="Bold" TextColor="{StaticResource BackGroundDark}" BackgroundColor="White"/>
+                </Frame>
+                <Frame Grid.Column="1" Padding="1" HasShadow="False"  BorderColor="{StaticResource BackGroundDarkTranc}">
+                    <Button  Text="{Binding SelectedModelName,Mode=OneWay}" Clicked="Models_Button_Clicked" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource BackGroundDark}" BackgroundColor="White"/>
+                </Frame>
+                <editors:ComboBoxEdit Grid.Row="1" LabelText="Από" ItemsSource="{Binding YearsFrom}"/>
+                <editors:ComboBoxEdit Grid.Row="1" Grid.Column="1" LabelText="Έως" ItemsSource="{Binding YearsFrom}"/>
+            </Grid>
+            <Label  Text="Πόρτες:" FontSize="18" Margin="10,10,10,0"/>
+            <editors:ChoiceChipGroup 
                      BackgroundColor="Transparent"
                      IsMultiline="True">
-                    <editors:Chip Text="Καινούριο"/>
-                    <editors:Chip Text="Μεταχειρισμένο"/>
-                    <editors:Chip Text="Ιμιτασιόν"/>
-                    <editors:Chip Text="Ανακατασκευασμένο"/>
-                </editors:ChoiceChipGroup>
-                <editors:TextEdit   LabelText="Κωδικός Ανταλλακτικού:"/>
-                <editors:TextEdit  LabelText="Κωδικός Μηχανής:"/>
-                <editors:TextEdit  LabelText="Αριθμός Πλαισίου"/>
-                <editors:MultilineEdit  LabelText="Περιγραφή" HeightRequest="150"/>
-                <Button  Text="Καταχώρηση" CornerRadius="30" Margin="20" WidthRequest="200" HorizontalOptions="Center"/>
-            </StackLayout>
-        </Frame>
+                <editors:Chip Text="2"/>
+                <editors:Chip Text="3"/>
+                <editors:Chip Text="4"/>
+                <editors:Chip Text="5"/>
+            </editors:ChoiceChipGroup>
+            <editors:ComboBoxEdit   LabelText="Τύπος Καυσίμου">
+                <editors:ComboBoxEdit.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Βενζίνη</x:String>
+                        <x:String>Πετρέλαιο</x:String>
+                        <x:String>Αέριο</x:String>
+                        <x:String>Υβριδικό</x:String>
+                        <x:String>Ηλεκτρικό</x:String>
+                    </x:Array>
+                </editors:ComboBoxEdit.ItemsSource>
+            </editors:ComboBoxEdit>
+            <Label  Text="Κατάσταση ανταλλακτικού:" FontSize="18" Margin="10,10,10,0"/>
+            <editors:ChoiceChipGroup 
+                     BackgroundColor="Transparent"
+                     IsMultiline="True">
+                <editors:Chip Text="Καινούριο"/>
+                <editors:Chip Text="Μεταχειρισμένο"/>
+                <editors:Chip Text="Ιμιτασιόν"/>
+                <editors:Chip Text="Ανακατασκευασμένο"/>
+            </editors:ChoiceChipGroup>
+            <editors:TextEdit   LabelText="Κωδικός Ανταλλακτικού:"/>
+            <editors:TextEdit  LabelText="Κωδικός Μηχανής:"/>
+            <editors:TextEdit  LabelText="Αριθμός Πλαισίου"/>
+            <editors:MultilineEdit  LabelText="Περιγραφή" HeightRequest="150"/>
+            <Button  Text="Καταχώρηση" CornerRadius="30" Margin="20" WidthRequest="200" HorizontalOptions="Center"/>
+        </StackLayout>
     </ScrollView>
 </ContentPage>

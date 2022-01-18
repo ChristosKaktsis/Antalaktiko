@@ -25,5 +25,30 @@ namespace Antalaktiko.Views
             base.OnAppearing();
             _viewModel.OnAppearing();
         }
+
+        private void choiceChipGroup_SelectionChanged(object sender, EventArgs e)
+        {
+            string st = "Α";
+            if (choiceChipGroup.SelectedIndex == 1)
+                st = "Π";
+            PostCollectionView.FilterString = "Contains([Type], '"+st+"')";
+           
+        }
+
+        private void OpenPopUp_Clicked(object sender, EventArgs e)
+        {
+            filterpopup.IsOpen = true;
+        }
+
+        private void ClosePopup_Clicked(object sender, EventArgs e)
+        {
+            filterpopup.IsOpen = false;
+        }
+
+        private void Button_Clicked(object sender, EventArgs e)
+        {
+            PostCollectionView.FilterString = string.Empty;
+            choiceChipGroup.SelectedChip.IsSelected = false;
+        }
     }
 }

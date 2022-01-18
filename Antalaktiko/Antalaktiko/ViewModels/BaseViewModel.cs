@@ -11,7 +11,8 @@ namespace Antalaktiko.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
-
+        public IDataManger<Brand> brandManager = new BrandManager();
+        public IDataManger<Part> partManager = new PartManager();
         bool isBusy = false;
         public bool IsBusy
         {

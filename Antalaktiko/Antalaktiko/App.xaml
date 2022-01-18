@@ -22,7 +22,8 @@
             <Color x:Key="Triadic2Light">#f48ac3</Color>
             <Color x:Key="Triadic2Dark">#8d0066</Color>
             <Color x:Key="BackGround">#efefef</Color>
-            <Color x:Key="BackGroundDark">#a0a0a0</Color>
+            <Color x:Key="BackGroundDark">#636363</Color>
+            <Color x:Key="BackGroundDarkTranc">#b3a0a0a0</Color>
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="White"></Setter>
                 <Setter Property="VisualStateManager.VisualStateGroups">
