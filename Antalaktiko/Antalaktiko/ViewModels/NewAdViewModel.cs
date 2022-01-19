@@ -113,7 +113,7 @@ namespace Antalaktiko.ViewModels
             var minyearint = 1950;
             var maxyearint = int.Parse(DateTime.Now.ToString("yyyy"));
             var howmanyyears = maxyearint - minyearint +1;
-            return  Enumerable.Range(minyearint, howmanyyears).ToList();
+            return Enumerable.Range(minyearint, howmanyyears).OrderByDescending(i => i).ToList();
         }
     }
 }

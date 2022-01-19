@@ -10,7 +10,7 @@ namespace Antalaktiko.Services
 {
     public class PostManger : BaseManager, IDataManger<Post>
     {
-        static readonly string Url = $"{BaseAddress}?method=Posts&params[from]=10_d";
+        static readonly string Url = $"{BaseAddress}?method=Posts&params[num]=5&params[page]=0";
 
         public async Task<IEnumerable<Post>> GetAll()
         {

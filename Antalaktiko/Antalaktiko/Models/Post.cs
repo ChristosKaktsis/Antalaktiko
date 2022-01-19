@@ -16,6 +16,7 @@ namespace Antalaktiko.Models
         public string Comments { get; set; }
         public PostInfo Info { get; set; }
         public string AuthorDesc { get; set; }
+        public string TitleInfo { get; set; }
         public string Type { 
             get
             {

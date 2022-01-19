@@ -5,10 +5,9 @@
              xmlns:vm="clr-namespace:Antalaktiko.ViewModels" xmlns:model="clr-namespace:Antalaktiko.Models" xmlns:dxe="http://schemas.devexpress.com/xamarin/2014/forms/editors" xmlns:dxp="http://schemas.devexpress.com/xamarin/2014/forms/popup"
              x:Class="Antalaktiko.Views.StartPage"
              Title="Αρχική">
-    <RefreshView x:DataType="vm:StartViewModel" Command="{Binding LoadPostItemsCommand}" IsRefreshing="{Binding IsBusy,Mode=TwoWay}">
-        <Grid>
-            <StackLayout>
-                <dxp:DXPopup x:Name="filterpopup"
+    <Grid x:DataType="vm:StartViewModel">
+        <StackLayout>
+            <dxp:DXPopup x:Name="filterpopup"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
                          AllowScrim="True"
@@ -16,24 +15,43 @@
                          ShadowColor="Black"
                          ShadowRadius="5"
                          ShadowHorizontalOffset="5">
-                    <StackLayout Margin="20" WidthRequest="300">
-                        <dxe:ChoiceChipGroup x:Name="choiceChipGroup" HorizontalOptions="Center"
+                <Grid Margin="10" WidthRequest="260" RowSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="60"/>
+                    </Grid.RowDefinitions>
+                    <dxe:ChoiceChipGroup x:Name="choiceChipGroup" HorizontalOptions="Center" Grid.ColumnSpan="2"
                                              BackgroundColor="Transparent" 
-                                             IsMultiline="True" 
-                                             AllowDeselect="True"
+                                             IsMultiline="True" AllowDeselect="True"
                                              SelectionChanged="choiceChipGroup_SelectionChanged">
-                            <dxe:Chip Text="Θέλω να αγωράσω"
-                              />
-                            <dxe:Chip Text="Θέλω να πουλήσω"
-                              />
-                        </dxe:ChoiceChipGroup>
-                        <Button Text="Clear" Clicked="Button_Clicked" CornerRadius="20"/>
-                        <Button Text="Επιλογή" Clicked="ClosePopup_Clicked" CornerRadius="20"/>
-                    </StackLayout>
-                </dxp:DXPopup>
-                
-                <StackLayout Orientation="Horizontal">
-                    <SearchBar Placeholder="Αναζήτηση..."
+                        <dxe:Chip Text="Θέλω να αγωράσω"/>
+                        <dxe:Chip Text="Θέλω να πουλήσω"/>
+                    </dxe:ChoiceChipGroup>
+                    <Picker Grid.Row="1" Title="Μάρκα"  ItemsSource="{Binding BrandItems}" SelectedItem="{Binding SelectedBrand}" ItemDisplayBinding="{Binding Name}" SelectedIndexChanged="Brand_Picker_SelectedIndexChanged"/>
+                    <Picker Grid.Row="1" Grid.Column="1" Title="Μοντέλο" ItemsSource="{Binding ModelItems}" SelectedItem="{Binding SelectedModel}" ItemDisplayBinding="{Binding Name}"/>
+                    <dxe:ComboBoxEdit x:Name="YearFromComboBox" Grid.Row="2" LabelText="Έτος από" ItemsSource="{Binding YearsFrom}" SelectedItem="{Binding SelectedYearFrom,Mode=OneWayToSource}"/>
+                    <dxe:ComboBoxEdit x:Name="YearToComboBox" Grid.Row="2" Grid.Column="1" LabelText="Έτος έως" ItemsSource="{Binding YearsFrom}" SelectedItem="{Binding SelectedYearTo,Mode=OneWayToSource}"/>
+                    <dxe:ComboBoxEdit x:Name="FuelTypeComboBox" Grid.Row="3" Grid.ColumnSpan="2" LabelText="Είδος Καυσήμου" SelectedItem="{Binding SelectedFuelType}">
+                        <dxe:ComboBoxEdit.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Βενζίνη</x:String>
+                                <x:String>Πετρέλαιο</x:String>
+                                <x:String>Αέριο</x:String>
+                                <x:String>Υβριδικό</x:String>
+                                <x:String>Ηλεκτρικό</x:String>
+                            </x:Array>
+                        </dxe:ComboBoxEdit.ItemsSource>
+                    </dxe:ComboBoxEdit>
+                    <dxe:ComboBoxEdit x:Name="PartItemComboBox" Grid.Row="4" Grid.ColumnSpan="2" LabelText="Είδος Ανταλακτικού" ItemsSource="{Binding PartItems}" SelectedItem="{Binding SelectedPart}" DisplayMember="Title"/>
+                    <Button Grid.Row="5" Text="Clear" Clicked="Button_Clicked" CornerRadius="10" TextColor="{StaticResource Primary}" BackgroundColor="{StaticResource BackGround}" HorizontalOptions="StartAndExpand"/>
+                    <Button Grid.Row="5" Grid.Column="1" Text="Επιλογή" Clicked="ClosePopup_Clicked" CornerRadius="10" HorizontalOptions="EndAndExpand"/>
+                </Grid>
+            </dxp:DXPopup>
+            <SearchBar Placeholder="Αναζήτηση..."
                                CancelButtonColor="{StaticResource BackGroundDark}"
                                PlaceholderColor="{StaticResource BackGroundDark}"
                                TextColor="{StaticResource PrimaryDark}"
@@ -41,11 +59,11 @@
                                HorizontalTextAlignment="Center"
                                FontSize="Medium"
                                FontAttributes="Italic" />
-                    
-                </StackLayout>
-                <Button Text="Filter" Clicked="OpenPopUp_Clicked" HorizontalOptions="Start" Margin="5" CornerRadius="20"/>
-                <dxcv:DXCollectionView x:Name="PostCollectionView" ItemsSource="{Binding PostItems}">
-                    <dxcv:DXCollectionView.ItemTemplate>
+            <Button Text="Φίλτρα" FontSize="17" Clicked="OpenPopUp_Clicked" HorizontalOptions="Start" Margin="5" CornerRadius="10" HeightRequest="40" 
+                    TextColor="{StaticResource Primary}" BackgroundColor="{StaticResource BackGround}"/>
+            <RefreshView IsRefreshing="{Binding IsBusy,Mode=TwoWay}" Command="{Binding LoadPostItemsCommand}">
+                <CollectionView x:Name="PostCollectionView" ItemsSource="{Binding PostItems}">
+                    <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <SwipeView>
                                 <SwipeView.LeftItems>
@@ -60,33 +78,33 @@
                                 </SwipeView.RightItems>
                                 <!-- Content -->
                                 <Frame BorderColor="{StaticResource BackGround}" Padding="10">
-                                    <StackLayout Orientation="Horizontal" x:DataType="model:Post">
-                                        <StackLayout VerticalOptions="Center">
-                                            <Frame Padding="10" BackgroundColor="{Binding BackGround}" CornerRadius="30" HasShadow="False">
-                                                <Label Text="{Binding Type}" TextColor="{Binding TextColor}" FontSize="18" FontAttributes="Bold"/>
-                                            </Frame>
-                                        </StackLayout>
-                                        <StackLayout  HorizontalOptions="FillAndExpand">
-                                            <StackLayout Orientation="Horizontal">
-                                                <Label Text="Audi A4 2016" FontSize="16" FontAttributes="Bold" HorizontalOptions="StartAndExpand"/>
-                                                <Label Text="{Binding AuthorDesc,StringFormat='Από:{0}'}"/>
-                                            </StackLayout>
-                                            <Label Text="{Binding Description}"/>
-                                            <StackLayout Orientation="Horizontal" >
-                                                <Label Text="{Binding Date}" TextColor="{StaticResource BackGroundDark}" HorizontalOptions="StartAndExpand"/>
-                                                <Label Text="Αριθμός Αγγελίας" WidthRequest="125" VerticalOptions="End"/>
-                                                <Label Text="{Binding Id}" FontAttributes="Bold" WidthRequest="51" VerticalOptions="End"/>
-                                            </StackLayout>
-                                        </StackLayout>
-
-                                    </StackLayout>
+                                    <Grid x:DataType="model:Post">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="33"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Frame Padding="10" BackgroundColor="{Binding BackGround}" CornerRadius="5" HasShadow="False">
+                                            <Label Text="{Binding Type}" TextColor="{Binding TextColor}" FontSize="18" FontAttributes="Bold"/>
+                                        </Frame>
+                                        <Grid Grid.Column="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="40*"/>
+                                                <RowDefinition Height="50*"/>
+                                                <RowDefinition Height="20"/>
+                                            </Grid.RowDefinitions>
+                                            <Label Text="{Binding TitleInfo}" FontSize="16" FontAttributes="Bold" HorizontalOptions="StartAndExpand"/>
+                                            <Label Grid.Column="1" Text="{Binding AuthorDesc,StringFormat='{0}'}" HorizontalOptions="EndAndExpand"/>
+                                            <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Description}"/>
+                                            <Label Grid.Row="2" Text="{Binding Date}" TextColor="{StaticResource BackGroundDark}" HorizontalOptions="StartAndExpand"/>
+                                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Id}" FontAttributes="Bold" WidthRequest="51" HorizontalOptions="EndAndExpand"/>
+                                        </Grid>
+                                    </Grid>
                                 </Frame>
                             </SwipeView>
                         </DataTemplate>
-                    </dxcv:DXCollectionView.ItemTemplate>
-                </dxcv:DXCollectionView>
-            </StackLayout>
-            <Button Command="{Binding NewAdCommand}" Text="+" FontSize="30" Padding="0" Margin="20" BackgroundColor="{StaticResource Complementary}" CornerRadius="30" WidthRequest="60" HeightRequest="60" HorizontalOptions="End" VerticalOptions="End"/>
-        </Grid>
-    </RefreshView>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </StackLayout>
+        <Button Command="{Binding NewAdCommand}" Text="+" FontSize="30" Padding="0" Margin="20" BackgroundColor="{StaticResource Complementary}" CornerRadius="30" WidthRequest="60" HeightRequest="60" HorizontalOptions="End" VerticalOptions="End"/>
+    </Grid>
 </ContentPage>
