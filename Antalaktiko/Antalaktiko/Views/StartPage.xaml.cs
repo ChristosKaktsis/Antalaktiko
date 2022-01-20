@@ -25,16 +25,6 @@ namespace Antalaktiko.Views
             base.OnAppearing();
             _viewModel.OnAppearing();
         }
-
-        private void choiceChipGroup_SelectionChanged(object sender, EventArgs e)
-        {
-            string st = "Α";
-            if (choiceChipGroup.SelectedIndex == 1)
-                st = "Π";
-            
-           
-        }
-
         private void OpenPopUp_Clicked(object sender, EventArgs e)
         {
             filterpopup.IsOpen = true;

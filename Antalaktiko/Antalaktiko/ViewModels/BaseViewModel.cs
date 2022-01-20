@@ -19,8 +19,14 @@ namespace Antalaktiko.ViewModels
             get { return isBusy; }
             set { SetProperty(ref isBusy, value); }
         }
-
+        public bool IsRefresing
+        {
+            get { return isRefresing; }
+            set { SetProperty(ref isRefresing, value); }
+        }
         string title = string.Empty;
+        private bool isRefresing;
+
         public string Title
         {
             get { return title; }

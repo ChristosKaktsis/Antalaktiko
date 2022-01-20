@@ -27,7 +27,7 @@
                     <dxe:ChoiceChipGroup x:Name="choiceChipGroup" HorizontalOptions="Center" Grid.ColumnSpan="2"
                                              BackgroundColor="Transparent" 
                                              IsMultiline="True" AllowDeselect="True"
-                                             SelectionChanged="choiceChipGroup_SelectionChanged">
+                                             SelectedIndex="{Binding SelectedChipIndex}">
                         <dxe:Chip Text="Θέλω να αγωράσω"/>
                         <dxe:Chip Text="Θέλω να πουλήσω"/>
                     </dxe:ChoiceChipGroup>
@@ -56,13 +56,14 @@
                                PlaceholderColor="{StaticResource BackGroundDark}"
                                TextColor="{StaticResource PrimaryDark}"
                                TextTransform="Lowercase"
+                               Text="{Binding SearchFilter}"
                                HorizontalTextAlignment="Center"
                                FontSize="Medium"
                                FontAttributes="Italic" />
             <Button Text="Φίλτρα" FontSize="17" Clicked="OpenPopUp_Clicked" HorizontalOptions="Start" Margin="5" CornerRadius="10" HeightRequest="40" 
                     TextColor="{StaticResource Primary}" BackgroundColor="{StaticResource BackGround}"/>
             <RefreshView IsRefreshing="{Binding IsBusy,Mode=TwoWay}" Command="{Binding LoadPostItemsCommand}">
-                <CollectionView x:Name="PostCollectionView" ItemsSource="{Binding PostItems}">
+                <CollectionView x:Name="PostCollectionView" ItemsSource="{Binding PostItems}" RemainingItemsThreshold="5" RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}" EmptyView="Δέν βρέθηκαν αγγελίες για εσάς">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <SwipeView>
