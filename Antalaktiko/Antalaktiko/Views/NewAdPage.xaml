@@ -74,9 +74,9 @@
             </dxp:DXPopup>
             <editors:ChoiceChipGroup HorizontalOptions="Center"
                      BackgroundColor="Transparent"
-                     IsMultiline="True">
-                <editors:Chip Text="Θέλω να πουλήσω"/>
-                <editors:Chip Text="Θέλω να αγοράσω"/>
+                     IsMultiline="True" ChipFontSize="18">
+                <editors:Chip Text="Θέλω να πουλήσω" />
+                <editors:Chip Text="Θέλω να αγοράσω" />
             </editors:ChoiceChipGroup>
             <Grid>
                 <Frame Padding="1" HasShadow="False"  BorderColor="{StaticResource BackGroundDarkTranc}">
@@ -91,7 +91,7 @@
             <Label  Text="Πόρτες:" FontSize="18" Margin="10,10,10,0"/>
             <editors:ChoiceChipGroup 
                      BackgroundColor="Transparent"
-                     IsMultiline="True">
+                     IsMultiline="True" ChipFontSize="18">
                 <editors:Chip Text="2"/>
                 <editors:Chip Text="3"/>
                 <editors:Chip Text="4"/>
@@ -108,6 +108,9 @@
                     </x:Array>
                 </editors:ComboBoxEdit.ItemsSource>
             </editors:ComboBoxEdit>
+            <editors:ComboBoxEdit LabelText="Κατηγιρία ανταλλακτικού" 
+                                  ItemsSource="{Binding PartItems}" 
+                                  DisplayMember="Title"/>
             <Label  Text="Κατάσταση ανταλλακτικού:" FontSize="18" Margin="10,10,10,0"/>
             <editors:ChoiceChipGroup 
                      BackgroundColor="Transparent"

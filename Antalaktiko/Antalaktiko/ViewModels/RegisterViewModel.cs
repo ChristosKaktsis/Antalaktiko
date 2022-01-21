@@ -43,7 +43,7 @@ namespace Antalaktiko.ViewModels
             //open pop up to select brands
             IsPopUpOpen = !IsPopUpOpen;
             //load brands
-            await ExecuteLoadItemsCommand();
+            
         }
         async Task ExecuteLoadItemsCommand()
         {
@@ -74,7 +74,7 @@ namespace Antalaktiko.ViewModels
             //open pop up to select brands
             IsPartsPopUpOpen = !IsPartsPopUpOpen;
             //load brands
-            await ExecuteLoadPartsCommand();
+            
         }
         private async Task ExecuteLoadPartsCommand()
         {
@@ -157,6 +157,8 @@ namespace Antalaktiko.ViewModels
         public async void OnAppearing()
         {
             IsBusy = true;
+            await ExecuteLoadItemsCommand();
+            await ExecuteLoadPartsCommand();
             try
             {
                 if (TKItems.Any())

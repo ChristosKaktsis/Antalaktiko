@@ -42,7 +42,8 @@
                         <editors:TextEdit  PlaceholderText="ΑΦΜ"  StartIcon="afm" Keyboard="Numeric"/>
                         <editors:TextEdit  PlaceholderText="ΦΑΞ"  StartIcon="fax" Keyboard="Telephone"/>
                         <editors:TextEdit  PlaceholderText="ΚΙΝ ΤΗΛΕΦΩΝΟ"  StartIcon="mobphone" Keyboard="Telephone"/>
-                        <editors:TextEdit PlaceholderText="ΔΙΕΥΘΥΝΣΗ" StartIcon="address"/>
+                        <editors:TextEdit PlaceholderText="ΟΔΟΣ" StartIcon="address"/>
+                        <editors:TextEdit PlaceholderText="ΑΡΙΘΜΟΣ" StartIcon="address"/>
                         <StackLayout Orientation="Horizontal">
                             <editors:ComboBoxEdit LabelText="ΤΑΧ. ΚΩΔΙΚΑΣ" ItemsSource="{Binding TKItems}" SelectedItem="{Binding SelectedTK,Mode=OneWayToSource}" DisplayMember="Ονοματκ" IsFilterEnabled="True" FilterMode="Contains"/>
                             <editors:TextEdit   PlaceholderText="ΠΕΡΙΟΧΗ" Text="{Binding SelectedRegion,Mode=OneWay}" HorizontalOptions="EndAndExpand"/>

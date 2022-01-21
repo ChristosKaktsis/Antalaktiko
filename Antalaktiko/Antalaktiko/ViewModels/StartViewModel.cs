@@ -24,6 +24,7 @@ namespace Antalaktiko.ViewModels
         private string selectedFuelType;
         private string searchFilter;
         private int selectedChipIndex = -1;
+        private bool isFilterFocused;
 
         public Command NewAdCommand { get; }
         public ObservableCollection<Post> PostItems { get; set; }
@@ -54,53 +55,6 @@ namespace Antalaktiko.ViewModels
             LoadPartItemsCommand = new Command(async () => await ExecuteLoadPartsCommand());
             FilterCollectionCommand = new Command(ExecuteFilterCollectionCommand);
         }
-        
-        private async Task ExecuteLoadMoreCommand()
-        {
-            if (IsBusy)
-                return;
-            if (IsRefresing)
-                return;
-            try
-            {
-                IsRefresing = true;
-           
-                var items = await postManager.GetMore();
-                foreach (var item in items)
-                {
-                    //set Author Info to display
-                    item.AuthorDesc = await SetAuthorDesc(item.Author);
-                    //set title Info to display
-                    item.TitleInfo = await SetPostTitleInfo(item.Info);
-                    PostItems.Add(item);
-                    //there is a Post with null and we cant filter it with out info 
-                    if (item.Info != null)
-                        SourcePostItems.Add(item);
-                }
-                ExecuteFilterCollectionCommand();
-               
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsRefresing = false;
-            }
-        }
-
-        private async Task<string> SetAuthorDesc(string authorId)
-        {
-            if (string.IsNullOrEmpty(authorId))
-                return string.Empty;
-
-            var user = UserItems.Where(x => x.Id == authorId).FirstOrDefault();
-            var author = await companyManager.GetItem(user.Info.CompanyId);
-
-            return author==null? string.Empty:author.Title;
-        }
-
         private async Task ExecuteLoadBrandItemsCommand()
         {
             try
@@ -118,40 +72,6 @@ namespace Antalaktiko.ViewModels
                 Debug.WriteLine(ex);
             }
         }
-        private async Task ExecuteLoadPostItemsCommand()
-        {
-            IsBusy = true;
-            try
-            {
-                SourcePostItems.Clear();
-                PostItems.Clear();
-                await Task.WhenAll(
-                    ExecuteLoadBrandItemsCommand(), 
-                    ExecuteLoadUserItemsCommand()
-                    );
-               
-                var items = await postManager.GetAll();
-                foreach (var item in items)
-                {
-                    //set Author Info to display
-                    item.AuthorDesc = await SetAuthorDesc(item.Author);
-                    //set title Info to display
-                    item.TitleInfo = await SetPostTitleInfo(item.Info);
-                    PostItems.Add(item);
-                    //there is a Post with null and we cant filter it with out info 
-                    if (item.Info != null)
-                        SourcePostItems.Add(item);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
         private async Task ExecuteLoadUserItemsCommand()
         {
             try
@@ -167,6 +87,84 @@ namespace Antalaktiko.ViewModels
             {
                 Debug.WriteLine(ex);
             }
+        }
+        private async Task ExecuteLoadPostItemsCommand()
+        {
+            IsBusy = true;
+            try
+            {
+                SourcePostItems.Clear();
+                PostItems.Clear();
+                await Task.WhenAll(
+                    ExecuteLoadBrandItemsCommand(),
+                    ExecuteLoadUserItemsCommand());
+
+                var items = await postManager.GetAll();
+                foreach (var item in items)
+                {
+                    await SetDisplayInfo(item);
+                    PostItems.Add(item);
+                    //there is a Post with null and we cant filter it with out info 
+                    if (item.Info != null)
+                        SourcePostItems.Add(item);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+        private async Task SetDisplayInfo(Post item)
+        {
+            //set Author Info to display
+            item.AuthorDesc = await SetAuthorDesc(item.Author);
+            //set title Info to display
+            item.TitleInfo = await SetPostTitleInfo(item.Info);
+        }
+        private async Task ExecuteLoadMoreCommand()
+        {
+            if (IsBusy)
+                return;
+            if (IsRefresing)
+                return;
+            try
+            {
+                IsRefresing = true;
+
+                var items = await postManager.GetMore();
+                foreach (var item in items)
+                {
+                    await SetDisplayInfo(item);
+                    PostItems.Add(item);
+                    //there is a Post with null and we cant filter it with out info 
+                    if (item.Info != null)
+                        SourcePostItems.Add(item);
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                IsRefresing = false;
+            }
+        }
+        private async Task<string> SetAuthorDesc(string authorId)
+        {
+            if (string.IsNullOrEmpty(authorId))
+                return string.Empty;
+
+            var user = UserItems.Where(x => x.Id == authorId).FirstOrDefault();
+            var author = await companyManager.GetItem(user.Info.CompanyId);
+
+            return author == null ? string.Empty : author.Title;
         }
         private async Task<string> SetPostTitleInfo(PostInfo info)
         {
@@ -275,8 +273,15 @@ namespace Antalaktiko.ViewModels
             get => searchFilter;
             set
             {
-                SetProperty(ref searchFilter, value);
-                ExecuteFilterCollectionCommand();
+                SetProperty(ref searchFilter, value);             
+            }
+        }
+        public bool IsFilterFocused
+        {
+            get => isFilterFocused;
+            set
+            {
+                SetProperty(ref isFilterFocused, value);
             }
         }
         public void ExecuteFilterCollectionCommand()
@@ -285,14 +290,11 @@ namespace Antalaktiko.ViewModels
             var ModelFilter = SelectedModel != null ? SelectedModel.Id : string.Empty;
             var YearFilter = !string.IsNullOrEmpty(SelectedYearFrom) ? int.Parse(SelectedYearFrom) : 0;
             var YearFilterTo = !string.IsNullOrEmpty(SelectedYearTo) ? int.Parse(SelectedYearTo) : 2080;
-            var BuySell = SelectedChipIndex ==-1 ? string.Empty : (SelectedChipIndex == 0 ? "Α" : "Π");
+            var BuySell = SelectedChipIndex == -1 ? string.Empty : (SelectedChipIndex == 0 ? "Α" : "Π");
             var FilterText = !string.IsNullOrWhiteSpace(SearchFilter) ? SearchFilter : string.Empty;
             var filtereditems = SourcePostItems.Where(x => x.Info.Brand.Contains(BrandFilter));
-            filtereditems = filtereditems.Where(x => x.Info.Model.Contains(ModelFilter));
-            filtereditems = filtereditems.Where(x => int.Parse(x.Info.Chronology) >= YearFilter);
-            filtereditems = filtereditems.Where(x => int.Parse(x.Info.Chronology) <= YearFilterTo);
             filtereditems = filtereditems.Where(x => x.Type.ToLowerInvariant().Contains(BuySell.ToLowerInvariant()));
-            filtereditems = filtereditems.Where(x => x.TitleInfo.ToLowerInvariant().Contains(FilterText.ToLowerInvariant()));
+            filtereditems = SourcePostItems.Where(x => x.TitleInfo.ToLowerInvariant().Contains(FilterText.ToLowerInvariant()));
 
             PostItems.Clear();
             foreach (var post in filtereditems)

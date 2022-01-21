@@ -21,13 +21,36 @@ namespace Antalaktiko.ViewModels
         public ObservableCollection<Part> PartItems { get; }
         public List<int> YearsFrom { get; }
         public Command LoadBrandsCommand { get; }
+        public Command LoadPartsCommand { get; }
         public NewAdViewModel()
         {
             BrandItems = new ObservableCollection<Brand>();
             ModelItems = new ObservableCollection<Model>();
             PartItems = new ObservableCollection<Part>();
             LoadBrandsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+            LoadPartsCommand = new Command(async () => await ExecuteLoadPartItemsCommand());
             YearsFrom = SetYears();
+        }
+        private async Task ExecuteLoadPartItemsCommand()
+        {
+            IsBusy = true;
+            try
+            {
+                PartItems.Clear();
+                var items = await partManager.GetAll();
+                foreach (var item in items)
+                {
+                    PartItems.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
         async Task ExecuteLoadItemsCommand()
         {
@@ -106,6 +129,7 @@ namespace Antalaktiko.ViewModels
         public void OnAppearing()
         {
             LoadBrandsCommand.Execute(null);
+            LoadPartsCommand.Execute(null);
             SetYears();
         }
         List<int> SetYears()

@@ -10,7 +10,7 @@ namespace Antalaktiko.Services
 {
     public class PostManger : BaseManager, IDataManger<Post>
     {
-        static readonly int num = 10;
+        static readonly int num = 15;
         static int page = 0;
         static readonly string Url = $"{BaseAddress}?method=Posts&params[num]={num}&params[page]=";
 
@@ -25,7 +25,7 @@ namespace Antalaktiko.Services
         {
             page += num;
             HttpClient client = GetClient();
-            string result = await client.GetStringAsync(Url+$"{page}");
+            string result = await client.GetStringAsync(Url+$"{page}");       
             return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
         }
     }
