@@ -57,21 +57,47 @@ namespace Antalaktiko.ViewModels
         }
         private async Task ExecuteLoadBrandItemsCommand()
         {
+            var stopwatch = Stopwatch.StartNew();
             try
             {
                 if (BrandItems.Any())
                     return;
-                var items = await brandManager.GetAll();
+                //var items = await brandManager.GetAll();
+                var items = await App.Database.GetBrandsAsync();
+                var models = await App.Database.GetModelsAsync();
                 foreach (var item in items)
                 {
+                    //add the brand s models
+                    await AddBrandModels(models, item);
+                    //add brand to collection
                     BrandItems.Add(item);
                 }
+                stopwatch.Stop();
+
+                var elapsed = stopwatch.Elapsed;
+                Debug.WriteLine("Load Brands Complete:" + elapsed);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
             }
         }
+
+        private  Task AddBrandModels(List<Model> models, Brand item)
+        {
+            if (!models.Any())
+                return null;
+            item.Models = new List<Model>();
+            
+            foreach(var model in models)
+            {
+                //add matching model
+                if (model.Brand == item.Id)
+                    item.Models.Add(model);
+            }
+            return Task.FromResult(true);
+        }
+
         private async Task ExecuteLoadUserItemsCommand()
         {
             try
@@ -90,6 +116,7 @@ namespace Antalaktiko.ViewModels
         }
         private async Task ExecuteLoadPostItemsCommand()
         {
+            var stopwatch = Stopwatch.StartNew();
             IsBusy = true;
             try
             {
@@ -108,6 +135,10 @@ namespace Antalaktiko.ViewModels
                     if (item.Info != null)
                         SourcePostItems.Add(item);
                 }
+                stopwatch.Stop();
+
+                var elapsed = stopwatch.Elapsed;
+                Debug.WriteLine("Load post Complete:"+elapsed);
 
             }
             catch (Exception ex)
@@ -286,22 +317,7 @@ namespace Antalaktiko.ViewModels
         }
         public void ExecuteFilterCollectionCommand()
         {
-            var BrandFilter = SelectedBrand != null ? SelectedBrand.Id : string.Empty;
-            var ModelFilter = SelectedModel != null ? SelectedModel.Id : string.Empty;
-            var YearFilter = !string.IsNullOrEmpty(SelectedYearFrom) ? int.Parse(SelectedYearFrom) : 0;
-            var YearFilterTo = !string.IsNullOrEmpty(SelectedYearTo) ? int.Parse(SelectedYearTo) : 2080;
-            var BuySell = SelectedChipIndex == -1 ? string.Empty : (SelectedChipIndex == 0 ? "Α" : "Π");
-            var FilterText = !string.IsNullOrWhiteSpace(SearchFilter) ? SearchFilter : string.Empty;
-            var filtereditems = SourcePostItems.Where(x => x.Info.Brand.Contains(BrandFilter));
-            filtereditems = filtereditems.Where(x => x.Type.ToLowerInvariant().Contains(BuySell.ToLowerInvariant()));
-            filtereditems = SourcePostItems.Where(x => x.TitleInfo.ToLowerInvariant().Contains(FilterText.ToLowerInvariant()));
-
-            PostItems.Clear();
-            foreach (var post in filtereditems)
-            {
-                PostItems.Add(post);
-            }
-
+            
             //foreach (var post in SourcePostItems)
             //{
             //    if (!filtereditems.Contains(post))

@@ -34,5 +34,15 @@ namespace Antalaktiko.Views
         {
             PartsCollectionView.FilterString = "Contains([Title], '" + SearchPartText.Text + "')";
         }
+
+        private void OpenAfmPopup_Clicked(object sender, EventArgs e)
+        {
+            afmpopup.IsOpen = true;
+        }
+
+        private void CloseAfmPopUp_Clicked(object sender, EventArgs e)
+        {
+            afmpopup.IsOpen = false;
+        }
     }
 }

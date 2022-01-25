@@ -13,12 +13,10 @@ namespace Antalaktiko.Data
 
         public Database(string dbPath)
         {
-            database = new SQLiteAsyncConnection(dbPath);
-            database.CreateTableAsync<TK>().Wait();
             //get data from file db
             Assembly assembly = IntrospectionExtensions.GetTypeInfo(typeof(App)).Assembly;
             Stream embeddedDatabaseStream = assembly.GetManifestResourceStream("Antalaktiko.Antalaktiko.db");
-            if (File.Exists(dbPath))
+            if (!File.Exists(dbPath))
             {
                 FileStream fileStreamToWrite = File.Create(dbPath);
                 embeddedDatabaseStream.Seek(0, SeekOrigin.Begin);
@@ -26,6 +24,12 @@ namespace Antalaktiko.Data
                 fileStreamToWrite.Close();
             }
             //
+            database = new SQLiteAsyncConnection(dbPath);
+            database.CreateTableAsync<TK>().Wait();
+            database.CreateTableAsync<Brand>().Wait();
+            database.CreateTableAsync<Model>().Wait();
+            database.CreateTableAsync<Part>().Wait();
+            
         }
 
         public Task<List<TK>> GetNotesAsync()
@@ -41,6 +45,21 @@ namespace Antalaktiko.Data
                             .Where(i => i.OID == id)
                             .FirstOrDefaultAsync();
         }
-        
+        public Task<List<Brand>> GetBrandsAsync()
+        {
+            //Get all notes.
+            return database.Table<Brand>().ToListAsync();
+        }
+        public Task<List<Model>> GetModelsAsync()
+        {
+            //Get all notes.
+            return database.Table<Model>().ToListAsync();
+        }
+        public Task<List<Part>> GetPartsAsync()
+        {
+            //Get all notes.
+            return database.Table<Part>().ToListAsync();
+        }
+
     }
 }

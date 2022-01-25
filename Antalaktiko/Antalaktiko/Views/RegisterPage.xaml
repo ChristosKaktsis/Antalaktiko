@@ -5,7 +5,8 @@
              xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors" 
              xmlns:dxcv="http://schemas.devexpress.com/xamarin/2014/forms/collectionview" 
              xmlns:local="clr-namespace:Antalaktiko.ViewModels" 
-             xmlns:model="clr-namespace:Antalaktiko.Models"
+             xmlns:model="clr-namespace:Antalaktiko.Models" 
+             xmlns:dxp="http://schemas.devexpress.com/xamarin/2014/forms/popup"
              Shell.PresentationMode="ModalAnimated"
              >
     <ContentPage.Resources>
@@ -34,19 +35,22 @@
             <StackLayout Margin="0,60,0,0">
                 <Frame Margin="12" Padding="0" CornerRadius="20">
                     <StackLayout Margin="10" Spacing="15">
-                        <Label Margin="10" Text="Στοιχεία Εταιρίας" FontAttributes="Bold" FontSize="20"/>
-                        <editors:TextEdit PlaceholderText="ΕΠΩΝΥΜΙΑ ΕΤΑΙΡΙΑΣ" StartIcon="company"/>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Margin="10" Text="Στοιχεία Εταιρίας" FontAttributes="Bold" FontSize="20" HorizontalOptions="StartAndExpand"/>
+                            <Button x:Name="OpenAfmPopup" Text="ΑΦΜ" CornerRadius="30" Clicked="OpenAfmPopup_Clicked"/>
+                        </StackLayout>
+                        <editors:TextEdit PlaceholderText="ΕΠΩΝΥΜΙΑ ΕΤΑΙΡΙΑΣ" StartIcon="company" IsReadOnly="True" Text="{Binding CompanyName}"/>
                         <editors:TextEdit PlaceholderText="ΙΣΤΟΣΕΛΙΔΑ" StartIcon="website"/>
                         <editors:TextEdit PlaceholderText="EMAIL" StartIcon="email"/>
                         <editors:TextEdit  PlaceholderText="ΤΗΛΕΦΩΝΟ"  StartIcon="phone" Keyboard="Telephone"/>
-                        <editors:TextEdit  PlaceholderText="ΑΦΜ"  StartIcon="afm" Keyboard="Numeric"/>
+                        <editors:TextEdit  PlaceholderText="ΑΦΜ"  StartIcon="afm" Keyboard="Numeric" IsReadOnly="True" Text="{Binding Afm}"/>
                         <editors:TextEdit  PlaceholderText="ΦΑΞ"  StartIcon="fax" Keyboard="Telephone"/>
                         <editors:TextEdit  PlaceholderText="ΚΙΝ ΤΗΛΕΦΩΝΟ"  StartIcon="mobphone" Keyboard="Telephone"/>
-                        <editors:TextEdit PlaceholderText="ΟΔΟΣ" StartIcon="address"/>
-                        <editors:TextEdit PlaceholderText="ΑΡΙΘΜΟΣ" StartIcon="address"/>
+                        <editors:TextEdit PlaceholderText="ΟΔΟΣ" StartIcon="address" IsReadOnly="True" Text="{Binding Address}"/>
+                        <editors:TextEdit PlaceholderText="ΑΡΙΘΜΟΣ" StartIcon="address" IsReadOnly="True" Text="{Binding AddressNo}"/>
                         <StackLayout Orientation="Horizontal">
-                            <editors:ComboBoxEdit LabelText="ΤΑΧ. ΚΩΔΙΚΑΣ" ItemsSource="{Binding TKItems}" SelectedItem="{Binding SelectedTK,Mode=OneWayToSource}" DisplayMember="Ονοματκ" IsFilterEnabled="True" FilterMode="Contains"/>
-                            <editors:TextEdit   PlaceholderText="ΠΕΡΙΟΧΗ" Text="{Binding SelectedRegion,Mode=OneWay}" HorizontalOptions="EndAndExpand"/>
+                            <editors:ComboBoxEdit LabelText="ΤΑΧ. ΚΩΔΙΚΑΣ" IsReadOnly="True" ItemsSource="{Binding TKItems}" SelectedItem="{Binding SelectedTK,Mode=TwoWay}" DisplayMember="Ονοματκ" IsFilterEnabled="True" FilterMode="Contains"/>
+                            <editors:TextEdit PlaceholderText="ΠΕΡΙΟΧΗ" IsReadOnly="True" Text="{Binding SelectedRegion,Mode=OneWay}" HorizontalOptions="EndAndExpand"/>
                         </StackLayout>
                         <editors:ComboBoxEdit LabelText="ΤΥΠΟΣ ΕΤΑΙΡΙΑΣ"/>
                         
@@ -98,13 +102,35 @@
 
                     </StackLayout>
                 </Frame>
+                
             </StackLayout>
             <!--popup-->
-            
+            <dxp:DXPopup x:Name="afmpopup"
+                             AllowScrim="True"
+                             IsOpen="{Binding IsAfmPopUpOpen}"
+                             ScrimColor="{StaticResource BackGroundDarkTranc}"
+                             ShadowColor="Black"
+                             ShadowRadius="5"
+                             ShadowHorizontalOffset="5">
+                <StackLayout Margin="20" WidthRequest="300">
+                    <Label Text="Εισαγωγή ΑΦΜ" FontSize="20" FontAttributes="Bold"/>
+                    <editors:TextEdit PlaceholderText="ΑΦΜ" StartIcon="afm" Keyboard="Numeric" Text="{Binding Afm}" HasError="{Binding AfmHasError}" ErrorText="{Binding AfmError}"/>
+                    <StackLayout Orientation="Horizontal">
+                        <Button x:Name="CloseAfmPopUp" Text="Άκυρο" CornerRadius="30" HorizontalOptions="Start" BackgroundColor="{StaticResource BackGround}" TextColor="{StaticResource Primary}" Clicked="CloseAfmPopUp_Clicked"/>
+                        <Button Text="Εισαγωγή" CornerRadius="30" HorizontalOptions="End" Command="{Binding LoadFieldWithAFMCommand}"/>
+                    </StackLayout>
+
+                </StackLayout>
+            </dxp:DXPopup>
             <!--BrandsPopUp-->
-            <StackLayout BackgroundColor="Gray" Opacity="0.7" IsVisible="{Binding IsPopUpOpen}"/>
-            <Frame IsVisible="{Binding IsPopUpOpen}" VerticalOptions="End" HorizontalOptions="Center" HeightRequest="550" BackgroundColor="White" Margin="30,0,30,400" Padding="0" CornerRadius="20">
-                <StackLayout Margin="12">
+            <dxp:DXPopup x:Name="BrandsPopUp"
+                             AllowScrim="True"
+                             IsOpen="{Binding IsPopUpOpen}"
+                             ScrimColor="{StaticResource BackGroundDarkTranc}"
+                             ShadowColor="Black"
+                             ShadowRadius="5"
+                             ShadowHorizontalOffset="5">
+                <StackLayout Margin="20" WidthRequest="300">
                     <Label Text="Επιλογή μάρκας" FontSize="20" FontAttributes="Bold"/>
                     <editors:TextEdit x:Name="SearchText" PlaceholderText="Αναζήτηση" CornerRadius="20" TextChanged="SearchText_TextChanged"/>
                     <StackLayout Orientation="Horizontal" Margin="10,20,10,0">
@@ -131,11 +157,16 @@
                         <Button Command="{Binding OpenPopUpCommand}" Text="OK"  CornerRadius="30"/>
                     </StackLayout>
                 </StackLayout>
-            </Frame>
+            </dxp:DXPopup>
             <!--PartsPopUp-->
-            <StackLayout BackgroundColor="Gray" Opacity="0.7" IsVisible="{Binding IsPartsPopUpOpen}"/>
-            <Frame IsVisible="{Binding IsPartsPopUpOpen}" VerticalOptions="End" HorizontalOptions="Center" HeightRequest="550" BackgroundColor="White" Margin="30,0,30,400" Padding="0" CornerRadius="20">
-                <StackLayout Margin="12">
+            <dxp:DXPopup x:Name="PartsPopUp"
+                             AllowScrim="True"
+                             IsOpen="{Binding IsPartsPopUpOpen}"
+                             ScrimColor="{StaticResource BackGroundDarkTranc}"
+                             ShadowColor="Black"
+                             ShadowRadius="5"
+                             ShadowHorizontalOffset="5">
+                <StackLayout Margin="20" WidthRequest="300">
                     <Label Text="Επιλογή ανταλλακτικού" FontSize="20" FontAttributes="Bold"/>
                     <editors:TextEdit x:Name="SearchPartText" PlaceholderText="Αναζήτηση" CornerRadius="20" TextChanged="SearchPartText_TextChanged"/>
                     <StackLayout Orientation="Horizontal" Margin="10,20,10,0">
@@ -162,7 +193,7 @@
                         <Button Command="{Binding OpenPartsPopUpCommand}" Text="OK"  CornerRadius="30"/>
                     </StackLayout>
                 </StackLayout>
-            </Frame>
+            </dxp:DXPopup>
         </Grid>
 
     </ScrollView>
