@@ -202,8 +202,8 @@ namespace Antalaktiko.ViewModels
             if(info==null)
                 return await Task.FromResult(string.Empty);
             string title = string.Empty;
-            var brandname = BrandItems.Where(x => x.Id == info.Brand).FirstOrDefault();
-            var modelname = brandname.Models.Where(x => x.Id == info.Model).FirstOrDefault();
+            var brandname = BrandItems.Where(x => x.Id.ToString() == info.Brand).FirstOrDefault();
+            var modelname = brandname.Models.Where(x => x.Id.ToString() == info.Model).FirstOrDefault();
             var chronology = info.Chronology;
             title = $"{brandname.Name} {modelname.Name} {chronology}";
             return await Task.FromResult(title);
@@ -214,7 +214,8 @@ namespace Antalaktiko.ViewModels
             {
                 if (PartItems.Any())
                     return;
-                var items = await partManager.GetAll();
+                //var items = await partManager.GetAll();
+                var items = await App.Database.GetPartsAsync();
                 foreach (var item in items)
                 {
                     PartItems.Add(item);

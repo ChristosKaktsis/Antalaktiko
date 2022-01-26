@@ -6,8 +6,8 @@ namespace Antalaktiko.Models
 {
     public class PostInfo
     {
-        public int Brand { get; set; }
-        public int Model { get; set; }
+        public string Brand { get; set; }
+        public string Model { get; set; }
         public string Chronology { get; set; }
         public string ChronilogyTo { get; set; }
         public string Fuel { get; set; }

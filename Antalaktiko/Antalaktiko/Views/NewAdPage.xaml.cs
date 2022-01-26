@@ -1,6 +1,9 @@
-﻿using Antalaktiko.ViewModels;
+﻿using Antalaktiko.Services;
+using Antalaktiko.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,11 +17,13 @@ namespace Antalaktiko.Views
     public partial class NewAdPage : ContentPage
     {
         private NewAdViewModel _viewModel;
+        private List<Grid> gridForRemove { get; set; }
 
         public NewAdPage()
         {
             InitializeComponent();
             BindingContext = _viewModel = new NewAdViewModel();
+            gridForRemove = new List<Grid>();
         }
         protected override void OnAppearing()
         {
@@ -51,6 +56,79 @@ namespace Antalaktiko.Views
         private void SearchTextModels_TextChanged(object sender, EventArgs e)
         {
             ModelsCollectionView.FilterString = "Contains([Name], '" + SearchTextModels.Text + "')";
+        }
+
+        private async void PickPhotoButton_Clicked(object sender, EventArgs e)
+        {
+            var image = new Image { WidthRequest = 80, HeightRequest = 80 };
+            var grid = new Grid { WidthRequest = 80, HeightRequest = 80, Margin = 10 };
+            
+            var button = new Button 
+            { 
+                BackgroundColor = Color.Transparent,
+            };
+
+            //button.Pressed += ImageDeleteButton;
+            //button.Released += ImageReleasedDelete;
+            button.Clicked += ImageDeleteButton;
+            (sender as Button).IsEnabled = false;
+
+            Stream stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
+            if (stream != null)
+            {
+                image.Source = ImageSource.FromStream(() => stream);
+            }
+            
+            grid.Children.Add(image);
+
+            grid.Children.Add(button);
+            (sender as Button).IsEnabled = true;
+            
+            ImageLayout.Children.Add(grid);
+        }
+        //Stopwatch stopwatch = new Stopwatch();
+        
+
+        private void ImageDeleteButton(object sender, EventArgs e)
+        {
+            //stopwatch.Start();
+
+            //var stack = (sender as Button).Parent;
+            //var imgToRemove = (stack.Parent as Grid);
+            //ImageLayout.Children.Remove(imgToRemove);
+
+            //Console.WriteLine("Delete Image");
+            var button = (sender as Button);
+            var setColor = button.BackgroundColor == Color.Transparent ? Color.FromHex("#b3a0a0a0") : Color.Transparent;
+            var par = button.Parent as Grid;
+
+            if (gridForRemove.Contains(par))
+                gridForRemove.Remove(par);
+            else
+                gridForRemove.Add(par);
+
+            (sender as Button).BackgroundColor = setColor;
+        }
+        private void ImageReleasedDelete(object sender, EventArgs e)
+        {
+            //if (stopwatch.Elapsed.TotalSeconds >= 1)
+            //{
+            //    (sender as Button).Pressed -= ImageDeleteButton;
+            //    (sender as Button).Released -= ImageReleasedDelete;
+            //    var grid = (sender as Button).Parent;
+            //    //var imgToRemove = (grid as Grid);
+            //    //ImageLayout.Children.Remove(imgToRemove);
+                
+            //    Console.WriteLine("Delete Image");
+            //}
+            //stopwatch.Reset();
+            //stopwatch.Stop();
+        }
+
+        private void Button_Clicked_1(object sender, EventArgs e)
+        {
+            foreach(var item in gridForRemove)
+                ImageLayout.Children.Remove(item);
         }
     }
 }

@@ -37,7 +37,8 @@ namespace Antalaktiko.ViewModels
             try
             {
                 PartItems.Clear();
-                var items = await partManager.GetAll();
+                //var items = await partManager.GetAll();
+                var items = await App.Database.GetPartsAsync();
                 foreach (var item in items)
                 {
                     PartItems.Add(item);
@@ -60,9 +61,13 @@ namespace Antalaktiko.ViewModels
             try
             {
                 BrandItems.Clear();
-                var items = await brandManager.GetAll();
+                //var items = await brandManager.GetAll();
+                var items = await App.Database.GetBrandsAsync();
+                var models = await App.Database.GetModelsAsync();
                 foreach (var item in items)
                 {
+                    //add the brand s models
+                    await AddBrandModels(models, item);
                     BrandItems.Add(item);
                 }
             }
@@ -74,6 +79,20 @@ namespace Antalaktiko.ViewModels
             {
                 IsBusy = false;
             }
+        }
+        private Task AddBrandModels(List<Model> models, Brand item)
+        {
+            if (!models.Any())
+                return null;
+            item.Models = new List<Model>();
+
+            foreach (var model in models)
+            {
+                //add matching model
+                if (model.Brand == item.Id)
+                    item.Models.Add(model);
+            }
+            return Task.FromResult(true);
         }
         public Brand SelectedBrand
         {

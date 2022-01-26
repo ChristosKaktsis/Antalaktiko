@@ -10,7 +10,7 @@
     
     <ScrollView>
         
-        <StackLayout x:DataType="vm:NewAdViewModel" Padding="10">
+        <StackLayout x:Name="MainStackLayout" x:DataType="vm:NewAdViewModel" Padding="10">
             
             <dxp:DXPopup x:Name="brandspopup"
                          AllowScrim="True"
@@ -124,6 +124,11 @@
             <editors:TextEdit  LabelText="Κωδικός Μηχανής:"/>
             <editors:TextEdit  LabelText="Αριθμός Πλαισίου"/>
             <editors:MultilineEdit  LabelText="Περιγραφή" HeightRequest="150"/>
+            <Button x:Name="PickPhotoButton" Text="pick photo" Clicked="PickPhotoButton_Clicked"/>
+            <Frame Padding="5" CornerRadius="10">
+                <FlexLayout x:Name="ImageLayout" Wrap="Wrap"/>
+            </Frame>
+            <Button Text="Delete All" Clicked="Button_Clicked_1"/>
             <Button  Text="Καταχώρηση" CornerRadius="30" Margin="20" WidthRequest="200" HorizontalOptions="Center"/>
         </StackLayout>
     </ScrollView>
