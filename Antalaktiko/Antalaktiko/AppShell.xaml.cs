@@ -15,6 +15,8 @@ namespace Antalaktiko
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
             Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
             Routing.RegisterRoute(nameof(NewAdPage), typeof(NewAdPage));
+            Routing.RegisterRoute(nameof(ContactPage), typeof(ContactPage));
+            Routing.RegisterRoute(nameof(AnswerPage), typeof(AnswerPage));
         }
     }
 }

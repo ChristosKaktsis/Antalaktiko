@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Antalaktiko.ViewModels
@@ -15,6 +17,7 @@ namespace Antalaktiko.ViewModels
         private Model selectedModel;
         private string selectedModelName = "Μοντέλο";
         private string selectedBrandName = "Μάρκα";
+        private ImageSource imageSource;
 
         public ObservableCollection<Brand> BrandItems { get; }
         public ObservableCollection<Model> ModelItems { get; }
@@ -22,6 +25,7 @@ namespace Antalaktiko.ViewModels
         public List<int> YearsFrom { get; }
         public Command LoadBrandsCommand { get; }
         public Command LoadPartsCommand { get; }
+        public Command TakePhotoCommand { get; }
         public NewAdViewModel()
         {
             BrandItems = new ObservableCollection<Brand>();
@@ -29,6 +33,7 @@ namespace Antalaktiko.ViewModels
             PartItems = new ObservableCollection<Part>();
             LoadBrandsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             LoadPartsCommand = new Command(async () => await ExecuteLoadPartItemsCommand());
+            TakePhotoCommand = new Command(async () => await TakePhotoAsync());
             YearsFrom = SetYears();
         }
         private async Task ExecuteLoadPartItemsCommand()
@@ -157,6 +162,62 @@ namespace Antalaktiko.ViewModels
             var maxyearint = int.Parse(DateTime.Now.ToString("yyyy"));
             var howmanyyears = maxyearint - minyearint +1;
             return Enumerable.Range(minyearint, howmanyyears).OrderByDescending(i => i).ToList();
+        }
+        public ImageSource ImageSource
+        {
+            get
+            {
+                return imageSource;
+            }
+            set
+            {
+                SetProperty(ref imageSource, value);
+            }
+        }
+
+        public string PhotoPath { get; private set; }
+
+        public async Task TakePhotoAsync()
+        {
+            try
+            {
+                imageSource = null;
+                var photo = await MediaPicker.CapturePhotoAsync();
+                await LoadPhotoAsync(photo);
+                Console.WriteLine($"CapturePhotoAsync COMPLETED: {PhotoPath}");
+            }
+            catch (FeatureNotSupportedException fnsEx)
+            {
+                // Feature is not supported on the device
+                Console.WriteLine($"CapturePhotoAsync THREW: {fnsEx.Message}");
+            }
+            catch (PermissionException pEx)
+            {
+                // Permissions not granted
+                Console.WriteLine($"CapturePhotoAsync THREW: {pEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"CapturePhotoAsync THREW: {ex.Message}");
+            }
+        }
+
+        async Task LoadPhotoAsync(FileResult photo)
+        {
+            // canceled
+            if (photo == null)
+            {
+                PhotoPath = null;
+                return;
+            }
+            // save the file into local storage
+            var newFile = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+            using (var stream = await photo.OpenReadAsync())
+            using (var newStream = File.OpenWrite(newFile))
+                await stream.CopyToAsync(newStream);
+
+            PhotoPath = newFile;
+            ImageSource = ImageSource.FromFile(newFile);
         }
     }
 }

@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
+             x:Class="Antalaktiko.Views.AnswerPage"
+             Shell.TabBarIsVisible="False"
+             Title="Στοιχεία αγγελίας">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label">
+                <Setter Property="FontSize" Value="16"/>
+            </Style>
+            
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView>
+        <Grid>
+            <StackLayout>
+                <Frame Padding="10" Margin="5" CornerRadius="5">
+                    <StackLayout >
+                        <Label Text="Renault Clio '15 AUTO COMP" FontSize="26" FontAttributes="Bold"/>
+                        
+                        <Grid RowSpacing="20" ColumnSpacing="40" Margin="0,20,0,0">
+                            <StackLayout>
+                                <Label Text="Χρονολογία"/>
+                                <Label Text="2015-2022" FontAttributes="Bold"/>
+                            </StackLayout>
+                            <StackLayout Grid.Row="1">
+                                <Label Text="Αριθμός  αγγελίας"/>
+                                <Label Text="1111111" FontAttributes="Bold"/>
+                            </StackLayout>
+                            <StackLayout Grid.Row="2">
+                                <Label Text="Καύσιμο"/>
+                                <Label Text="Πετρέλαιο" FontAttributes="Bold"/>
+                            </StackLayout>
+                            <StackLayout Grid.Column="1">
+                                <Label Text="Κατηγορία"/>
+                                <Label Text="09/2015" FontAttributes="Bold"/>
+                            </StackLayout>
+                            <StackLayout Grid.Row="1" Grid.Column="1">
+                                <Label Text="Κατάσταση"/>
+                                <Label Text="Μεταχειρισμένο" FontAttributes="Bold"/>
+                            </StackLayout>
+                            <StackLayout Grid.Row="2" Grid.Column="1">
+                                <Label Text="Πόρτες"/>
+                                <Label Text="4" FontAttributes="Bold"/>
+                            </StackLayout>
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+                <Frame Padding="10" Margin="5" CornerRadius="5">
+                    <StackLayout >
+                        <Label Text="Περιγραφή" FontSize="26" FontAttributes="Bold"/>
+                        <Label Text="Περιγραφή Περιγραφή ΠεριγραφήΠεριγραφή Περιγραφή Περιγραφή" />
+                        
+                    </StackLayout>
+                </Frame>
+                <Frame Padding="10" Margin="5" CornerRadius="5">
+                    <StackLayout >
+                        <Label Text="Σχόλιο" FontSize="26" FontAttributes="Bold"/>
+                        <editors:MultilineEdit   />
+                        <Button Text="Αποστολή" HorizontalOptions="End" CornerRadius="10"/>
+
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </Grid>
+        
+    </ScrollView>
+</ContentPage>

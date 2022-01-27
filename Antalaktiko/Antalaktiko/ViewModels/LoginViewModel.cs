@@ -10,10 +10,12 @@ namespace Antalaktiko.ViewModels
     {
         public Command LoginCommand { get; }
         public Command RegisterCommand { get; }
+        public Command ContactCommand { get; }
         public LoginViewModel()
         {
             LoginCommand = new Command(OnLoginClicked);
             RegisterCommand = new Command(async ()=> await Shell.Current.GoToAsync(nameof(RegisterPage)));
+            ContactCommand = new Command(async () => await Shell.Current.GoToAsync(nameof(ContactPage)));
         }
 
         private async void OnLoginClicked(object obj)

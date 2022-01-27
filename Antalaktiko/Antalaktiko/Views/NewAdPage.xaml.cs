@@ -60,31 +60,16 @@ namespace Antalaktiko.Views
 
         private async void PickPhotoButton_Clicked(object sender, EventArgs e)
         {
-            var image = new Image { WidthRequest = 80, HeightRequest = 80 };
-            var grid = new Grid { WidthRequest = 80, HeightRequest = 80, Margin = 10 };
             
-            var button = new Button 
-            { 
-                BackgroundColor = Color.Transparent,
-            };
-
-            //button.Pressed += ImageDeleteButton;
-            //button.Released += ImageReleasedDelete;
-            button.Clicked += ImageDeleteButton;
             (sender as Button).IsEnabled = false;
 
             Stream stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
             if (stream != null)
             {
-                image.Source = ImageSource.FromStream(() => stream);
+                var imageSource = ImageSource.FromStream(() => stream);
+                AddImageToLayout(imageSource);
             }
-            
-            grid.Children.Add(image);
-
-            grid.Children.Add(button);
             (sender as Button).IsEnabled = true;
-            
-            ImageLayout.Children.Add(grid);
         }
         //Stopwatch stopwatch = new Stopwatch();
         
@@ -109,26 +94,52 @@ namespace Antalaktiko.Views
 
             (sender as Button).BackgroundColor = setColor;
         }
-        private void ImageReleasedDelete(object sender, EventArgs e)
-        {
-            //if (stopwatch.Elapsed.TotalSeconds >= 1)
-            //{
-            //    (sender as Button).Pressed -= ImageDeleteButton;
-            //    (sender as Button).Released -= ImageReleasedDelete;
-            //    var grid = (sender as Button).Parent;
-            //    //var imgToRemove = (grid as Grid);
-            //    //ImageLayout.Children.Remove(imgToRemove);
+        //private void ImageReleasedDelete(object sender, EventArgs e)
+        //{
+        //    //if (stopwatch.Elapsed.TotalSeconds >= 1)
+        //    //{
+        //    //    (sender as Button).Pressed -= ImageDeleteButton;
+        //    //    (sender as Button).Released -= ImageReleasedDelete;
+        //    //    var grid = (sender as Button).Parent;
+        //    //    //var imgToRemove = (grid as Grid);
+        //    //    //ImageLayout.Children.Remove(imgToRemove);
                 
-            //    Console.WriteLine("Delete Image");
-            //}
-            //stopwatch.Reset();
-            //stopwatch.Stop();
-        }
+        //    //    Console.WriteLine("Delete Image");
+        //    //}
+        //    //stopwatch.Reset();
+        //    //stopwatch.Stop();
+        //}
 
         private void Button_Clicked_1(object sender, EventArgs e)
         {
             foreach(var item in gridForRemove)
                 ImageLayout.Children.Remove(item);
+        }
+
+        private async void TakePhotoButton_Clicked(object sender, EventArgs e)
+        {
+            await _viewModel.TakePhotoAsync();
+            AddImageToLayout(_viewModel.ImageSource);
+        }
+
+        private void AddImageToLayout(ImageSource imageSource)
+        {
+            if (imageSource == null)
+                return;
+            var image = new Image { WidthRequest = 80, HeightRequest = 80 };
+            var grid = new Grid { WidthRequest = 80, HeightRequest = 80, Margin = 10 };
+
+            var button = new Button
+            {
+                BackgroundColor = Color.Transparent,
+            };
+
+            button.Clicked += ImageDeleteButton;
+            image.Source = imageSource;
+            grid.Children.Add(image);
+
+            grid.Children.Add(button);
+            ImageLayout.Children.Add(grid);
         }
     }
 }

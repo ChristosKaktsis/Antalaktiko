@@ -75,7 +75,7 @@
                                 </SwipeView.LeftItems>
                                 <SwipeView.RightItems>
                                     <SwipeItems>
-                                        <SwipeItem Text="Απάντησε" BackgroundColor="{StaticResource AnalogousDark}"/>
+                                        <SwipeItem Text="Απάντησε" BackgroundColor="{StaticResource AnalogousDark}" Invoked="SwipeItem_Invoked"/>
                                     </SwipeItems>
                                 </SwipeView.RightItems>
                                 <!-- Content -->
@@ -94,7 +94,7 @@
                                                 <RowDefinition Height="20"/>
                                             </Grid.RowDefinitions>
                                             <Label Text="{Binding TitleInfo}" FontSize="16" FontAttributes="Bold" HorizontalOptions="StartAndExpand"/>
-                                            <Label Grid.Column="1" Text="{Binding AuthorDesc,StringFormat='{0}'}" HorizontalOptions="EndAndExpand"/>
+                                            <Label Grid.Column="1" Text="{Binding company_name,StringFormat='{0}'}" HorizontalOptions="EndAndExpand"/>
                                             <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Description}"/>
                                             <Label Grid.Row="2" Text="{Binding Date}" TextColor="{StaticResource BackGroundDark}" HorizontalOptions="StartAndExpand"/>
                                             <Label Grid.Row="2" Grid.Column="1" Text="{Binding Id}" FontAttributes="Bold" WidthRequest="51" HorizontalOptions="EndAndExpand"/>

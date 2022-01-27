@@ -14,6 +14,9 @@ namespace Antalaktiko.Models
         public string Status { get; set; }
         public string Date { get; set; }
         public string Comments { get; set; }
+        public string author_name { get; set; }
+        public string company_id { get; set; }
+        public string company_name { get; set; }
         public PostInfo Info { get; set; }
         public string AuthorDesc { get; set; }
         public string TitleInfo { get; set; }

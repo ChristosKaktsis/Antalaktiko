@@ -39,6 +39,7 @@ namespace Antalaktiko.ViewModels
         public Command LoadPartItemsCommand { get; }
         public Command FilterCollectionCommand { get; }
         public Command LoadMoreCommand { get; }
+        public Command AnswerCommand { get; }
         public StartViewModel()
         {
             NewAdCommand = new Command(OnNewAdPressed);
@@ -54,6 +55,7 @@ namespace Antalaktiko.ViewModels
             LoadBrandItemsCommand = new Command(async () => await ExecuteLoadBrandItemsCommand());
             LoadPartItemsCommand = new Command(async () => await ExecuteLoadPartsCommand());
             FilterCollectionCommand = new Command(ExecuteFilterCollectionCommand);
+            AnswerCommand = new Command(async () => await Shell.Current.GoToAsync(nameof(AnswerPage)));
         }
         private async Task ExecuteLoadBrandItemsCommand()
         {
@@ -82,7 +84,6 @@ namespace Antalaktiko.ViewModels
                 Debug.WriteLine(ex);
             }
         }
-
         private  Task AddBrandModels(List<Model> models, Brand item)
         {
             if (!models.Any())
@@ -123,13 +124,12 @@ namespace Antalaktiko.ViewModels
                 SourcePostItems.Clear();
                 PostItems.Clear();
                 await Task.WhenAll(
-                    ExecuteLoadBrandItemsCommand(),
-                    ExecuteLoadUserItemsCommand());
+                    ExecuteLoadBrandItemsCommand());
 
                 var items = await postManager.GetAll();
                 foreach (var item in items)
                 {
-                    await SetDisplayInfo(item);
+                    item.TitleInfo = await SetPostTitleInfo(item.Info);
                     PostItems.Add(item);
                     //there is a Post with null and we cant filter it with out info 
                     if (item.Info != null)
@@ -150,13 +150,6 @@ namespace Antalaktiko.ViewModels
                 IsBusy = false;
             }
         }
-        private async Task SetDisplayInfo(Post item)
-        {
-            //set Author Info to display
-            item.AuthorDesc = await SetAuthorDesc(item.Author);
-            //set title Info to display
-            item.TitleInfo = await SetPostTitleInfo(item.Info);
-        }
         private async Task ExecuteLoadMoreCommand()
         {
             if (IsBusy)
@@ -170,7 +163,8 @@ namespace Antalaktiko.ViewModels
                 var items = await postManager.GetMore();
                 foreach (var item in items)
                 {
-                    await SetDisplayInfo(item);
+                   
+                    item.TitleInfo = await SetPostTitleInfo(item.Info);
                     PostItems.Add(item);
                     //there is a Post with null and we cant filter it with out info 
                     if (item.Info != null)
@@ -187,25 +181,14 @@ namespace Antalaktiko.ViewModels
                 IsRefresing = false;
             }
         }
-        private async Task<string> SetAuthorDesc(string authorId)
-        {
-            if (string.IsNullOrEmpty(authorId))
-                return string.Empty;
-
-            var user = UserItems.Where(x => x.Id == authorId).FirstOrDefault();
-            var author = await companyManager.GetItem(user.Info.CompanyId);
-
-            return author == null ? string.Empty : author.Title;
-        }
         private async Task<string> SetPostTitleInfo(PostInfo info)
         {
             if(info==null)
                 return await Task.FromResult(string.Empty);
             string title = string.Empty;
-            var brandname = BrandItems.Where(x => x.Id.ToString() == info.Brand).FirstOrDefault();
-            var modelname = brandname.Models.Where(x => x.Id.ToString() == info.Model).FirstOrDefault();
+            
             var chronology = info.Chronology;
-            title = $"{brandname.Name} {modelname.Name} {chronology}";
+            title = $"{info.Brand_Name} {info.Model_Name} {chronology}";
             return await Task.FromResult(title);
         }
         private async Task ExecuteLoadPartsCommand()

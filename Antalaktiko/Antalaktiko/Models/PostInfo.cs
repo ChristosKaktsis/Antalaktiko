@@ -17,5 +17,8 @@ namespace Antalaktiko.Models
         public string Engine_Code { get; set; }
         public string Vehicle_Id_Number { get; set; }
         public string Item_State { get; set; }
+        public string Brand_Name { get; set; }
+        public string Model_Name { get; set; }
+        public string part_categories_name { get; set; }
     }
 }

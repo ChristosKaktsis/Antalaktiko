@@ -57,5 +57,10 @@ namespace Antalaktiko.Views
                 return;
             
         }
+
+        private void SwipeItem_Invoked(object sender, EventArgs e)
+        {
+            _viewModel.AnswerCommand.Execute(null);
+        }
     }
 }
