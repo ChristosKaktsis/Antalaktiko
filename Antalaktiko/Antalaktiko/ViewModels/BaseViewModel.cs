@@ -13,6 +13,7 @@ namespace Antalaktiko.ViewModels
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
         public IDataManger<Brand> brandManager = new BrandManager();
         public IDataManger<Part> partManager = new PartManager();
+        public PostManger postManager = new PostManger();
         bool isBusy = false;
         public bool IsBusy
         {

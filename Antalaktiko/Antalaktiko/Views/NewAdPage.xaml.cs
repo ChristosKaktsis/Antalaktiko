@@ -29,6 +29,7 @@ namespace Antalaktiko.Views
         {
             base.OnAppearing();
             _viewModel.OnAppearing();
+            RemovePhotoButton.IsVisible = false;
         }
 
         private void Button_Clicked(object sender, EventArgs e)
@@ -86,11 +87,17 @@ namespace Antalaktiko.Views
             var button = (sender as Button);
             var setColor = button.BackgroundColor == Color.Transparent ? Color.FromHex("#b3a0a0a0") : Color.Transparent;
             var par = button.Parent as Grid;
-
+            //add selected item for remove 
             if (gridForRemove.Contains(par))
                 gridForRemove.Remove(par);
             else
                 gridForRemove.Add(par);
+
+            //Open Delete Button if any item
+            if (gridForRemove.Any())
+                RemovePhotoButton.IsVisible = true;
+            else
+                RemovePhotoButton.IsVisible = false;
 
             (sender as Button).BackgroundColor = setColor;
         }
@@ -114,6 +121,11 @@ namespace Antalaktiko.Views
         {
             foreach(var item in gridForRemove)
                 ImageLayout.Children.Remove(item);
+
+            gridForRemove.Clear();
+
+            if (!gridForRemove.Any())
+                RemovePhotoButton.IsVisible = false;
         }
 
         private async void TakePhotoButton_Clicked(object sender, EventArgs e)
@@ -140,6 +152,7 @@ namespace Antalaktiko.Views
 
             grid.Children.Add(button);
             ImageLayout.Children.Add(grid);
+            
         }
     }
 }

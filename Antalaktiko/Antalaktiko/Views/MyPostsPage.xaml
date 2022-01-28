@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:vm="clr-namespace:Antalaktiko.ViewModels" 
+             xmlns:model="clr-namespace:Antalaktiko.Models"
+             x:Class="Antalaktiko.Views.MyPostsPage"
+             Shell.NavBarIsVisible="False">
+    <Grid x:DataType="vm:MyPostsViewModel">
+        <StackLayout>
+            <SearchBar Placeholder="Αναζήτηση..."
+                               CancelButtonColor="{StaticResource BackGroundDark}"
+                               PlaceholderColor="{StaticResource BackGroundDark}"
+                               TextColor="{StaticResource PrimaryDark}"
+                               TextTransform="Lowercase"
+                               
+                              
+                               HorizontalTextAlignment="Center"
+                               FontSize="Medium"
+                               FontAttributes="Italic" />
+            <RefreshView IsRefreshing="{Binding IsBusy,Mode=TwoWay}" Command="{Binding LoadPostItemsCommand}">
+                <CollectionView x:Name="PostCollectionView" ItemsSource="{Binding PostItems}" RemainingItemsThreshold="6" RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}" EmptyView="Δέν βρέθηκαν αγγελίες για εσάς">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <!-- Content -->
+                            <Frame BorderColor="{StaticResource BackGround}" Padding="10">
+                                <Grid x:DataType="model:Post">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="33"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Frame Padding="10" BackgroundColor="{Binding BackGround}" CornerRadius="5" HasShadow="False">
+                                        <Label Text="{Binding Type}" TextColor="{Binding TextColor}" FontSize="18" FontAttributes="Bold"/>
+                                    </Frame>
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="40*"/>
+                                            <RowDefinition Height="50*"/>
+                                            <RowDefinition Height="20"/>
+                                        </Grid.RowDefinitions>
+                                        <Label Text="{Binding TitleInfo}" FontSize="16" FontAttributes="Bold" HorizontalOptions="StartAndExpand"/>
+                                        <Label Grid.Column="1" Text="{Binding company_name,StringFormat='{0}'}" HorizontalOptions="EndAndExpand"/>
+                                        <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Description}"/>
+                                        <Label Grid.Row="2" Text="{Binding Date}" TextColor="{StaticResource BackGroundDark}" HorizontalOptions="StartAndExpand"/>
+                                        <Label Grid.Row="2" Grid.Column="1" Text="{Binding Id}" FontAttributes="Bold" WidthRequest="51" HorizontalOptions="EndAndExpand"/>
+                                    </Grid>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </StackLayout>
+        
+    </Grid>
+</ContentPage>

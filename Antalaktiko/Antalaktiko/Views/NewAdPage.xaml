@@ -124,12 +124,17 @@
             <editors:TextEdit  LabelText="Κωδικός Μηχανής:"/>
             <editors:TextEdit  LabelText="Αριθμός Πλαισίου"/>
             <editors:MultilineEdit  LabelText="Περιγραφή" HeightRequest="150"/>
-            <Button x:Name="PickPhotoButton" Text="pick photo" Clicked="PickPhotoButton_Clicked"/>
-            <Button x:Name="TakePhotoButton" Text="take photo" Clicked="TakePhotoButton_Clicked"/>
+            <StackLayout Orientation="Horizontal" >
+                <Button x:Name="RemovePhotoButton" Text="Delete" Clicked="Button_Clicked_1"  CornerRadius="10" />
+                <Button x:Name="PickPhotoButton"  ImageSource="gallery" Text="pick photo" Clicked="PickPhotoButton_Clicked" CornerRadius="10" HorizontalOptions="EndAndExpand"/>
+                <Button x:Name="TakePhotoButton" ImageSource="camera" Text="take photo" Clicked="TakePhotoButton_Clicked" CornerRadius="10" />
+            </StackLayout>
+            
             <Frame Padding="5" CornerRadius="10">
                 <FlexLayout x:Name="ImageLayout" Wrap="Wrap"/>
             </Frame>
-            <Button Text="Delete All" Clicked="Button_Clicked_1"/>
+            <!--we need an obscollection-->
+            
             <Button  Text="Καταχώρηση" CornerRadius="30" Margin="20" WidthRequest="200" HorizontalOptions="Center"/>
         </StackLayout>
     </ScrollView>
