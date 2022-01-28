@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace Antalaktiko.Services
         static readonly int num = 15;
         static int page = 0;
         static readonly string Url = $"{BaseAddress}?method=Posts&params[num]={num}&params[page]=";
+        
 
         public async Task<IEnumerable<Post>> GetAll()
         {
@@ -27,6 +29,13 @@ namespace Antalaktiko.Services
             HttpClient client = GetClient();
             string result = await client.GetStringAsync(Url+$"{page}");       
             return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
+        }
+        public async Task<Post> GetItemWithId(string id)
+        {
+            page += num;
+            HttpClient client = GetClient();
+            string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[id]={id}");
+            return JsonConvert.DeserializeObject<IEnumerable<Post>>(result).FirstOrDefault();
         }
     }
 }
