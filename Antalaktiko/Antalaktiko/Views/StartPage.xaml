@@ -28,7 +28,7 @@
                                              BackgroundColor="Transparent" 
                                              IsMultiline="True" AllowDeselect="True"
                                              SelectedIndex="{Binding SelectedChipIndex}">
-                        <dxe:Chip Text="Θέλω να αγωράσω"/>
+                        <dxe:Chip Text="Θέλω να αγοράσω"/>
                         <dxe:Chip Text="Θέλω να πουλήσω"/>
                     </dxe:ChoiceChipGroup>
                     <Picker Grid.Row="1" Title="Μάρκα"  ItemsSource="{Binding BrandItems}" SelectedItem="{Binding SelectedBrand}" ItemDisplayBinding="{Binding Name}" SelectedIndexChanged="Brand_Picker_SelectedIndexChanged"/>

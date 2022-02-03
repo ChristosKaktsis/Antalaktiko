@@ -55,8 +55,16 @@ namespace Antalaktiko.ViewModels
             LoadBrandItemsCommand = new Command(async () => await ExecuteLoadBrandItemsCommand());
             LoadPartItemsCommand = new Command(async () => await ExecuteLoadPartsCommand());
             FilterCollectionCommand = new Command(ExecuteFilterCollectionCommand);
-            AnswerCommand = new Command(async () => await Shell.Current.GoToAsync(nameof(AnswerPage)));
+            AnswerCommand = new Command(ExecuteAnswerCommand);
+            
         }
+
+        private async void ExecuteAnswerCommand(object obj)
+        {
+            var item = obj as Post;
+            await Shell.Current.GoToAsync($"{nameof(AnswerPage)}?{nameof(AnswerViewModel.ItemId)}={item.Id}");
+        }
+
         private async Task ExecuteLoadBrandItemsCommand()
         {
             var stopwatch = Stopwatch.StartNew();
@@ -299,9 +307,9 @@ namespace Antalaktiko.ViewModels
                 SetProperty(ref isFilterFocused, value);
             }
         }
-        public void ExecuteFilterCollectionCommand()
+        public async void ExecuteFilterCollectionCommand()
         {
-            
+            //await postManager.FilterSearch();
             //foreach (var post in SourcePostItems)
             //{
             //    if (!filtereditems.Contains(post))

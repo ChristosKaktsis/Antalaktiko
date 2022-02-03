@@ -20,5 +20,31 @@ namespace Antalaktiko.Models
         public string Brand_Name { get; set; }
         public string Model_Name { get; set; }
         public string part_categories_name { get; set; }
+        public string Item_State_Name 
+        { 
+            get 
+            {
+                string state = string.Empty;
+                switch (Item_State)
+                {
+                    case "1":
+                        state = "Ιμιτασιόν";
+                        break;
+                    case "2":
+                        state = "Γνήσιο";
+                        break;
+                    case "3":
+                        state = "Μεταχειρισμένο";
+                        break;
+                    case "4":
+                        state = "Ανακατασκευασμένο";
+                        break;
+                    default:
+                        state = "Όλα";
+                        break;
+                }
+                return state;
+            } 
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace Antalaktiko.ViewModels
 
         private async void OnLoginClicked(object obj)
         {
+            //await userManger.LogIn();
             // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
             await Shell.Current.GoToAsync($"//{nameof(StartPage)}");
         }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Xamarin.Forms;
 
 namespace Antalaktiko.ViewModels
 {
+    [QueryProperty(nameof(ItemId), nameof(ItemId))]
     public class AnswerViewModel : BaseViewModel
     {
         private string itemId;
@@ -15,10 +17,14 @@ namespace Antalaktiko.ViewModels
         private string fuel;
         private string doors;
         private string partType;
+        private string chronology;
+        private string brand;
+        private string model;
+        private string company;
 
         public AnswerViewModel()
         {
-            ItemId = "109600";
+            
         }
         public string ItemId
         {
@@ -28,7 +34,7 @@ namespace Antalaktiko.ViewModels
             }
             set
             {
-                itemId = value;
+                SetProperty(ref itemId, value);
                 LoadItemId(value);
             }
         }
@@ -46,6 +52,26 @@ namespace Antalaktiko.ViewModels
         {
             get => titleInfo;
             set => SetProperty(ref titleInfo, value);
+        }
+        public string Brand
+        {
+            get => brand;
+            set => SetProperty(ref brand, value);
+        }
+        public string Model
+        {
+            get => model;
+            set => SetProperty(ref model, value);
+        }
+        public string Company
+        {
+            get => company;
+            set => SetProperty(ref company, value);
+        }
+        public string Chronology
+        {
+            get => chronology;
+            set => SetProperty(ref chronology, value);
         }
         public string Type
         {
@@ -81,10 +107,15 @@ namespace Antalaktiko.ViewModels
                 Description = item.Description;
                 Author_Name = item.author_name;
                 TitleInfo = item.Info.Brand_Name;
-                Type = item.Type;
-                fuel = item.Info.Fuel;
+                Brand = item.Info.Brand_Name;
+                Model = item.Info.Model_Name;
+                Company = item.company_name;
+                Chronology = item.Info.Chronology;
+                Type = item.Name;
+                Fuel = item.Info.Fuel;
                 Doors = item.Info.Doors;
                 PartType = item.Info.part_categories_name;
+                ItemState = item.Info.Item_State_Name;
             }
             catch (Exception)
             {

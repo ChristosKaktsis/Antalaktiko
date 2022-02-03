@@ -25,5 +25,15 @@ namespace Antalaktiko.Services
             string result = await client.GetStringAsync($"{BaseAddress}?method=Users&params[id]={id}");
             return JsonConvert.DeserializeObject<IEnumerable<User>>(result).FirstOrDefault();
         }
+        public async Task<bool> LogIn()
+        {
+            var book = new { ΗλεκτρονικήΔιεύθυνση = "Christos@gmail.com", Συνθηματικό = "123123123" };
+            var json = JsonConvert.SerializeObject(book);
+            var loginurl = $"{BaseAddress}?putData=Login&data={json}";
+            HttpClient client =  GetClient();
+            string result = await client.GetStringAsync(loginurl);
+            return true;
+        }
+
     }
 }

@@ -14,6 +14,7 @@ namespace Antalaktiko.ViewModels
         public IDataManger<Brand> brandManager = new BrandManager();
         public IDataManger<Part> partManager = new PartManager();
         public PostManger postManager = new PostManger();
+        public UserManager userManger = new UserManager();
         bool isBusy = false;
         public bool IsBusy
         {
