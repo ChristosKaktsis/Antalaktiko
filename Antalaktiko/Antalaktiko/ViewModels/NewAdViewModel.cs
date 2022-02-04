@@ -18,24 +18,76 @@ namespace Antalaktiko.ViewModels
         private string selectedModelName = "Μοντέλο";
         private string selectedBrandName = "Μάρκα";
         private ImageSource imageSource;
+        private int selectedbuysell;
+        private int selectedDoor;
+        private string selectedfuel;
+        private Part selectedPart;
+        private int selectedPartType;
+        private string partCode;
+        private string bikeCode;
+        private string spaceNumber;
+        private string description;
+        private int selectedYearFrom;
+        private int selectedYearTo;
 
         public ObservableCollection<Brand> BrandItems { get; }
         public ObservableCollection<Model> ModelItems { get; }
         public ObservableCollection<Part> PartItems { get; }
         public List<int> YearsFrom { get; }
+        public List<string> ImageSources { get; }
         public Command LoadBrandsCommand { get; }
         public Command LoadPartsCommand { get; }
         public Command TakePhotoCommand { get; }
+        public Command RegisterAdCommand { get; }
         public NewAdViewModel()
         {
             BrandItems = new ObservableCollection<Brand>();
             ModelItems = new ObservableCollection<Model>();
             PartItems = new ObservableCollection<Part>();
+            ImageSources = new List<string>();
             LoadBrandsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             LoadPartsCommand = new Command(async () => await ExecuteLoadPartItemsCommand());
             TakePhotoCommand = new Command(async () => await TakePhotoAsync());
+            RegisterAdCommand = new Command(ExecuteRegisterCommand);
             YearsFrom = SetYears();
         }
+
+        private async void ExecuteRegisterCommand()
+        {
+            try
+            {
+                var door = SelectedDoor + 2;
+                var brand = SelectedBrand == null ? string.Empty : SelectedBrand.Id.ToString();
+                var model = SelectedModel == null ? string.Empty : SelectedModel.Id.ToString();
+                var part = selectedPart == null ? string.Empty : SelectedPart.Id.ToString();
+
+                var post = new
+                {
+                    BuySell,
+                    brand,
+                    model,
+                    SelectedYearFrom,
+                    SelectedYearTo,
+                    door,
+                    SelectedFuel,
+                    part,
+                    PartType,
+                    PartCode,
+                    BikeCode,
+                    SpaceNumber,
+                    Description,
+                    ImageSources
+                };
+                await postManager.RegisterPost(post);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            
+           
+        }
+
         private async Task ExecuteLoadPartItemsCommand()
         {
             IsBusy = true;
@@ -150,6 +202,135 @@ namespace Antalaktiko.ViewModels
                 SetProperty(ref selectedModelName, value);
             }
         }
+        public int SelectedBuySell
+        {
+            get => selectedbuysell;
+            set
+            {
+                SetProperty(ref selectedbuysell, value);
+            }
+        }
+        public string BuySell
+        {
+            get
+            {
+                string buysell = string.Empty;
+                if (SelectedBuySell == 1)
+                    buysell = "θέλω να αγοράσω";
+                else
+                {
+                    buysell = "Θέλω να πουλήσω";
+                }
+                return buysell;
+            }
+        }
+        public int SelectedYearFrom
+
+        {
+            get => selectedYearFrom;
+            set
+            {
+                SetProperty(ref selectedYearFrom, value);
+            }
+        }
+        public int SelectedYearTo
+
+        {
+            get => selectedYearTo;
+            set
+            {
+                SetProperty(ref selectedYearTo, value);
+            }
+        }
+        public int SelectedDoor
+
+        {
+            get => selectedDoor;
+            set
+            {
+                SetProperty(ref selectedDoor, value);
+            }
+        }
+        public string SelectedFuel
+        {
+            get => selectedfuel;
+            set
+            {
+                SetProperty(ref selectedfuel, value);
+            }
+        }
+        public Part SelectedPart
+        {
+            get => selectedPart;
+            set
+            {
+                SetProperty(ref selectedPart, value);
+            }
+        }
+        public int SelectedPartType
+        {
+            get => selectedPartType;
+            set
+            {
+                SetProperty(ref selectedPartType, value);
+            }
+        }
+        public string PartType
+        {
+            get
+            {
+                string part = string.Empty;
+                switch (SelectedPartType)
+                {
+                    case 0:
+                        part = "Καινούριο";
+                        break;
+                    case 1:
+                        part = "Μεταχειρισμένο";
+                        break;
+                    case 2:
+                        part = "Ιμιτασιόν";
+                        break;
+                    case 3:
+                        part = "Ανακατασκευασμένο";
+                        break;
+
+                }
+                return part;
+            }
+        }
+        public string PartCode
+        {
+            get => partCode;
+            set
+            {
+                SetProperty(ref partCode, value);
+            }
+        }
+        public string BikeCode
+        {
+            get => bikeCode;
+            set
+            {
+                SetProperty(ref bikeCode, value);
+            }
+        }
+        public string SpaceNumber
+        {
+            get => spaceNumber;
+            set
+            {
+                SetProperty(ref spaceNumber, value);
+            }
+        }
+        public string Description
+        {
+            get => description;
+            set
+            {
+                SetProperty(ref description, value);
+            }
+        }
         public void OnAppearing()
         {
             LoadBrandsCommand.Execute(null);
@@ -218,6 +399,14 @@ namespace Antalaktiko.ViewModels
 
             PhotoPath = newFile;
             ImageSource = ImageSource.FromFile(newFile);
+            ConvertImage(PhotoPath);
+        }
+        void ConvertImage(string p)
+        {
+            if (string.IsNullOrEmpty(p))
+                return;
+            byte[] imageByte = File.ReadAllBytes(p);
+            ImageSources.Add(Convert.ToBase64String(imageByte));
         }
     }
 }

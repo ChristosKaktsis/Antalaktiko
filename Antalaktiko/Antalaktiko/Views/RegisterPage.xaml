@@ -40,19 +40,39 @@
                             <Button x:Name="OpenAfmPopup" Text="ΑΦΜ" CornerRadius="30" Clicked="OpenAfmPopup_Clicked"/>
                         </StackLayout>
                         <editors:TextEdit PlaceholderText="ΕΠΩΝΥΜΙΑ ΕΤΑΙΡΙΑΣ" StartIcon="company" IsReadOnly="True" Text="{Binding CompanyName}"/>
-                        <editors:TextEdit PlaceholderText="ΙΣΤΟΣΕΛΙΔΑ" StartIcon="website"/>
-                        <editors:TextEdit PlaceholderText="EMAIL" StartIcon="email"/>
-                        <editors:TextEdit  PlaceholderText="ΤΗΛΕΦΩΝΟ"  StartIcon="phone" Keyboard="Telephone"/>
+                        <editors:TextEdit PlaceholderText="ΙΣΤΟΣΕΛΙΔΑ" StartIcon="website" Text="{Binding Website}"/>
+                        <editors:TextEdit PlaceholderText="EMAIL" StartIcon="email" Text="{Binding Email}"/>
+                        <editors:TextEdit  PlaceholderText="ΤΗΛΕΦΩΝΟ"  StartIcon="phone" Keyboard="Telephone" Text="{Binding Telephone}"/>
                         <editors:TextEdit  PlaceholderText="ΑΦΜ"  StartIcon="afm" Keyboard="Numeric" IsReadOnly="True" Text="{Binding Afm}"/>
-                        <editors:TextEdit  PlaceholderText="ΦΑΞ"  StartIcon="fax" Keyboard="Telephone"/>
-                        <editors:TextEdit  PlaceholderText="ΚΙΝ ΤΗΛΕΦΩΝΟ"  StartIcon="mobphone" Keyboard="Telephone"/>
+                        <editors:TextEdit  PlaceholderText="ΦΑΞ"  StartIcon="fax" Keyboard="Telephone" Text="{Binding  Fax}"/>
+                        <editors:TextEdit  PlaceholderText="ΚΙΝ ΤΗΛΕΦΩΝΟ"  StartIcon="mobphone" Keyboard="Telephone" Text="{Binding MobilePhone}"/>
                         <editors:TextEdit PlaceholderText="ΟΔΟΣ" StartIcon="address" IsReadOnly="True" Text="{Binding Address}"/>
                         <editors:TextEdit PlaceholderText="ΑΡΙΘΜΟΣ" StartIcon="address" IsReadOnly="True" Text="{Binding AddressNo}"/>
                         <StackLayout Orientation="Horizontal">
                             <editors:ComboBoxEdit LabelText="ΤΑΧ. ΚΩΔΙΚΑΣ" IsReadOnly="True" ItemsSource="{Binding TKItems}" SelectedItem="{Binding SelectedTK,Mode=TwoWay}" DisplayMember="Ονοματκ" IsFilterEnabled="True" FilterMode="Contains"/>
                             <editors:TextEdit PlaceholderText="ΠΕΡΙΟΧΗ" IsReadOnly="True" Text="{Binding SelectedRegion,Mode=OneWay}" HorizontalOptions="EndAndExpand"/>
                         </StackLayout>
-                        <editors:ComboBoxEdit LabelText="ΤΥΠΟΣ ΕΤΑΙΡΙΑΣ"/>
+                        <editors:ComboBoxEdit LabelText="ΤΥΠΟΣ ΕΤΑΙΡΙΑΣ" SelectedItem="{Binding CompanyType}">
+                            <editors:ComboBoxEdit.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>ΑΝΤΑΛΛΑΚΤΙΚΑ ΑΥΤΟΚΙΝΗΤΩΝ</x:String>
+                                    <x:String>ΑΝΤΑΛΛΑΚΤΙΚΑ AFTERMARKET</x:String>
+                                    <x:String>ΑΝΤΑΛΛΑΚΤΙΚΑ ΙΜΙΤΑΣΙΟΝ</x:String>
+                                    <x:String>ΑΝΤΑΛΛΑΚΤΙΚΑ ΜΕΤΑΧΕΙΡΣΜΕΝΑ</x:String>
+                                    <x:String>ΑΝΤΙΠΡΟΣΩΠΕΙΑ</x:String>
+                                    <x:String>ΑΣΦΑΛΙΣΤΙΚΗ ΕΤΑΙΡΙΑ</x:String>
+                                    <x:String>ΒΑΦΕΙΟ</x:String>
+                                    <x:String>ΕΤΑΙΡΙΑ ΕΝΟΙΚΙΑΣΕΩΝ</x:String>
+                                    <x:String>ΗΛΕΚΤΡΟΛΟΓΕΙΟ-ΔΙΑΓΝΩΣΤΙΚΟ ΚΕΝΤΡΟ</x:String>
+                                    <x:String>ΚΑΘΕΤΗ ΜΟΝΑΔΑ</x:String>
+                                    <x:String>ΜΙΖΕΣ-ΔΥΝΑΜΟ</x:String>
+                                    <x:String>ΣΥΝΕΡΓΕΙΟ ΑΥΤΟΚΙΝΗΤΩΝ</x:String>
+                                    <x:String>ΦΑΝΟΠΟΙΕΙΟ</x:String>
+                                    <x:String>ΨΥΓΕΙΑ ΑΥΤΟΚΙΝΗΤΩΝ</x:String>
+                                    
+                                </x:Array>
+                            </editors:ComboBoxEdit.ItemsSource>
+                        </editors:ComboBoxEdit>
                         
                     </StackLayout>
                 </Frame>
@@ -61,24 +81,24 @@
                         <Label Text="Ανταλλακτικά που ενδιαφέρουν την εταιρία" FontAttributes="Bold" FontSize="17" Margin="0,0,0,10"/>
                         <StackLayout Orientation="Horizontal">
                             <Label Text="Όλα" VerticalOptions="Center"/>
-                            <CheckBox HorizontalOptions="EndAndExpand"/>
+                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding AllChecked}"/>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal" >
                             <Label Text="Ιμιτασιόν" VerticalOptions="Center"/>
-                            <CheckBox HorizontalOptions="EndAndExpand"/>
+                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding ImitationChecked}"/>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal" >
                             <Label Text="Καινούρια" VerticalOptions="Center"/>
-                            <CheckBox HorizontalOptions="EndAndExpand"/>
+                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding NewChecked}"/>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal" >
 
                             <Label Text="Μεταχειρισμένα" VerticalOptions="Center"/>
-                            <CheckBox HorizontalOptions="EndAndExpand"/>
+                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding UsedChecked}"/>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal" >
                             <Label Text="Ανακατασκευασμένα" VerticalOptions="Center"/>
-                            <CheckBox HorizontalOptions="EndAndExpand"/>
+                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding  RebuildChecked}"/>
                         </StackLayout>
                         <Button Command="{Binding OpenPopUpCommand}" Text="Επιλογή Μάρκας που ενδιαφέρουν την εταιρία"  TextColor="{StaticResource Primary}" BackgroundColor="White" CornerRadius="30" Margin="10"/>
                         <Button Command="{Binding OpenPartsPopUpCommand}" Text="Επιλογή Ανταλλακτικών που ενδιαφέρουν την εταιρία"  TextColor="{StaticResource Primary}" BackgroundColor="White" CornerRadius="30" />
@@ -87,14 +107,14 @@
                 <Frame  Margin="12" Padding="0" CornerRadius="20">
                     <StackLayout Margin="10" Spacing="15">
                         <Label Margin="10" Text="Στοιχεία Χρήστη" FontAttributes="Bold" FontSize="20"/>
-                        <editors:TextEdit PlaceholderText="ΟΝΟΜΑ"  StartIcon="user"/>
-                        <editors:TextEdit PlaceholderText="ΕΠΙΘΕΤΟ"  StartIcon="user"/>
-                        <editors:TextEdit PlaceholderText="ΤΗΛΕΦΩΝΟ"  StartIcon="phone" Keyboard="Telephone"/>
-                        <editors:TextEdit PlaceholderText="EMAIL"  StartIcon="email"/>
-                        <editors:PasswordEdit PlaceholderText="ΚΩΔΙΚΟΣ"  StartIcon="password"/>
+                        <editors:TextEdit PlaceholderText="ΟΝΟΜΑ"  StartIcon="user" Text="{Binding Name}"/>
+                        <editors:TextEdit PlaceholderText="ΕΠΙΘΕΤΟ"  StartIcon="user" Text="{Binding Surname}"/>
+                        <editors:TextEdit PlaceholderText="ΤΗΛΕΦΩΝΟ"  StartIcon="phone" Keyboard="Telephone" Text="{Binding Userphone}"/>
+                        <editors:TextEdit PlaceholderText="EMAIL"  StartIcon="email" Text="{Binding UserMail}"/>
+                        <editors:PasswordEdit PlaceholderText="ΚΩΔΙΚΟΣ"  StartIcon="password" Text="{Binding Password}"/>
                         <editors:PasswordEdit PlaceholderText="ΕΠΙΒΕΒΑΙΩΣΗ"  StartIcon="password"/>
 
-                        <Button Text="Αποθήκευση"  FontSize="17" CornerRadius="30"   Padding="15" Margin="10,30,10,0"/>
+                        <Button Text="Αποθήκευση" Command="{Binding RegisterCommand}"  FontSize="17" CornerRadius="30"   Padding="15" Margin="10,30,10,0"/>
                         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                             <Label Text="Έχετε ήδη λογαριασμό;" TextColor="{StaticResource Primary}" VerticalOptions="Center"/>
                             <Button Command="{Binding GoBackCommand}" Text="Κάνε σύνδεση εδώ"  TextColor="{StaticResource Primary}" BackgroundColor="White" CornerRadius="30"/>

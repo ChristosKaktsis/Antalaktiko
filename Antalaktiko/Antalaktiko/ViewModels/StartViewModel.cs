@@ -309,17 +309,20 @@ namespace Antalaktiko.ViewModels
         }
         public async void ExecuteFilterCollectionCommand()
         {
-            //await postManager.FilterSearch();
-            //foreach (var post in SourcePostItems)
-            //{
-            //    if (!filtereditems.Contains(post))
-            //        PostItems.Remove(post);
-            //    else
-            //    {
-            //        if (!PostItems.Contains(post))
-            //            PostItems.Add(post);
-            //    }
-            //}
+            var buysell = selectedChipIndex != 1 ? "Θέλω  να αγοράσω" : "Θέλω να πουλήσω";
+            var brandid = SelectedBrand == null ? string.Empty : SelectedBrand.Id.ToString();
+            var modelid = SelectedModel == null ? string.Empty : SelectedModel.Id.ToString();
+            var partid = SelectedPart == null ? string.Empty : SelectedPart.Id.ToString();
+            var yearfrom = string.IsNullOrEmpty(SelectedYearFrom) ? string.Empty : SelectedYearFrom;
+            var yearto = string.IsNullOrEmpty(SelectedYearTo) ? string.Empty : SelectedYearTo;
+            var fuel = string.IsNullOrEmpty(selectedFuelType) ? string.Empty : SelectedFuelType;
+            
+            var filteritem = new 
+            {
+                buysell,brandid,modelid,partid,yearfrom,yearto,fuel
+            };
+            await postManager.FilterSearch(filteritem);
+            
         }
         public  void OnAppearing()
         {

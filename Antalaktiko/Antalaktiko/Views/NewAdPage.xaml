@@ -73,7 +73,7 @@
                 </StackLayout>
             </dxp:DXPopup>
             <editors:ChoiceChipGroup HorizontalOptions="Center"
-                     BackgroundColor="Transparent"
+                     BackgroundColor="Transparent" SelectedIndex="{Binding SelectedBuySell}"
                      IsMultiline="True" ChipFontSize="18">
                 <editors:Chip Text="Θέλω να πουλήσω" />
                 <editors:Chip Text="Θέλω να αγοράσω" />
@@ -85,19 +85,19 @@
                 <Frame Grid.Column="1" Padding="1" HasShadow="False"  BorderColor="{StaticResource BackGroundDarkTranc}">
                     <Button  Text="{Binding SelectedModelName,Mode=OneWay}" Clicked="Models_Button_Clicked" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource BackGroundDark}" BackgroundColor="White"/>
                 </Frame>
-                <editors:ComboBoxEdit Grid.Row="1" LabelText="Από" ItemsSource="{Binding YearsFrom}"/>
-                <editors:ComboBoxEdit Grid.Row="1" Grid.Column="1" LabelText="Έως" ItemsSource="{Binding YearsFrom}"/>
+                <editors:ComboBoxEdit Grid.Row="1" LabelText="Από" ItemsSource="{Binding YearsFrom}" SelectedItem="{Binding  SelectedYearFrom}"/>
+                <editors:ComboBoxEdit Grid.Row="1" Grid.Column="1" LabelText="Έως" ItemsSource="{Binding YearsFrom}" SelectedItem="{Binding SelectedYearTo}"/>
             </Grid>
             <Label  Text="Πόρτες:" FontSize="18" Margin="10,10,10,0"/>
             <editors:ChoiceChipGroup 
-                     BackgroundColor="Transparent"
+                     BackgroundColor="Transparent" SelectedIndex="{Binding SelectedDoor}"
                      IsMultiline="True" ChipFontSize="18">
                 <editors:Chip Text="2"/>
                 <editors:Chip Text="3"/>
                 <editors:Chip Text="4"/>
                 <editors:Chip Text="5"/>
             </editors:ChoiceChipGroup>
-            <editors:ComboBoxEdit   LabelText="Τύπος Καυσίμου">
+            <editors:ComboBoxEdit   LabelText="Τύπος Καυσίμου" SelectedItem="{Binding SelectedFuel}">
                 <editors:ComboBoxEdit.ItemsSource>
                     <x:Array Type="{x:Type x:String}">
                         <x:String>Βενζίνη</x:String>
@@ -108,22 +108,24 @@
                     </x:Array>
                 </editors:ComboBoxEdit.ItemsSource>
             </editors:ComboBoxEdit>
-            <editors:ComboBoxEdit LabelText="Κατηγιρία ανταλλακτικού" 
+            <editors:ComboBoxEdit LabelText="Κατηγoρία ανταλλακτικού" 
                                   ItemsSource="{Binding PartItems}" 
+                                  SelectedItem="{Binding SelectedPart}"
                                   DisplayMember="Title"/>
             <Label  Text="Κατάσταση ανταλλακτικού:" FontSize="18" Margin="10,10,10,0"/>
             <editors:ChoiceChipGroup 
-                     BackgroundColor="Transparent"
+                     BackgroundColor="Transparent" 
+                     SelectedIndex="{Binding SelectedPartType}"
                      IsMultiline="True">
                 <editors:Chip Text="Καινούριο"/>
                 <editors:Chip Text="Μεταχειρισμένο"/>
                 <editors:Chip Text="Ιμιτασιόν"/>
                 <editors:Chip Text="Ανακατασκευασμένο"/>
             </editors:ChoiceChipGroup>
-            <editors:TextEdit   LabelText="Κωδικός Ανταλλακτικού:"/>
-            <editors:TextEdit  LabelText="Κωδικός Μηχανής:"/>
-            <editors:TextEdit  LabelText="Αριθμός Πλαισίου"/>
-            <editors:MultilineEdit  LabelText="Περιγραφή" HeightRequest="150"/>
+            <editors:TextEdit  LabelText="Κωδικός Ανταλλακτικού:"  Text="{Binding PartCode}"/>
+            <editors:TextEdit  LabelText="Κωδικός Μηχανής:" Text="{Binding BikeCode}"/>
+            <editors:TextEdit  LabelText="Αριθμός Πλαισίου" Text="{Binding SpaceNumber}"/>
+            <editors:MultilineEdit  LabelText="Περιγραφή" HeightRequest="150" Text="{Binding Description}"/>
             <StackLayout Orientation="Horizontal" >
                 <Button x:Name="RemovePhotoButton" Text="Delete" Clicked="Button_Clicked_1"  CornerRadius="10" />
                 <Button x:Name="PickPhotoButton"  ImageSource="gallery" Text="pick photo" Clicked="PickPhotoButton_Clicked" CornerRadius="10" HorizontalOptions="EndAndExpand"/>
@@ -135,7 +137,7 @@
             </Frame>
             <!--we need an obscollection-->
             
-            <Button  Text="Καταχώρηση" CornerRadius="30" Margin="20" WidthRequest="200" HorizontalOptions="Center"/>
+            <Button  Text="Καταχώρηση" Command="{Binding RegisterAdCommand}" CornerRadius="30" Margin="20" WidthRequest="200" HorizontalOptions="Center"/>
         </StackLayout>
     </ScrollView>
 </ContentPage>

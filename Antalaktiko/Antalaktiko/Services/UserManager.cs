@@ -27,10 +27,18 @@ namespace Antalaktiko.Services
         }
         public async Task<bool> LogIn()
         {
-            var book = new { ΗλεκτρονικήΔιεύθυνση = "Christos@gmail.com", Συνθηματικό = "123123123" };
+            var book = new { Email = "Christos@gmail.com", Password = "123123123" };
             var json = JsonConvert.SerializeObject(book);
             var loginurl = $"{BaseAddress}?putData=Login&data={json}";
             HttpClient client =  GetClient();
+            string result = await client.GetStringAsync(loginurl);
+            return true;
+        }
+        public async Task<bool> Register(object registobj)
+        {
+            var json = JsonConvert.SerializeObject(registobj);
+            var loginurl = $"{BaseAddress}?putData=Register&data={json}";
+            HttpClient client = GetClient();
             string result = await client.GetStringAsync(loginurl);
             return true;
         }

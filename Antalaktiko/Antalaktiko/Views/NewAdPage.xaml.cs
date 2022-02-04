@@ -120,8 +120,10 @@ namespace Antalaktiko.Views
         private void Button_Clicked_1(object sender, EventArgs e)
         {
             foreach(var item in gridForRemove)
+            {
                 ImageLayout.Children.Remove(item);
-
+            }
+                
             gridForRemove.Clear();
 
             if (!gridForRemove.Any())
@@ -152,6 +154,9 @@ namespace Antalaktiko.Views
 
             grid.Children.Add(button);
             ImageLayout.Children.Add(grid);
+
+            //add image to image source 
+           
             
         }
     }

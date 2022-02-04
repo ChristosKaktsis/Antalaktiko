@@ -12,20 +12,12 @@ namespace Antalaktiko.ViewModels
 {
     class RegisterViewModel : BaseViewModel
     {
-        private bool isPopUpOpen;      
-        private bool isAllChecked;
+        private bool isPopUpOpen, isPartsPopUpOpen, isAllChecked, isAllPartsChecked, isAfmPopUpOpen, afmHasError;      
         private TK selectedTK;
-        private string selectedRegion;
-        private bool isPartsPopUpOpen;
-        private bool isAllPartsChecked;
-        private bool isAfmPopUpOpen;
-        private string afm;
-        private string afmError;
-        private string addressNo;
-        private string address;
-        private string companyName;
-        private string tk;
-        private bool afmHasError;
+        private string selectedRegion, afm, afmError, addressNo, address, companyName, tk;
+        private string name, usermail, password, userphone, surname, mobilePhone, website, email, telephone, fax;
+        private bool allChecked, imitationChecked, newChecked, usedChecked, rebuildChecked;
+        private string compType;
 
         public Command GoBackCommand { get; }
         public Command OpenPopUpCommand { get; }
@@ -33,9 +25,11 @@ namespace Antalaktiko.ViewModels
         public Command ClearSelectedBrandCommand { get; }
         public Command ClearSelectedPartsCommand { get; }
         public Command LoadFieldWithAFMCommand { get; }
+        public Command RegisterCommand { get; }
         public ObservableCollection<Brand> BrandItems { get; }
         public ObservableCollection<Part> PartItems { get; }
         public ObservableCollection<TK> TKItems { get; }
+        public List<int> PartType { get; }
         public RegisterViewModel()
         {
             GoBackCommand = new Command(OnGoBackClicked);
@@ -44,9 +38,33 @@ namespace Antalaktiko.ViewModels
             ClearSelectedBrandCommand = new Command(()=>CheckAllBrands(false));
             ClearSelectedPartsCommand = new Command(() => CheckAllParts(false));
             LoadFieldWithAFMCommand = new Command(async () => await ExecuteLoadFieldWithAFM());
+            RegisterCommand = new Command(ExecuteRegisterCommand);
             BrandItems = new ObservableCollection<Brand>();
             PartItems = new ObservableCollection<Part>();
             TKItems = new ObservableCollection<TK>();
+            PartType = new List<int>();
+        }
+
+        private async void ExecuteRegisterCommand(object obj)
+        {
+            List<int> selectedbrands = new List<int>();
+            List<int> selectedparts = new List<int>();
+            foreach (var braitem in BrandItems)
+                if (braitem.IsChecked)
+                    selectedbrands.Add(braitem.Id);
+
+            foreach (var partitem in PartItems)
+                if (partitem.IsChecked)
+                    selectedparts.Add(partitem.Id);
+
+            var regitem = new 
+            {
+                Afm, CompanyName, Website, Email, Telephone, MobilePhone,Fax,
+                Address,AddressNo,SelectedTK.Ονοματκ,SelectedRegion,
+                selectedbrands,selectedparts,PartType,CompanyType,
+                Name,Surname,Userphone,UserMail,Password
+            };
+            await userManger.Register(regitem);
         }
 
         private async Task ExecuteLoadFieldWithAFM()
@@ -135,6 +153,7 @@ namespace Antalaktiko.ViewModels
                 IsBusy = false;
             }
         }
+        //company info
         public TK SelectedTK
         {
             get => selectedTK;
@@ -182,6 +201,67 @@ namespace Antalaktiko.ViewModels
                 SetProperty(ref isAllPartsChecked, value);
                 CheckAllParts(value);
             }
+        }
+        public bool AllChecked
+        {
+            get => allChecked;
+            set 
+            {
+                SetProperty(ref allChecked, value);
+                
+                if (value)
+                    PartType.Add(0);
+                else
+                    PartType.Remove(0);
+            } 
+        }
+        public bool ImitationChecked
+        {
+            get => imitationChecked;
+            set 
+            {
+                SetProperty(ref imitationChecked, value);
+                if (value)
+                    PartType.Add(1);
+                else
+                    PartType.Remove(1);
+            } 
+        }
+        public bool NewChecked
+        {
+            get => newChecked;
+            set 
+            {
+                SetProperty(ref newChecked, value);
+                if (value)
+                    PartType.Add(2);
+                else
+                    PartType.Remove(2);
+            } 
+        }
+        public bool UsedChecked
+        {
+            get => usedChecked;
+            set 
+            {
+                SetProperty(ref usedChecked, value);
+                if (value)
+                    PartType.Add(3);
+                else
+                    PartType.Remove(3);
+            } 
+        }
+        public bool RebuildChecked
+        {
+            get => rebuildChecked;
+            set 
+            {
+                SetProperty(ref rebuildChecked, value);
+                if (value)
+                    PartType.Add(4);
+                else
+                    PartType.Remove(4);
+            } 
         }
         public string Afm
         {
@@ -248,7 +328,60 @@ namespace Antalaktiko.ViewModels
                 return;
             SelectedTK = TKItems.Where(x => x.Ονοματκ == value).FirstOrDefault();
         }
+        public string Website
+        {
+            get => website;
+            set
+            {
+                SetProperty(ref website, value);
 
+            }
+        }
+        public string Email
+        {
+            get => email;
+            set
+            {
+                SetProperty(ref email, value);
+
+            }
+        }
+        public string Telephone
+        {
+            get => telephone;
+            set
+            {
+                SetProperty(ref telephone, value);
+
+            }
+        }
+        public string Fax
+        {
+            get => fax;
+            set
+            {
+                SetProperty(ref fax, value);
+
+            }
+        }
+        public string MobilePhone
+        {
+            get => mobilePhone;
+            set
+            {
+                SetProperty(ref mobilePhone, value);
+
+            }
+        }
+        public string CompanyType
+        {
+            get => compType;
+            set
+            {
+                SetProperty(ref compType, value);
+
+            }
+        }
         private void CheckAllParts(bool value)
         {
             foreach (var item in PartItems)
@@ -259,6 +392,53 @@ namespace Antalaktiko.ViewModels
         {
             foreach (var item in BrandItems)
                 item.IsChecked = value;
+        }
+        
+        //user info
+        public string Name
+        {
+            get => name;
+            set
+            {
+                SetProperty(ref name, value);
+
+            }
+        }
+        public string Surname
+        {
+            get => surname;
+            set
+            {
+                SetProperty(ref surname, value);
+
+            }
+        }
+        public string Userphone
+        {
+            get => userphone;
+            set
+            {
+                SetProperty(ref userphone, value);
+
+            }
+        }
+        public string UserMail
+        {
+            get => usermail;
+            set
+            {
+                SetProperty(ref usermail, value);
+
+            }
+        }
+        public string Password
+        {
+            get => password;
+            set
+            {
+                SetProperty(ref password, value);
+
+            }
         }
         public async void OnAppearing()
         {

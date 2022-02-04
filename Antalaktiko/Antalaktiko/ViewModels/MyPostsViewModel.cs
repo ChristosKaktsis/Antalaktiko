@@ -35,7 +35,7 @@ namespace Antalaktiko.ViewModels
             {
                 PostItems.Clear();
                 SourcePostItems.Clear();
-                await postManager.GetUserPost();
+                
                 var items = await postManager.GetAll();
                 foreach (var item in items)
                 {
