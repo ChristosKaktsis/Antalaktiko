@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors" xmlns:Model="clr-namespace:Antalaktiko.Models" xmlns:vm="clr-namespace:Antalaktiko.ViewModels"
              x:Class="Antalaktiko.Views.AnswerPage"
              Shell.TabBarIsVisible="False"
              Title="Στοιχεία αγγελίας">
@@ -13,77 +13,101 @@
             
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ScrollView>
-        <Grid >
-            <StackLayout>
-                <Frame Padding="10" Margin="5" CornerRadius="5">
-                    <StackLayout>
-                        <Label Text="{Binding Type,Mode=OneWay}" FontSize="20" FontAttributes="Bold"/>
-                        <Label Text="{Binding Description,Mode=OneWay}" />
-                    </StackLayout>
-                </Frame>
-                <Frame Padding="10" Margin="5" CornerRadius="5">
-                    <StackLayout >
-                        <!--<Label Text="{Binding TitleInfo,Mode=OneWay}" FontSize="26" FontAttributes="Bold"/>-->
-                        
-                        <Grid RowSpacing="20" ColumnSpacing="40" Margin="0,0,0,0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                <RowDefinition Height="50"/>
-                                
-                            </Grid.RowDefinitions>
-                            <StackLayout>
-                                <Label Text="Μάρκα"/>
-                                <Label Text="{Binding Brand,Mode=OneWay}" FontAttributes="Bold"/>
-                            </StackLayout>
-                            <StackLayout Grid.Column="1">
-                                <Label Text="Μοντέλο"/>
-                                <Label Text="{Binding Model,Mode=OneWay}" FontAttributes="Bold"/>
-                            </StackLayout>
-                            <StackLayout Grid.Row="1">
-                                <Label Text="Χρονολογία"/>
-                                <Label Text="{Binding Chronology,Mode=OneWay}" FontAttributes="Bold"/>
-                            </StackLayout>
-                            <StackLayout Grid.Row="2">
-                                <Label Text="Αριθμός  αγγελίας"/>
-                                <Label Text="{Binding ItemId,Mode=OneWay}" FontAttributes="Bold"/>
-                            </StackLayout>
-                            <StackLayout Grid.Row="3">
-                                <Label Text="Καύσιμο"/>
-                                <Label Text="{Binding Fuel,Mode=OneWay}" FontAttributes="Bold"/>
-                            </StackLayout>
-                            <StackLayout Grid.Row="4">
-                                <Label Text="Εταιρεία"/>
-                                <Label Text="{Binding Company,Mode=OneWay}" FontAttributes="Bold"/>
-                            </StackLayout>
-                            <StackLayout Grid.Row="1" Grid.Column="1">
-                                <Label Text="Κατηγορία"/>
-                                <Label Text="{Binding PartType,Mode=OneWay}" FontAttributes="Bold"/>
-                            </StackLayout>
-                            <StackLayout Grid.Row="2" Grid.Column="1">
-                                <Label Text="Κατάσταση"/>
-                                <Label Text="{Binding ItemState,Mode=OneWay}" FontAttributes="Bold"/>
-                            </StackLayout>
-                            <StackLayout Grid.Row="3" Grid.Column="1">
-                                <Label Text="Πόρτες"/>
-                                <Label Text="{Binding Doors,Mode=OneWay}" FontAttributes="Bold"/>
-                            </StackLayout>
-                        </Grid>
-                    </StackLayout>
-                </Frame>
-                
-                <Frame Padding="10" Margin="5" CornerRadius="5">
-                    <StackLayout >
-                        <Label Text="Σχόλιο" FontSize="26" FontAttributes="Bold"/>
-                        <editors:MultilineEdit   />
-                        <Button Text="Αποστολή" HorizontalOptions="End" CornerRadius="10"/>
+    <ContentView x:DataType="vm:AnswerViewModel">
+        <ScrollView>
+            <Grid x:Name="maingrid">
+                <FlexLayout x:Name="MainFlexLayout" Direction="Column">
+                    <Frame Padding="10" Margin="5" CornerRadius="5">
+                        <StackLayout>
+                            <Label Text="{Binding Type,Mode=OneWay}" FontSize="20" FontAttributes="Bold"/>
+                            <Label Text="{Binding Description,Mode=OneWay}" />
+                        </StackLayout>
+                    </Frame>
+                    <Frame Padding="0" Margin="5" CornerRadius="5">
+                        <StackLayout >
+                            <!--<Label Text="{Binding TitleInfo,Mode=OneWay}" FontSize="26" FontAttributes="Bold"/>-->
 
-                    </StackLayout>
-                </Frame>
-            </StackLayout>
-        </Grid>
-        
-    </ScrollView>
+                            <Grid RowSpacing="0" Margin="0,0,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+
+                                </Grid.RowDefinitions>
+                                <Frame  Padding="10" HasShadow="False" BackgroundColor="{StaticResource BackGround}">
+                                    <StackLayout Orientation="Horizontal" >
+                                        <Label Text="Μάρκα"/>
+                                        <Label Text="{Binding Brand,Mode=OneWay}" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Grid.Row="1" Padding="10" HasShadow="False" >
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Μοντέλο"/>
+                                        <Label Text="{Binding Model,Mode=OneWay}" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Grid.Row="2" Padding="10" HasShadow="False" BackgroundColor="{StaticResource BackGround}">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="Χρονολογία"/>
+                                        <Label Text="{Binding Chronology,Mode=OneWay}" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Grid.Row="3" Padding="10" HasShadow="False" >
+                                    <StackLayout Orientation="Horizontal" >
+                                        <Label Text="Αριθμός  αγγελίας"/>
+                                        <Label Text="{Binding ItemId,Mode=OneWay}" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Grid.Row="4" Padding="10" HasShadow="False" BackgroundColor="{StaticResource BackGround}">
+                                    <StackLayout Orientation="Horizontal" >
+                                        <Label Text="Καύσιμο"/>
+                                        <Label Text="{Binding Fuel,Mode=OneWay}" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Grid.Row="5" Padding="10" HasShadow="False" >
+                                    <StackLayout Orientation="Horizontal" >
+                                        <Label Text="Εταιρεία"/>
+                                        <Label Text="{Binding Company,Mode=OneWay}" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Grid.Row="6" Padding="10" HasShadow="False" BackgroundColor="{StaticResource BackGround}">
+                                    <StackLayout Orientation="Horizontal" >
+                                        <Label Text="Κατηγορία"/>
+                                        <Label Text="{Binding PartType,Mode=OneWay}" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Grid.Row="7" Padding="10" HasShadow="False">
+                                    <StackLayout Orientation="Horizontal" >
+                                        <Label Text="Κατάσταση"/>
+                                        <Label Text="{Binding ItemState,Mode=OneWay}" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                                    </StackLayout>
+                                </Frame>
+                                <Frame Grid.Row="8" Padding="10" HasShadow="False"  BackgroundColor="{StaticResource BackGround}">
+                                    <StackLayout Orientation="Horizontal" >
+                                        <Label Text="Πόρτες"/>
+                                        <Label Text="{Binding Doors,Mode=OneWay}" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                                    </StackLayout>
+                                </Frame>
+
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
+                    <StackLayout x:Name="CommentStack"/>
+                    <Frame Padding="10" Margin="5" CornerRadius="5">
+                        <StackLayout >
+                            <editors:MultilineEdit  PlaceholderText="Απάντησε εδώ..." Text="{Binding CommentAnswer}"/>
+                            <Button x:Name="AnswerButton" Text="Απάντησε" HorizontalOptions="End" CornerRadius="10" Clicked="AnswerButton_Clicked"/>
+                        </StackLayout>
+                    </Frame>
+                </FlexLayout>
+            </Grid>
+
+        </ScrollView>
+    </ContentView>
+    
 </ContentPage>

@@ -25,7 +25,7 @@ namespace Antalaktiko.ViewModels
             SourcePostItems = new List<Post>();
             LoadPostItemsCommand = new Command(async () => await ExecuteLoadPostItemsCommand());
             LoadMoreCommand = new Command(async () => await ExecuteLoadMoreCommand());
-            LogedUser = "6199";
+            LogedUser = "5570";
         }
 
         private async Task ExecuteLoadPostItemsCommand()
@@ -36,12 +36,11 @@ namespace Antalaktiko.ViewModels
                 PostItems.Clear();
                 SourcePostItems.Clear();
                 
-                var items = await postManager.GetAll();
+                var items = await postManager.GetItemsWithUid(LogedUser);
                 foreach (var item in items)
                 {
                     item.TitleInfo = await SetPostTitleInfo(item.Info);
-                    if (item.Author == LogedUser)
-                        PostItems.Add(item);
+                    PostItems.Add(item);
                 }
 
             }
@@ -66,22 +65,21 @@ namespace Antalaktiko.ViewModels
         }
         private async Task ExecuteLoadMoreCommand()
         {
-            //if (IsBusy)
-            //    return;
-            //if (IsRefresing)
-            //    return;
+            if (IsBusy)
+                return;
+            if (IsRefresing)
+                return;
             try
             {
                 IsRefresing = true;
                 SourcePostItems.Clear();
-                var items = await postManager.GetMore();
+                var items = await postManager.GetMoreItemsWithUid(LogedUser);
                 foreach (var item in items)
                 {
                     item.TitleInfo = await SetPostTitleInfo(item.Info);
-                    if (item.Author == LogedUser)
-                        SourcePostItems.Add(item); 
+                    PostItems.Add(item);
                 }
-                SourcePostItems.ForEach(PostItems.Add);
+                
             }
             catch (Exception ex)
             {

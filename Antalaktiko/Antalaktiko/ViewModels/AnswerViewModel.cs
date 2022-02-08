@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Antalaktiko.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Antalaktiko.ViewModels
@@ -8,23 +11,16 @@ namespace Antalaktiko.ViewModels
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
     public class AnswerViewModel : BaseViewModel
     {
-        private string itemId;
-        private string description;
-        private string author_Name;
-        private string titleInfo;
-        private string type;
-        private string itemState;
-        private string fuel;
-        private string doors;
-        private string partType;
-        private string chronology;
-        private string brand;
-        private string model;
-        private string company;
+        private string itemId, description, author_Name, titleInfo, type, itemState, 
+            fuel, doors, partType, chronology, brand, model, company;
+        private string commntAnswer;
 
+        public ObservableCollection<Comment> CommentCollection { get; set; }
+        public List<Comment> NewComments { get; set; }
         public AnswerViewModel()
         {
-            
+            CommentCollection = new ObservableCollection<Comment>();
+            NewComments = new List<Comment>();
         }
         public string ItemId
         {
@@ -120,6 +116,55 @@ namespace Antalaktiko.ViewModels
             catch (Exception)
             {
                 Console.WriteLine("Failed to Load Item");
+            }
+        }
+        public async Task LoadComments()
+        {
+            try
+            {
+                CommentCollection.Clear();
+                NewComments.ForEach(CommentCollection.Add);
+                var comments = await commentManager.GetCommentWithPostId(itemId);
+                foreach (var item in comments)
+                    CommentCollection.Add(item);
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+        public string CommentAnswer
+        {
+            get => commntAnswer;
+            set => SetProperty(ref commntAnswer, value);
+        }
+        public async Task AnswerComment()
+        {
+            try
+            {
+                var comment = new 
+                {
+                    Author = 1,
+                    Date = DateTime.Now.ToString(),
+                    Description = CommentAnswer,
+                    Pid = itemId
+                };
+                //await commentManager.PutComment(comment);
+                await Task.Delay(1);
+                //normaly we would return an comment after put to display in list
+                //temporary object creation
+                NewComments.Add(new Comment
+                {
+                    Author = comment.Author,
+                    Date = comment.Date,
+                    Description = comment.Description
+                });
+                CommentAnswer = string.Empty;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
     }

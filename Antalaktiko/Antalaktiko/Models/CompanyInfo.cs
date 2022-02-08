@@ -23,5 +23,58 @@ namespace Antalaktiko.Models
         public string Active { get; set; }
         public string Seller { get; set; }
         public string Location { get; set; }
+        public string Company_Type 
+        {
+            get
+            {
+                string type = string.Empty;
+                switch (Company_Job)
+                {
+                    case "1":
+                        type = "ΑΝΤΑΛΛΑΚΤΙΚΑ ΑΥΤΟΚΙΝΗΤΩΝ";
+                        break;
+                    case "2":
+                        type = "ΑΝΤΑΛΛΑΚΤΙΚΑ AFTERMARKET";
+                        break;
+                    case "3":
+                        type = "ΑΝΤΑΛΛΑΚΤΙΚΑ ΙΜΙΤΑΣΙΟΝ";
+                        break;
+                    case "4":
+                        type = "ΑΝΤΑΛΛΑΚΤΙΚΑ ΜΕΤΑΧΕΙΡΣΜΕΝΑ";
+                        break;
+                    case "5":
+                        type = "ΑΝΤΙΠΡΟΣΩΠΕΙΑ";
+                        break;
+                    case "6":
+                        type = "ΑΣΦΑΛΙΣΤΙΚΗ ΕΤΑΙΡΙΑ";
+                        break;
+                    case "7":
+                        type = "ΒΑΦΕΙΟ";
+                        break;
+                    case "8":
+                        type = "ΕΤΑΙΡΙΑ ΕΝΟΙΚΙΑΣΕΩΝ";
+                        break;
+                    case "9":
+                        type = "ΗΛΕΚΤΡΟΛΟΓΕΙΟ-ΔΙΑΓΝΩΣΤΙΚΟ ΚΕΝΤΡΟ";
+                        break;
+                    case "10":
+                        type = "ΚΑΘΕΤΗ ΜΟΝΑΔΑ";
+                        break;
+                    case "11":
+                        type = "ΜΙΖΕΣ-ΔΥΝΑΜΟ";
+                        break;
+                    case "12":
+                        type = "ΣΥΝΕΡΓΕΙΟ ΑΥΤΟΚΙΝΗΤΩΝ";
+                        break;
+                    case "13":
+                        type = "ΦΑΝΟΠΟΙΕΙΟ";
+                        break;
+                    case "14":
+                        type = "ΨΥΓΕΙΑ ΑΥΤΟΚΙΝΗΤΩΝ";
+                        break;
+                }
+                return type;
+            } 
+        }
     }
 }

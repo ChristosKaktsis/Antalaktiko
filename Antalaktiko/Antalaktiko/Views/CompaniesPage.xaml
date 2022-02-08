@@ -1,12 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Antalaktiko.Views.CompaniesPage">
-    <ContentPage.Content>
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:vm="clr-namespace:Antalaktiko.ViewModels" 
+             xmlns:model="clr-namespace:Antalaktiko.Models"
+             x:Class="Antalaktiko.Views.CompaniesPage"
+             Title="Εταιρείες">
+    <RefreshView x:DataType="vm:CompaniesViewModel" IsRefreshing="{Binding IsBusy}" Command="{Binding LoadCompaniesCommand}">
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <CollectionView ItemsSource="{Binding CompanyCollection}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Frame x:DataType="model:Company" Padding="10"  CornerRadius="10">
+                                <StackLayout>
+                                    <Label Text="{Binding Title}" FontSize="18" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Info.Address1}"/>
+                                    <Label Text="{Binding Info.Phone}"/>
+                                    
+                                    <Label Text="{Binding Info.Company_Type}"/>
+                                    <Label Text="{Binding Info.Subscription_Ends,StringFormat='Ημ.Λήξης :{0}'}"/>
+                                    <Label Text="{Binding Info.Subscription_Started,StringFormat='Ημ.Αρχ.Εγγρ. :{0}'}"/>
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                        
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </StackLayout>
-    </ContentPage.Content>
+    </RefreshView>
 </ContentPage>

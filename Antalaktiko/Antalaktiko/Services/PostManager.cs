@@ -32,10 +32,23 @@ namespace Antalaktiko.Services
         }
         public async Task<Post> GetItemWithId(string id)
         {
-            page += num;
             HttpClient client = GetClient();
             string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[id]={id}");
             return JsonConvert.DeserializeObject<IEnumerable<Post>>(result).FirstOrDefault();
+        }
+        public async Task<IEnumerable<Post>> GetItemsWithUid(string id)
+        {
+            page = 0;
+            HttpClient client = GetClient();
+            string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[uid]={id}&params[type]=mine&params[upage]={page}&params[unum]={num}");
+            return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
+        }
+        public async Task<IEnumerable<Post>> GetMoreItemsWithUid(string id)
+        {
+            page += num;
+            HttpClient client = GetClient();
+            string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[uid]={id}&params[type]=mine&params[upage]={page}&params[unum]={num}");
+            return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
         }
         public async Task<bool> FilterSearch(object filter)
         {

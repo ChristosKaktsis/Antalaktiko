@@ -25,10 +25,9 @@ namespace Antalaktiko.Services
             string result = await client.GetStringAsync($"{BaseAddress}?method=Users&params[id]={id}");
             return JsonConvert.DeserializeObject<IEnumerable<User>>(result).FirstOrDefault();
         }
-        public async Task<bool> LogIn()
+        public async Task<bool> LogIn(object loginobj)
         {
-            var book = new { Email = "Christos@gmail.com", Password = "123123123" };
-            var json = JsonConvert.SerializeObject(book);
+            var json = JsonConvert.SerializeObject(loginobj);
             var loginurl = $"{BaseAddress}?putData=Login&data={json}";
             HttpClient client =  GetClient();
             string result = await client.GetStringAsync(loginurl);

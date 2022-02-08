@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Antalaktiko.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,17 @@ namespace Antalaktiko.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class CompaniesPage : ContentPage
 	{
-		public CompaniesPage ()
+        private CompaniesViewModel _viewModel;
+
+        public CompaniesPage ()
 		{
 			InitializeComponent ();
+			BindingContext = _viewModel = new CompaniesViewModel();
 		}
-	}
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _viewModel.OnAppearing();
+        }
+    }
 }
