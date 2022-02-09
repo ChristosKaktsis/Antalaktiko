@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -123,7 +124,8 @@ namespace Antalaktiko.ViewModels
             try
             {
                 CommentCollection.Clear();
-                NewComments.ForEach(CommentCollection.Add);
+                var list = NewComments.OrderByDescending(x => x.Date).ToList();
+                list.ForEach(CommentCollection.Add);
                 var comments = await commentManager.GetCommentWithPostId(itemId);
                 foreach (var item in comments)
                     CommentCollection.Add(item);
@@ -145,7 +147,7 @@ namespace Antalaktiko.ViewModels
             {
                 var comment = new 
                 {
-                    Author = 1,
+                    Author = LogedUser,
                     Date = DateTime.Now.ToString(),
                     Description = CommentAnswer,
                     Pid = itemId
@@ -156,7 +158,7 @@ namespace Antalaktiko.ViewModels
                 //temporary object creation
                 NewComments.Add(new Comment
                 {
-                    Author = comment.Author,
+                    Author_Name = App.LogedUser.First_Name,
                     Date = comment.Date,
                     Description = comment.Description
                 });

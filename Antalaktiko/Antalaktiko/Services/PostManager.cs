@@ -38,6 +38,8 @@ namespace Antalaktiko.Services
         }
         public async Task<IEnumerable<Post>> GetItemsWithUid(string id)
         {
+            if (string.IsNullOrEmpty(id))
+                return Enumerable.Empty<Post>(); 
             page = 0;
             HttpClient client = GetClient();
             string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[uid]={id}&params[type]=mine&params[upage]={page}&params[unum]={num}");
@@ -45,9 +47,29 @@ namespace Antalaktiko.Services
         }
         public async Task<IEnumerable<Post>> GetMoreItemsWithUid(string id)
         {
+            if (string.IsNullOrEmpty(id))
+                return Enumerable.Empty<Post>();
             page += num;
             HttpClient client = GetClient();
             string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[uid]={id}&params[type]=mine&params[upage]={page}&params[unum]={num}");
+            return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
+        }
+        public async Task<IEnumerable<Post>> GetMyAnsweredWithUid(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return Enumerable.Empty<Post>();
+            page = 0;
+            HttpClient client = GetClient();
+            string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[uid]={id}&params[type]=my_answers&params[upage]={page}&params[unum]={num}");
+            return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
+        }
+        public async Task<IEnumerable<Post>> GetMoreMyAnsweredWithUid(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return Enumerable.Empty<Post>();
+            page += num;
+            HttpClient client = GetClient();
+            string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[uid]={id}&params[type]=my_answers&params[upage]={page}&params[unum]={num}");
             return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
         }
         public async Task<bool> FilterSearch(object filter)

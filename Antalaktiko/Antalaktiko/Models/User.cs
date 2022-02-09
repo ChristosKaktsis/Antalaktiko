@@ -10,6 +10,7 @@ namespace Antalaktiko.Models
         public string Email { get; set; }
         public string First_Name { get; set; }
         public string Last_Name { get; set; }
+        public int Error { get; set; }
         public UserInfo Info { get; set; }
     }
 }

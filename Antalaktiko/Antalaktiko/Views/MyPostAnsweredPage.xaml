@@ -1,19 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-             xmlns:vm="clr-namespace:Antalaktiko.ViewModels" 
-             xmlns:model="clr-namespace:Antalaktiko.Models"
-             x:Class="Antalaktiko.Views.MyPostsPage"
+             xmlns:model="clr-namespace:Antalaktiko.Models" 
+             xmlns:vm="clr-namespace:Antalaktiko.ViewModels"
+             x:Class="Antalaktiko.Views.MyPostAnsweredPage"
              Shell.NavBarIsVisible="False">
-    <Grid x:DataType="vm:MyPostsViewModel">
+    <Grid x:DataType="vm:MyPostAnsweredViewModel">
         <StackLayout>
             <SearchBar Placeholder="Αναζήτηση..."
                                CancelButtonColor="{StaticResource BackGroundDark}"
                                PlaceholderColor="{StaticResource BackGroundDark}"
                                TextColor="{StaticResource PrimaryDark}"
-                               TextTransform="Lowercase"
-                               
-                              
+                               TextTransform="Lowercase"                 
                                HorizontalTextAlignment="Center"
                                FontSize="Medium"
                                FontAttributes="Italic" />
@@ -51,13 +49,12 @@
                                     </Grid>
                                 </Frame>
                             </SwipeView>
-                            <!-- Content -->
                             
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </RefreshView>
         </StackLayout>
-        
+
     </Grid>
 </ContentPage>

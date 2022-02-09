@@ -36,6 +36,18 @@ namespace Antalaktiko.ViewModels
             get { return title; }
             set { SetProperty(ref title, value); }
         }
+        string logedUser;
+        public string LogedUser
+        {
+            get
+            {
+                if (App.LogedUser == null)
+                    return string.Empty;
+
+                logedUser = App.LogedUser.Id;
+                return logedUser;
+            }
+        }
         public async void OnGoBackClicked()
         {
             await Shell.Current.GoToAsync($"..");

@@ -33,10 +33,10 @@ namespace Antalaktiko.Views
         {
             CommentStack.Children.Clear();
             foreach (var item in _viewModel.CommentCollection)
-                BuildCommentUI(item.Author,item.Description,item.Date);
+                BuildCommentUI(item.Author_Name,item.Description,item.Date);
         }
 
-        void BuildCommentUI(int author, string description, string date)
+        void BuildCommentUI(string author, string description, string date)
         {
             Frame frame = new Frame
             {
@@ -48,7 +48,7 @@ namespace Antalaktiko.Views
            
             Label companyLabel = new Label
             {
-                Text = author.ToString(),
+                Text = author,
                 FontSize = 20,
                 FontAttributes = FontAttributes.Bold,
                 HorizontalOptions = LayoutOptions.StartAndExpand

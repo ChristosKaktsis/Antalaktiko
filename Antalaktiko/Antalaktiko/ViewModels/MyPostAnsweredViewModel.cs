@@ -1,25 +1,23 @@
 ﻿using Antalaktiko.Models;
-using Antalaktiko.Services;
 using Antalaktiko.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Antalaktiko.ViewModels
 {
-    public class MyPostsViewModel : BaseViewModel
+    public class MyPostAnsweredViewModel : BaseViewModel
     {
         public ObservableCollection<Post> PostItems { get; set; }
         public List<Post> SourcePostItems { get; set; }
         public Command LoadPostItemsCommand { get; }
         public Command LoadMoreCommand { get; }
         public Command AnswerCommand { get; }
-        
-        public MyPostsViewModel()
+
+        public MyPostAnsweredViewModel()
         {
             PostItems = new ObservableCollection<Post>();
             SourcePostItems = new List<Post>();
@@ -39,8 +37,8 @@ namespace Antalaktiko.ViewModels
             {
                 PostItems.Clear();
                 SourcePostItems.Clear();
-                
-                var items = await postManager.GetItemsWithUid(LogedUser);
+
+                var items = await postManager.GetMyAnsweredWithUid(LogedUser);
                 foreach (var item in items)
                 {
                     item.TitleInfo = await SetPostTitleInfo(item.Info);
@@ -50,7 +48,7 @@ namespace Antalaktiko.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                Console.WriteLine(ex);
             }
             finally
             {
@@ -77,17 +75,17 @@ namespace Antalaktiko.ViewModels
             {
                 IsRefresing = true;
                 SourcePostItems.Clear();
-                var items = await postManager.GetMoreItemsWithUid(LogedUser);
+                var items = await postManager.GetMoreMyAnsweredWithUid(LogedUser);
                 foreach (var item in items)
                 {
                     item.TitleInfo = await SetPostTitleInfo(item.Info);
                     PostItems.Add(item);
                 }
-                
+
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                Console.WriteLine(ex);
             }
             finally
             {

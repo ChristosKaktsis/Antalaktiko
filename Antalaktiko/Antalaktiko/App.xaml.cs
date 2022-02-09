@@ -1,4 +1,5 @@
 ﻿using Antalaktiko.Data;
+using Antalaktiko.Models;
 using Antalaktiko.Services;
 using Antalaktiko.Views;
 using System;
@@ -24,6 +25,8 @@ namespace Antalaktiko
                 return database;
             }
         }
+
+        public static User LogedUser { get; set; }
         public App()
         {
             DevExpress.XamarinForms.Editors.Initializer.Init();

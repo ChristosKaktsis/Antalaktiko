@@ -25,13 +25,13 @@ namespace Antalaktiko.Services
             string result = await client.GetStringAsync($"{BaseAddress}?method=Users&params[id]={id}");
             return JsonConvert.DeserializeObject<IEnumerable<User>>(result).FirstOrDefault();
         }
-        public async Task<bool> LogIn(object loginobj)
+        public async Task<User> LogIn(object loginobj)
         {
             var json = JsonConvert.SerializeObject(loginobj);
             var loginurl = $"{BaseAddress}?putData=Login&data={json}";
             HttpClient client =  GetClient();
             string result = await client.GetStringAsync(loginurl);
-            return true;
+            return JsonConvert.DeserializeObject<User>(result);
         }
         public async Task<bool> Register(object registobj)
         {

@@ -11,14 +11,14 @@ using Xamarin.Forms.Xaml;
 namespace Antalaktiko.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MyPostsPage : ContentPage
+    public partial class MyPostAnsweredPage : ContentPage
     {
-        private MyPostsViewModel _viewModel;
+        private MyPostAnsweredViewModel _viewModel;
 
-        public MyPostsPage()
+        public MyPostAnsweredPage()
         {
             InitializeComponent();
-            BindingContext = _viewModel = new MyPostsViewModel();
+            BindingContext = _viewModel = new MyPostAnsweredViewModel();
         }
         protected override void OnAppearing()
         {
