@@ -150,7 +150,8 @@ namespace Antalaktiko.ViewModels
                     Author = LogedUser,
                     Date = DateTime.Now.ToString(),
                     Description = CommentAnswer,
-                    Pid = itemId
+                    Pid = itemId,
+                    parent = "0"
                 };
                 //await commentManager.PutComment(comment);
                 await Task.Delay(1);

@@ -18,8 +18,7 @@
                                     <Label Text="{Binding Info.Phone}"/>
                                     
                                     <Label Text="{Binding Info.Company_Type}"/>
-                                    <Label Text="{Binding Info.Subscription_Ends,StringFormat='Ημ.Λήξης :{0}'}"/>
-                                    <Label Text="{Binding Info.Subscription_Started,StringFormat='Ημ.Αρχ.Εγγρ. :{0}'}"/>
+                                    
                                 </StackLayout>
                             </Frame>
                         </Grid>

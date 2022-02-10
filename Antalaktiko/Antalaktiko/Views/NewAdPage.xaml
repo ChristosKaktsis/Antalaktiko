@@ -75,8 +75,9 @@
             <editors:ChoiceChipGroup HorizontalOptions="Center"
                      BackgroundColor="Transparent" SelectedIndex="{Binding SelectedBuySell}"
                      IsMultiline="True" ChipFontSize="18">
-                <editors:Chip Text="Θέλω να πουλήσω" />
+                
                 <editors:Chip Text="Θέλω να αγοράσω" />
+                <editors:Chip Text="Θέλω να πουλήσω" />
             </editors:ChoiceChipGroup>
             <Grid>
                 <Frame Padding="1" HasShadow="False"  BorderColor="{StaticResource BackGroundDarkTranc}">
@@ -85,8 +86,8 @@
                 <Frame Grid.Column="1" Padding="1" HasShadow="False"  BorderColor="{StaticResource BackGroundDarkTranc}">
                     <Button  Text="{Binding SelectedModelName,Mode=OneWay}" Clicked="Models_Button_Clicked" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource BackGroundDark}" BackgroundColor="White"/>
                 </Frame>
-                <editors:ComboBoxEdit Grid.Row="1" LabelText="Από" ItemsSource="{Binding YearsFrom}" SelectedItem="{Binding  SelectedYearFrom}"/>
-                <editors:ComboBoxEdit Grid.Row="1" Grid.Column="1" LabelText="Έως" ItemsSource="{Binding YearsFrom}" SelectedItem="{Binding SelectedYearTo}"/>
+                <editors:ComboBoxEdit Grid.Row="1" LabelText="Από" ItemsSource="{Binding YearsFrom}" SelectedItem="{Binding  SelectedYearFrom,Mode=OneWayToSource}"/>
+                <editors:ComboBoxEdit Grid.Row="1" Grid.Column="1" LabelText="Έως" ItemsSource="{Binding YearsFrom}" SelectedItem="{Binding SelectedYearTo,Mode=OneWayToSource}"/>
             </Grid>
             <Label  Text="Πόρτες:" FontSize="18" Margin="10,10,10,0"/>
             <editors:ChoiceChipGroup 

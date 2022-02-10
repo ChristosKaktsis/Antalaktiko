@@ -72,13 +72,13 @@ namespace Antalaktiko.Services
             string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[uid]={id}&params[type]=my_answers&params[upage]={page}&params[unum]={num}");
             return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
         }
-        public async Task<bool> FilterSearch(object filter)
+        public async Task<IEnumerable<Post>> FilterSearch(object filter)
         {
             var json = JsonConvert.SerializeObject(filter);
             var loginurl = $"{BaseAddress}?putData=Filters&data={json}";
             HttpClient client = GetClient();
             string result = await client.GetStringAsync(loginurl);
-            return true;
+            return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
         }
         public async Task<bool> RegisterPost(object post)
         {

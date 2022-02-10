@@ -215,7 +215,7 @@ namespace Antalaktiko.ViewModels
             get
             {
                 string buysell = string.Empty;
-                if (SelectedBuySell == 1)
+                if (SelectedBuySell != 1)
                     buysell = "θέλω να αγοράσω";
                 else
                 {

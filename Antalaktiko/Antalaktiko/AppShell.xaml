@@ -37,7 +37,7 @@
         <ShellContent Title="Αρχική" Icon="house.png" Route="StartPage" ContentTemplate="{DataTemplate local:StartPage}" />
         <Tab Title="Ιστορικό" Icon="hourglass.png">
             <ShellContent Title="Οι αγγελίες σας"  Route="MyPostsPage" ContentTemplate="{DataTemplate local:MyPostsPage}"/>
-            <ShellContent Title="Αγγελίες που έχετε απαντήσει" Route="MyPostAnsweredPage" ContentTemplate="{DataTemplate local:MyPostAnsweredPage}" />
+            <ShellContent Title="Οι απαντήσεις σας" Route="MyPostAnsweredPage" ContentTemplate="{DataTemplate local:MyPostAnsweredPage}" />
         </Tab>
         
         <ShellContent Title="Αγαπημένα" Icon="heart.png"  ContentTemplate="{DataTemplate local:FavoritesPage}" />

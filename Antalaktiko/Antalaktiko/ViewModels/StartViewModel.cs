@@ -25,6 +25,7 @@ namespace Antalaktiko.ViewModels
         private string searchFilter;
         private int selectedChipIndex = -1;
         private bool isFilterFocused;
+        private int selectedFuelTypeIndex;
 
         public Command NewAdCommand { get; }
         public ObservableCollection<Post> PostItems { get; set; }
@@ -125,6 +126,8 @@ namespace Antalaktiko.ViewModels
         }
         private async Task ExecuteLoadPostItemsCommand()
         {
+            if (IsRefresing)
+                return;
             var stopwatch = Stopwatch.StartNew();
             IsBusy = true;
             try
@@ -274,6 +277,14 @@ namespace Antalaktiko.ViewModels
                 SetProperty(ref selectedFuelType, value);
             }
         }
+        public int SelectedFuelTypeIndex
+        {
+            get => selectedFuelTypeIndex;
+            set
+            {
+                SetProperty(ref selectedFuelTypeIndex, value);
+            }
+        }
         private void SetBrandModels(Brand value)
         {
             ModelItems.Clear();
@@ -309,20 +320,54 @@ namespace Antalaktiko.ViewModels
         }
         public async void ExecuteFilterCollectionCommand()
         {
-            var buysell = selectedChipIndex != 1 ? "Θέλω  να αγοράσω" : "Θέλω να πουλήσω";
+            var buysell = SelectedChipIndex + 1;
             var brandid = SelectedBrand == null ? string.Empty : SelectedBrand.Id.ToString();
             var modelid = SelectedModel == null ? string.Empty : SelectedModel.Id.ToString();
             var partid = SelectedPart == null ? string.Empty : SelectedPart.Id.ToString();
             var yearfrom = string.IsNullOrEmpty(SelectedYearFrom) ? string.Empty : SelectedYearFrom;
             var yearto = string.IsNullOrEmpty(SelectedYearTo) ? string.Empty : SelectedYearTo;
-            var fuel = string.IsNullOrEmpty(selectedFuelType) ? string.Empty : SelectedFuelType;
-            
-            var filteritem = new 
+            //var fuel = string.IsNullOrEmpty(selectedFuelType) ? string.Empty : SelectedFuelType;
+            var fuel = SelectedFuelTypeIndex + 1;
+            var filteritem = new
             {
-                buysell,brandid,modelid,partid,yearfrom,yearto,fuel
+                buysell,
+                brandid,
+                modelid,
+                partid,
+                yearfrom,
+                yearto,
+                fuel,
+                page = "0",
+                num = "15"
             };
-            await postManager.FilterSearch(filteritem);
-            
+            await ExecuteLoadFilteredPostItemsCommand(filteritem);
+        }
+        private async Task ExecuteLoadFilteredPostItemsCommand(object filteritem)
+        {
+            IsRefresing = true;
+            IsBusy = true;
+            try
+            {
+                SourcePostItems.Clear();
+                PostItems.Clear();
+                var items = await postManager.FilterSearch(filteritem);
+                foreach (var item in items)
+                {
+                    item.TitleInfo = await SetPostTitleInfo(item.Info);
+                    PostItems.Add(item);
+                    //there is a Post with null and we cant filter it with out info 
+                    if (item.Info != null)
+                        SourcePostItems.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+            finally
+            {
+                IsRefresing = IsBusy = false;
+            }
         }
         public  void OnAppearing()
         {

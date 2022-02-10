@@ -35,7 +35,7 @@
                     <Picker Grid.Row="1" Grid.Column="1" Title="Μοντέλο" ItemsSource="{Binding ModelItems}" SelectedItem="{Binding SelectedModel}" ItemDisplayBinding="{Binding Name}"/>
                     <dxe:ComboBoxEdit x:Name="YearFromComboBox" Grid.Row="2" LabelText="Έτος από" ItemsSource="{Binding YearsFrom}" SelectedItem="{Binding SelectedYearFrom,Mode=OneWayToSource}"/>
                     <dxe:ComboBoxEdit x:Name="YearToComboBox" Grid.Row="2" Grid.Column="1" LabelText="Έτος έως" ItemsSource="{Binding YearsFrom}" SelectedItem="{Binding SelectedYearTo,Mode=OneWayToSource}"/>
-                    <dxe:ComboBoxEdit x:Name="FuelTypeComboBox" Grid.Row="3" Grid.ColumnSpan="2" LabelText="Είδος Καυσίμου" SelectedItem="{Binding SelectedFuelType}">
+                    <dxe:ComboBoxEdit x:Name="FuelTypeComboBox" Grid.Row="3" Grid.ColumnSpan="2" LabelText="Είδος Καυσίμου" SelectedItem="{Binding SelectedFuelType}" SelectedIndex="{Binding SelectedFuelTypeIndex,Mode=OneWayToSource}">
                         <dxe:ComboBoxEdit.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>Βενζίνη</x:String>
