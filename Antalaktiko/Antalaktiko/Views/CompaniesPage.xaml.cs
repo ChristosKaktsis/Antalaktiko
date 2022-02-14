@@ -25,5 +25,14 @@ namespace Antalaktiko.Views
             base.OnAppearing();
             _viewModel.OnAppearing();
         }
+        private void OpenPopUp_Clicked(object sender, EventArgs e)
+        {
+            filterpopup.IsOpen = true;
+        }
+
+        private void ClosePopup_Clicked(object sender, EventArgs e)
+        {
+            filterpopup.IsOpen = false;
+        }
     }
 }

@@ -4,6 +4,8 @@ using Antalaktiko.Services;
 using Antalaktiko.Views;
 using System;
 using System.IO;
+using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -27,26 +29,51 @@ namespace Antalaktiko
         }
 
         public static User LogedUser { get; set; }
+
+        public static bool IsLoggedIn
+        {
+            get => Preferences.Get(nameof(IsLoggedIn), false);
+            set
+            {
+                Preferences.Set(nameof(IsLoggedIn), value);
+            }
+        }
         public App()
         {
             DevExpress.XamarinForms.Editors.Initializer.Init();
             DevExpress.XamarinForms.CollectionView.Initializer.Init();
+            DevExpress.XamarinForms.Popup.Initializer.Init();
             InitializeComponent();
 
             DependencyService.Register<MockDataStore>();
-            MainPage = new AppShell();          
+            MainPage = new AppShell();
+            if (!IsLoggedIn)
+                GoToLogInPage();
+            else
+                CheckUser();
         }
 
-        protected override void OnStart()
+        private async void CheckUser()
         {
+            var username = Preferences.Get("UserMail", string.Empty);
+            var password = Preferences.Get("Password", string.Empty);
+            LogedUser = await GetUser(username,password);
+            if (LogedUser.Error != 0)
+                GoToLogInPage();
         }
 
-        protected override void OnSleep()
+        public static async Task<User> GetUser(string username, string password)
         {
+            var login = new { username, password };
+            UserManager userManager = new UserManager();
+            var user = await userManager.LogIn(login);
+            return user;
         }
+       
 
-        protected override void OnResume()
+        private async void GoToLogInPage()
         {
+            await Shell.Current.GoToAsync("//LoginPage");
         }
     }
 }

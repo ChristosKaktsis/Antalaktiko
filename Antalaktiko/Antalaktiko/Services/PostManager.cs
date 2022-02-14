@@ -21,19 +21,22 @@ namespace Antalaktiko.Services
             page = 0;
             HttpClient client = GetClient();
             string result = await client.GetStringAsync(Url+"0");
+            result = System.Web.HttpUtility.HtmlDecode(result);//this is for the char that appears &amp
             return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
         }
         public async Task<IEnumerable<Post>> GetMore()
         {
             page += num;
             HttpClient client = GetClient();
-            string result = await client.GetStringAsync(Url+$"{page}");       
+            string result = await client.GetStringAsync(Url+$"{page}");
+            result = System.Web.HttpUtility.HtmlDecode(result);//this is for the char that appears &amp
             return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
         }
         public async Task<Post> GetItemWithId(string id)
         {
             HttpClient client = GetClient();
             string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[id]={id}");
+            result = System.Web.HttpUtility.HtmlDecode(result);//this is for the char that appears &amp
             return JsonConvert.DeserializeObject<IEnumerable<Post>>(result).FirstOrDefault();
         }
         public async Task<IEnumerable<Post>> GetItemsWithUid(string id)
@@ -43,6 +46,7 @@ namespace Antalaktiko.Services
             page = 0;
             HttpClient client = GetClient();
             string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[uid]={id}&params[type]=mine&params[upage]={page}&params[unum]={num}");
+            result = System.Web.HttpUtility.HtmlDecode(result);//this is for the char that appears &amp
             return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
         }
         public async Task<IEnumerable<Post>> GetMoreItemsWithUid(string id)
@@ -52,6 +56,7 @@ namespace Antalaktiko.Services
             page += num;
             HttpClient client = GetClient();
             string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[uid]={id}&params[type]=mine&params[upage]={page}&params[unum]={num}");
+            result = System.Web.HttpUtility.HtmlDecode(result);//this is for the char that appears &amp
             return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
         }
         public async Task<IEnumerable<Post>> GetMyAnsweredWithUid(string id)
@@ -61,6 +66,7 @@ namespace Antalaktiko.Services
             page = 0;
             HttpClient client = GetClient();
             string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[uid]={id}&params[type]=my_answers&params[upage]={page}&params[unum]={num}");
+            result = System.Web.HttpUtility.HtmlDecode(result);//this is for the char that appears &amp
             return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
         }
         public async Task<IEnumerable<Post>> GetMoreMyAnsweredWithUid(string id)
@@ -70,6 +76,7 @@ namespace Antalaktiko.Services
             page += num;
             HttpClient client = GetClient();
             string result = await client.GetStringAsync($"{BaseAddress}?method=Posts&params[uid]={id}&params[type]=my_answers&params[upage]={page}&params[unum]={num}");
+            result = System.Web.HttpUtility.HtmlDecode(result);//this is for the char that appears &amp
             return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
         }
         public async Task<IEnumerable<Post>> FilterSearch(object filter)
@@ -78,6 +85,7 @@ namespace Antalaktiko.Services
             var loginurl = $"{BaseAddress}?putData=Filters&data={json}";
             HttpClient client = GetClient();
             string result = await client.GetStringAsync(loginurl);
+            result = System.Web.HttpUtility.HtmlDecode(result);//this is for the char that appears &amp
             return JsonConvert.DeserializeObject<IEnumerable<Post>>(result);
         }
         public async Task<bool> RegisterPost(object post)

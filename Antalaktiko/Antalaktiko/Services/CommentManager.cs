@@ -21,6 +21,7 @@ namespace Antalaktiko.Services
         {
             HttpClient client = GetClient();
             string result = await client.GetStringAsync(Url + $"&params[pid]={postid}");
+            result = System.Web.HttpUtility.HtmlDecode(result);//this is for the char that appears &amp
             return JsonConvert.DeserializeObject<IEnumerable<Comment>>(result);
         }
         public async Task<bool> PutComment(object post)

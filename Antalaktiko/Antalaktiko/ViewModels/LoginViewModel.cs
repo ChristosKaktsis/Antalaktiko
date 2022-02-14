@@ -1,7 +1,9 @@
-﻿using Antalaktiko.Views;
+﻿using Antalaktiko.Models;
+using Antalaktiko.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -21,6 +23,7 @@ namespace Antalaktiko.ViewModels
         public Command ContactCommand { get; }
         public LoginViewModel()
         {
+            App.IsLoggedIn = false;
             LoginCommand = new Command(OnLoginClicked);
             RegisterCommand = new Command(async ()=> await Shell.Current.GoToAsync(nameof(RegisterPage)));
             ContactCommand = new Command(async () => await Shell.Current.GoToAsync(nameof(ContactPage)));
@@ -48,14 +51,14 @@ namespace Antalaktiko.ViewModels
             try
             {
                 IsBusy = true;
-                var login = new { username = UserMail, password = Password };
-                var user = await userManger.LogIn(login);
-                var errorCheck = CheckError(user.Error);
-                if (errorCheck)
+                var user = await App.GetUser(UserMail,Password);
+                if (CheckError(user.Error))
                     return;
                 App.LogedUser = user;
+                App.IsLoggedIn = true;
                 // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
                 await Shell.Current.GoToAsync($"//{nameof(StartPage)}");
+                
             }
             catch(Exception ex)
             {
@@ -67,6 +70,9 @@ namespace Antalaktiko.ViewModels
             }
            
         }
+
+        
+
         public string ErrorMessage 
         {
             get => errorMessage;

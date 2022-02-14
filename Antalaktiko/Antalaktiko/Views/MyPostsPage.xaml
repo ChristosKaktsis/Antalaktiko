@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:Antalaktiko.ViewModels" 
              xmlns:model="clr-namespace:Antalaktiko.Models"
              x:Class="Antalaktiko.Views.MyPostsPage"
-             Shell.NavBarIsVisible="False">
+             Title="Ιστορικό" >
     <Grid x:DataType="vm:MyPostsViewModel">
         <StackLayout>
             <SearchBar Placeholder="Αναζήτηση..."
@@ -12,8 +12,6 @@
                                PlaceholderColor="{StaticResource BackGroundDark}"
                                TextColor="{StaticResource PrimaryDark}"
                                TextTransform="Lowercase"
-                               
-                              
                                HorizontalTextAlignment="Center"
                                FontSize="Medium"
                                FontAttributes="Italic" />

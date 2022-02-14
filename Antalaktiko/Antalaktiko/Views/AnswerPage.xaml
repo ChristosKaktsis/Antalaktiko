@@ -97,13 +97,13 @@
                             </Grid>
                         </StackLayout>
                     </Frame>
-                    <StackLayout x:Name="CommentStack"/>
                     <Frame Padding="10" Margin="5" CornerRadius="5">
-                        <StackLayout >
-                            <editors:MultilineEdit  PlaceholderText="Απάντησε εδώ..." Text="{Binding CommentAnswer}"/>
-                            <Button x:Name="AnswerButton" Text="Απάντησε" HorizontalOptions="End" CornerRadius="10" Clicked="AnswerButton_Clicked"/>
-                        </StackLayout>
+                        <StackLayout>
+                            <Label Text="Σχόλια" FontSize="20" FontAttributes="Bold"/>
+                        </StackLayout>   
                     </Frame>
+                     <StackLayout x:Name="CommentStack"/>
+                    
                 </FlexLayout>
             </Grid>
 

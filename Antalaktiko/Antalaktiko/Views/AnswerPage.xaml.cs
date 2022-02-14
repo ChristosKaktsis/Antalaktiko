@@ -33,10 +33,10 @@ namespace Antalaktiko.Views
         {
             CommentStack.Children.Clear();
             foreach (var item in _viewModel.CommentCollection)
-                BuildCommentUI(item.Author_Name,item.Description,item.Date);
+                BuildCommentUI(item.Id,item.Author_Name,item.Description,item.Date);
         }
 
-        void BuildCommentUI(string author, string description, string date)
+        void BuildCommentUI(int id, string author, string description, string date)
         {
             Frame frame = new Frame
             {
@@ -68,11 +68,14 @@ namespace Antalaktiko.Views
             };
            
             Label answereLabel = new Label { Text = description};
+            MultilineEdit answerEntry = new MultilineEdit { PlaceholderText = "Απάντησε εδώ...", AutomationId = id.ToString()};
+            Button answerButton = new Button { Text = "Απάντησε", HorizontalOptions = LayoutOptions.End, CornerRadius = 10 };
+            answerButton.Clicked += AnswerButton_Clicked;
             StackLayout stackLayout = new StackLayout
             {
                 Children =
                 {
-                    horStack,answereLabel
+                    horStack,answereLabel,answerEntry,answerButton
                 }
             };
             frame.Content = stackLayout;
@@ -81,9 +84,38 @@ namespace Antalaktiko.Views
 
         private async void AnswerButton_Clicked(object sender, EventArgs e)
         {
-            await _viewModel.AnswerComment();
-            await _viewModel.LoadComments();
-            LoadCommentsInUI();
+            var button = sender as Button;
+            var stack = button.Parent as StackLayout;
+           
+           
+            //get the id and the descr
+            string comId = string.Empty;
+            string desc = string.Empty;
+            foreach(var item in stack.Children)
+            {
+                if(item is MultilineEdit)
+                {
+                    comId = (item as MultilineEdit).AutomationId ;
+                    desc = (item as MultilineEdit).Text;
+                }
+            }
+            if (string.IsNullOrWhiteSpace(desc))
+                return;
+            stack.Children.Add(new Label { Text = "Απάντήθηκε !!" });
+            //lock the UI
+            button.IsVisible = false;
+            stack.IsEnabled = false;
+            //send to service
+            await _viewModel.AnswerComment(comId, desc);
+            //unsub the event 
+            button.Clicked -= AnswerButton_Clicked;
         }
+
+        //private async void AnswerButton_Clicked(object sender, EventArgs e)
+        //{
+        //    await _viewModel.AnswerComment();
+        //    await _viewModel.LoadComments();
+        //    LoadCommentsInUI();
+        //}
     }
 }

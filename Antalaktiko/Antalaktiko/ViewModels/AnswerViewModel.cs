@@ -14,7 +14,8 @@ namespace Antalaktiko.ViewModels
     {
         private string itemId, description, author_Name, titleInfo, type, itemState, 
             fuel, doors, partType, chronology, brand, model, company;
-        private string commntAnswer;
+       
+        private string author_Id;
 
         public ObservableCollection<Comment> CommentCollection { get; set; }
         public List<Comment> NewComments { get; set; }
@@ -34,6 +35,11 @@ namespace Antalaktiko.ViewModels
                 SetProperty(ref itemId, value);
                 LoadItemId(value);
             }
+        }
+        public string Author_Id
+        {
+            get => author_Id;
+            set => SetProperty(ref author_Id, value);
         }
         public string Description
         {
@@ -101,6 +107,7 @@ namespace Antalaktiko.ViewModels
             try
             {
                 var item = await postManager.GetItemWithId(itemId);
+                Author_Id = item.Author;
                 Description = item.Description;
                 Author_Name = item.author_name;
                 TitleInfo = item.Info.Brand_Name;
@@ -124,24 +131,27 @@ namespace Antalaktiko.ViewModels
             try
             {
                 CommentCollection.Clear();
+                //new comments added after answer
                 var list = NewComments.OrderByDescending(x => x.Date).ToList();
                 list.ForEach(CommentCollection.Add);
+                //load comments from service
                 var comments = await commentManager.GetCommentWithPostId(itemId);
+                //put to collection 
                 foreach (var item in comments)
-                    CommentCollection.Add(item);
+                    if(item.Author.ToString() == LogedUser || Author_Id == LogedUser)
+                        CommentCollection.Add(item);
 
+                //put empty comment to UI
+                if (!CommentCollection.Any())
+                    CommentCollection.Add(new Comment());
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex);
             }
         }
-        public string CommentAnswer
-        {
-            get => commntAnswer;
-            set => SetProperty(ref commntAnswer, value);
-        }
-        public async Task AnswerComment()
+        
+        public async Task AnswerComment(string comId, string answer)
         {
             try
             {
@@ -149,9 +159,9 @@ namespace Antalaktiko.ViewModels
                 {
                     Author = LogedUser,
                     Date = DateTime.Now.ToString(),
-                    Description = CommentAnswer,
+                    Description = answer,
                     Pid = itemId,
-                    parent = "0"
+                    parent = comId
                 };
                 //await commentManager.PutComment(comment);
                 await Task.Delay(1);
@@ -163,7 +173,7 @@ namespace Antalaktiko.ViewModels
                     Date = comment.Date,
                     Description = comment.Description
                 });
-                CommentAnswer = string.Empty;
+                
             }
             catch(Exception ex)
             {

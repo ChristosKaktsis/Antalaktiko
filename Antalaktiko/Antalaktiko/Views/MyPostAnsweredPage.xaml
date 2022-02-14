@@ -4,7 +4,7 @@
              xmlns:model="clr-namespace:Antalaktiko.Models" 
              xmlns:vm="clr-namespace:Antalaktiko.ViewModels"
              x:Class="Antalaktiko.Views.MyPostAnsweredPage"
-             Shell.NavBarIsVisible="False">
+              Title="Ιστορικό">
     <Grid x:DataType="vm:MyPostAnsweredViewModel">
         <StackLayout>
             <SearchBar Placeholder="Αναζήτηση..."

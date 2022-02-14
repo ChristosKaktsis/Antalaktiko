@@ -2,11 +2,63 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:vm="clr-namespace:Antalaktiko.ViewModels" 
-             xmlns:model="clr-namespace:Antalaktiko.Models"
+             xmlns:model="clr-namespace:Antalaktiko.Models" 
+             xmlns:dxp="http://schemas.devexpress.com/xamarin/2014/forms/popup" 
+             xmlns:dxe="http://schemas.devexpress.com/xamarin/2014/forms/editors"
              x:Class="Antalaktiko.Views.CompaniesPage"
              Title="Εταιρείες">
     <RefreshView x:DataType="vm:CompaniesViewModel" IsRefreshing="{Binding IsBusy}" Command="{Binding LoadCompaniesCommand}">
         <StackLayout>
+            <dxp:DXPopup x:Name="filterpopup"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                         AllowScrim="True"
+                         ScrimColor="{StaticResource BackGroundDarkTranc}"
+                         ShadowColor="Black"
+                         ShadowRadius="5"
+                         ShadowHorizontalOffset="5">
+                <Grid Margin="10" WidthRequest="260" RowSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="60"/>
+                    </Grid.RowDefinitions>
+
+                    <dxe:ComboBoxEdit Grid.Row="0" Grid.ColumnSpan="2" LabelText="Περιοχή"/>
+                    <dxe:ComboBoxEdit Grid.Row="1" Grid.ColumnSpan="2" LabelText="ΤΥΠΟΣ ΕΤΑΙΡΙΑΣ" >
+                        <dxe:ComboBoxEdit.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>ΑΝΤΑΛΛΑΚΤΙΚΑ ΑΥΤΟΚΙΝΗΤΩΝ</x:String>
+                                <x:String>ΑΝΤΑΛΛΑΚΤΙΚΑ AFTERMARKET</x:String>
+                                <x:String>ΑΝΤΑΛΛΑΚΤΙΚΑ ΙΜΙΤΑΣΙΟΝ</x:String>
+                                <x:String>ΑΝΤΑΛΛΑΚΤΙΚΑ ΜΕΤΑΧΕΙΡΣΜΕΝΑ</x:String>
+                                <x:String>ΑΝΤΙΠΡΟΣΩΠΕΙΑ</x:String>
+                                <x:String>ΑΣΦΑΛΙΣΤΙΚΗ ΕΤΑΙΡΙΑ</x:String>
+                                <x:String>ΒΑΦΕΙΟ</x:String>
+                                <x:String>ΕΤΑΙΡΙΑ ΕΝΟΙΚΙΑΣΕΩΝ</x:String>
+                                <x:String>ΗΛΕΚΤΡΟΛΟΓΕΙΟ-ΔΙΑΓΝΩΣΤΙΚΟ ΚΕΝΤΡΟ</x:String>
+                                <x:String>ΚΑΘΕΤΗ ΜΟΝΑΔΑ</x:String>
+                                <x:String>ΜΙΖΕΣ-ΔΥΝΑΜΟ</x:String>
+                                <x:String>ΣΥΝΕΡΓΕΙΟ ΑΥΤΟΚΙΝΗΤΩΝ</x:String>
+                                <x:String>ΦΑΝΟΠΟΙΕΙΟ</x:String>
+                                <x:String>ΨΥΓΕΙΑ ΑΥΤΟΚΙΝΗΤΩΝ</x:String>
+
+                            </x:Array>
+                        </dxe:ComboBoxEdit.ItemsSource>
+                    </dxe:ComboBoxEdit>
+                    <Button Grid.Row="2" Grid.Column="1" Text="Επιλογή" Clicked="ClosePopup_Clicked" CornerRadius="10" HorizontalOptions="EndAndExpand"/>
+                </Grid>
+            </dxp:DXPopup>
+            <SearchBar Placeholder="Αναζήτηση..."
+                               CancelButtonColor="{StaticResource BackGroundDark}"
+                               PlaceholderColor="{StaticResource BackGroundDark}"
+                               TextColor="{StaticResource PrimaryDark}"
+                               TextTransform="Lowercase"
+                               HorizontalTextAlignment="Center"
+                               FontSize="Medium"
+                               FontAttributes="Italic" />
+            <Button Text="Φίλτρα" FontSize="17" Clicked="OpenPopUp_Clicked" HorizontalOptions="Start" Margin="5" CornerRadius="10" HeightRequest="40" 
+                    TextColor="{StaticResource Primary}" BackgroundColor="{StaticResource BackGround}"/>
             <CollectionView ItemsSource="{Binding CompanyCollection}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -18,7 +70,13 @@
                                     <Label Text="{Binding Info.Phone}"/>
                                     
                                     <Label Text="{Binding Info.Company_Type}"/>
-                                    
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            NumberOfTapsRequired="1"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CompaniesViewModel}}, Path=GoToDetailPageCommand}"		
+                                            CommandParameter="{Binding .}">
+                                        </TapGestureRecognizer>
+                                    </StackLayout.GestureRecognizers>
                                 </StackLayout>
                             </Frame>
                         </Grid>
