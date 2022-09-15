@@ -55,15 +55,24 @@ namespace Antalaktiko
 
         private async void CheckUser()
         {
-            var username = Preferences.Get("UserMail", string.Empty);
-            var password = Preferences.Get("Password", string.Empty);
-            LogedUser = await GetUser(username,password);
-            if (LogedUser.Error != 0)
-                GoToLogInPage();
+            try
+            {
+                var username = Preferences.Get("UserMail", string.Empty);
+                var password = Preferences.Get("Password", string.Empty);
+                LogedUser = await GetUser(username, password);
+                if (LogedUser.Error != 0)
+                    GoToLogInPage();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+           
         }
 
         public static async Task<User> GetUser(string username, string password)
         {
+            
             var login = new { username, password };
             UserManager userManager = new UserManager();
             var user = await userManager.LogIn(login);

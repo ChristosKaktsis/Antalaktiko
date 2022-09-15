@@ -13,5 +13,6 @@ namespace Antalaktiko.Models
         public string Author_Name { get; set; }
         public int Parent { get; set; }
         public string Date { get; set; }
+        public Comment Child { get; set; }
     }
 }

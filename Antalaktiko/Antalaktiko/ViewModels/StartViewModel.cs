@@ -13,8 +13,6 @@ namespace Antalaktiko.ViewModels
 {
     class StartViewModel : BaseViewModel
     {
-       
-        public CompanyManager companyManager = new CompanyManager();
         public UserManager userManager = new UserManager();
         private Brand selectedBrand;
         private Model selectedModel;

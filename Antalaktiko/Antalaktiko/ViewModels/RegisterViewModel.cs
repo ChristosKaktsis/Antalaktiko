@@ -60,7 +60,7 @@ namespace Antalaktiko.ViewModels
             var regitem = new 
             {
                 Afm, CompanyName, Website, Email, Telephone, MobilePhone,Fax,
-                Address,AddressNo,SelectedTK.Ονοματκ,SelectedRegion,
+                Address,AddressNo,Tk=SelectedTK.Ονοματκ,SelectedRegion,
                 selectedbrands,selectedparts,PartType,CompanyType,
                 Name,Surname,Userphone,UserMail,Password
             };

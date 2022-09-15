@@ -32,11 +32,83 @@ namespace Antalaktiko.Views
         private void LoadCommentsInUI()
         {
             CommentStack.Children.Clear();
+            //foreach (var item in _viewModel.CommentCollection)
+            //    BuildCommentUI(item.Id,item.Author_Name,item.Description,item.Date,item.Author.ToString()==App.LogedUser.Id);
+           
             foreach (var item in _viewModel.CommentCollection)
-                BuildCommentUI(item.Id,item.Author_Name,item.Description,item.Date);
+                BuildCommentUI2(item);
+
         }
 
-        void BuildCommentUI(int id, string author, string description, string date)
+        private void BuildCommentUI2(Models.Comment item)
+        {
+            //do it only for top level coments
+            if (item.Parent != 0)
+                return;
+
+            Frame frame = new Frame
+            {
+                Padding = 10,
+                Margin = 5,
+                CornerRadius = 5
+
+            };
+
+            StackLayout commentStack = CreateCommentStack(item);
+            //if its this.user comment dont answer
+
+            frame.Content = commentStack;
+            CommentStack.Children.Add(frame);
+        }
+
+        private StackLayout CreateCommentStack(Models.Comment item)
+        {
+            if (item == null)
+                return new StackLayout();
+            Label companyLabel = new Label
+            {
+                Text = item.Author_Name,
+                FontSize = 20,
+                FontAttributes = FontAttributes.Bold,
+                HorizontalOptions = LayoutOptions.StartAndExpand
+            };
+            Label dateLabel = new Label
+            {
+                Text = item.Date,
+
+            };
+            StackLayout horStack = new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal,
+                Children =
+                {
+                    companyLabel,dateLabel
+                }
+            };
+            Label answereLabel = new Label { Text = item.Description };
+            MultilineEdit answerEntry = new MultilineEdit { PlaceholderText = "Απάντησε εδώ...", AutomationId = item.Id.ToString() };
+            Button answerButton = new Button { Text = "Απάντησε", HorizontalOptions = LayoutOptions.End, CornerRadius = 10 };
+            answerButton.Clicked += AnswerButton_Clicked;
+
+            StackLayout stackLayout = new StackLayout
+            {
+                Children =
+                {
+                    horStack,answereLabel
+                }
+            };
+            var isUsers = item.Author.ToString() == App.LogedUser.Id;
+            //if its this.user comment dont answer
+            if (!isUsers && item.Child==null)
+            {
+                stackLayout.Children.Add(answerEntry);
+                stackLayout.Children.Add(answerButton);
+            }
+            stackLayout.Children.Add(CreateCommentStack(item.Child));
+            return stackLayout;
+        }
+
+        void BuildCommentUI(int id, string author, string description, string date, bool isUsers)
         {
             Frame frame = new Frame
             {
@@ -66,18 +138,26 @@ namespace Antalaktiko.Views
                     companyLabel,dateLabel
                 }
             };
-           
             Label answereLabel = new Label { Text = description};
             MultilineEdit answerEntry = new MultilineEdit { PlaceholderText = "Απάντησε εδώ...", AutomationId = id.ToString()};
             Button answerButton = new Button { Text = "Απάντησε", HorizontalOptions = LayoutOptions.End, CornerRadius = 10 };
             answerButton.Clicked += AnswerButton_Clicked;
+
             StackLayout stackLayout = new StackLayout
             {
                 Children =
                 {
-                    horStack,answereLabel,answerEntry,answerButton
+                    horStack,answereLabel
                 }
             };
+
+            //if its this.user comment dont answer
+            if (!isUsers)
+            {
+                stackLayout.Children.Add(answerEntry);
+                stackLayout.Children.Add(answerButton);
+            }
+
             frame.Content = stackLayout;
             CommentStack.Children.Add(frame);
         }

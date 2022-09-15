@@ -4,52 +4,88 @@
              xmlns:vm="clr-namespace:Antalaktiko.ViewModels"
              x:Class="Antalaktiko.Views.CompanyDetailPage"
              Title="Εταιρεία">
-    <Grid x:DataType="vm:CompanyDetailViewModel">
-        <StackLayout>
-            <Frame Margin="10" CornerRadius="10" Padding="0">
-                <StackLayout  Spacing="0">
-                    <Frame HasShadow="False" BackgroundColor="White" >
-                        <Label Text="{Binding Comp_Title}" FontSize="20" FontAttributes="Bold"/>
-                    </Frame>
-                    <Frame HasShadow="False" BackgroundColor="{StaticResource BackGround}" >
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Website" FontSize="16"/>
-                            <Label Text="{Binding Website}" FontSize="16" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
-                        </StackLayout>
-                    </Frame>
-                    <Frame HasShadow="False" BackgroundColor="White" >
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Email" FontSize="16"/>
-                            <Label Text="{Binding Email}" FontSize="16" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
-                        </StackLayout>
-                    </Frame>
-                    <Frame HasShadow="False" BackgroundColor="{StaticResource BackGround}" >
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Address" FontSize="16"/>
-                            <Label Text="{Binding Address}" FontSize="16" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
-                        </StackLayout>
-                    </Frame>
-                    <Frame HasShadow="False" BackgroundColor="White" >
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Phone" FontSize="16"/>
-                            <Label Text="{Binding Phone}" FontSize="16" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
-                        </StackLayout>
-                    </Frame>
-                    <Frame HasShadow="False" BackgroundColor="{StaticResource BackGround}" >
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Mobile" FontSize="16"/>
-                            <Label Text="{Binding Mobile}" FontSize="16" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
-                        </StackLayout>
-                    </Frame>
-                    <Frame HasShadow="False" BackgroundColor="White" >
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Job" FontSize="16"/>
-                            <Label Text="{Binding Job}" FontSize="16" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
-                        </StackLayout>
-                    </Frame>
-                </StackLayout>
-            </Frame>
-        </StackLayout>
-        
-    </Grid>
+    <ScrollView>
+        <Grid x:DataType="vm:CompanyDetailViewModel">
+            <StackLayout>
+                <Frame Margin="10" CornerRadius="10" Padding="0">
+                    <StackLayout  Spacing="0">
+                        <Frame HasShadow="False" BackgroundColor="White" >
+                            <Label Text="{Binding Comp_Title}" FontSize="20" FontAttributes="Bold"/>
+                        </Frame>
+                        <Frame HasShadow="False" BackgroundColor="{StaticResource BackGround}" >
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Website" FontSize="16"/>
+                                <Label Text="{Binding Website}" FontSize="16" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+                        </Frame>
+                        <Frame HasShadow="False" BackgroundColor="White" >
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Email" FontSize="16"/>
+                                <Label Text="{Binding Comp_Email}" FontSize="16" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                            NumberOfTapsRequired="1"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CompanyDetailViewModel}}, Path=SendEmailCommand}">
+                                    </TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </Frame>
+                        <Frame HasShadow="False" BackgroundColor="{StaticResource BackGround}" >
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Address" FontSize="16"/>
+                                <Label Text="{Binding Address}" FontSize="16" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+                        </Frame>
+                        <Frame HasShadow="False" BackgroundColor="White" >
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Phone" FontSize="16"/>
+                                <Label Text="{Binding Phone}" FontSize="16" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                            NumberOfTapsRequired="1"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CompanyDetailViewModel}}, Path=PlacePhoneCallCommand}">
+                                    </TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </Frame>
+                        <Frame HasShadow="False" BackgroundColor="{StaticResource BackGround}" >
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Mobile" FontSize="16"/>
+                                <Label Text="{Binding Mobile}" FontSize="16" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+                        </Frame>
+                        <Frame HasShadow="False" BackgroundColor="White" >
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Job" FontSize="16"/>
+                                <Label Text="{Binding Job}" FontSize="16" FontAttributes="Bold" HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
+                </Frame>
+                <Frame Margin="10" CornerRadius="10" Padding="0">
+                    <StackLayout  Spacing="0">
+                        <Frame HasShadow="False" BackgroundColor="White" >
+                            <Label Text="Χρήστες" FontSize="20" FontAttributes="Bold"/>
+                        </Frame>
+                    </StackLayout>
+                </Frame>
+                <Frame Margin="10" CornerRadius="10" Padding="0">
+                    <StackLayout  Spacing="0">
+                        <Frame HasShadow="False" BackgroundColor="White" >
+                            <Label Text="Μάρκες" FontSize="20" FontAttributes="Bold"/>
+                        </Frame>
+                    </StackLayout>
+                </Frame>
+                <Frame Margin="10" CornerRadius="10" Padding="0">
+                    <StackLayout  Spacing="0">
+                        <Frame HasShadow="False" BackgroundColor="White" >
+                            <Label Text="Ανταλλακτικά" FontSize="20" FontAttributes="Bold"/>
+                        </Frame>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+
+        </Grid>
+    </ScrollView>
+    
 </ContentPage>

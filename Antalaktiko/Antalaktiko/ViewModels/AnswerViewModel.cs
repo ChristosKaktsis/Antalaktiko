@@ -136,21 +136,38 @@ namespace Antalaktiko.ViewModels
                 list.ForEach(CommentCollection.Add);
                 //load comments from service
                 var comments = await commentManager.GetCommentWithPostId(itemId);
-                //put to collection 
+                
+                //put to collection only first level parent comments 
                 foreach (var item in comments)
-                    if(item.Author.ToString() == LogedUser || Author_Id == LogedUser)
+                    if (item.Author.ToString() == LogedUser || Author_Id == LogedUser)
                         CommentCollection.Add(item);
 
                 //put empty comment to UI
                 if (!CommentCollection.Any())
                     CommentCollection.Add(new Comment());
+
+                //add children to comments 
+                foreach (var c in comments)
+                    AddChild(c);
+
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex);
             }
         }
-        
+
+        private void AddChild(Comment c)
+        {
+            if (c.Child != null)
+                return;
+            var child = CommentCollection.Where(x => x.Parent == c.Id).FirstOrDefault();
+            if (child == null)
+                return;
+            c.Child = child;
+            AddChild(child);
+        }
+
         public async Task AnswerComment(string comId, string answer)
         {
             try
@@ -163,7 +180,7 @@ namespace Antalaktiko.ViewModels
                     Pid = itemId,
                     parent = comId
                 };
-                //await commentManager.PutComment(comment);
+                await commentManager.PutComment(comment);
                 await Task.Delay(1);
                 //normaly we would return an comment after put to display in list
                 //temporary object creation

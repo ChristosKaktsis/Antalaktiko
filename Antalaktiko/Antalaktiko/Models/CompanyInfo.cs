@@ -7,7 +7,7 @@ namespace Antalaktiko.Models
     public class CompanyInfo
     {
         public string WebSite { get; set; }
-        public string Email { get; set; }
+        public string Company_Email { get; set; }
         public string Vat { get; set; }
         public string Parts_String { get; set; }
         public string Address1 { get; set; }
