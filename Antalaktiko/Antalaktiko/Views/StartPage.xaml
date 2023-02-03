@@ -2,13 +2,25 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:dxcv="http://schemas.devexpress.com/xamarin/2014/forms/collectionview" 
-             xmlns:vm="clr-namespace:Antalaktiko.ViewModels" xmlns:model="clr-namespace:Antalaktiko.Models" xmlns:dxe="http://schemas.devexpress.com/xamarin/2014/forms/editors" xmlns:dxp="http://schemas.devexpress.com/xamarin/2014/forms/popup"
+             xmlns:vm="clr-namespace:Antalaktiko.ViewModels" xmlns:model="clr-namespace:Antalaktiko.Models" xmlns:dxe="http://schemas.devexpress.com/xamarin/2014/forms/editors" xmlns:dxp="http://schemas.devexpress.com/xamarin/2014/forms/popup" xmlns:temp="clr-namespace:Antalaktiko.Views.Templates"
              x:Class="Antalaktiko.Views.StartPage"
              Title="Αρχική">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="post_template">
+                <temp:Post_Template/>
+            </DataTemplate>
+            <DataTemplate x:Key="footer_template">
+                <Frame>
+                    <ActivityIndicator IsRunning="{Binding IsRefresing}"/>
+                </Frame>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Grid x:DataType="vm:StartViewModel">
         <StackLayout>
             <dxp:DXPopup x:Name="filterpopup"
-                             HorizontalAlignment="Left"
+                             HorizontalAlignment="Right"
                              VerticalAlignment="Top"
                          AllowScrim="True"
                          ScrimColor="{StaticResource BackGroundDarkTranc}"
@@ -51,62 +63,36 @@
                     <Button Grid.Row="5" Grid.Column="1" Text="Επιλογή" Clicked="ClosePopup_Clicked" CornerRadius="10" HorizontalOptions="EndAndExpand"/>
                 </Grid>
             </dxp:DXPopup>
-            <SearchBar Placeholder="Αναζήτηση..."
+            <StackLayout Orientation="Horizontal">
+                <SearchBar Placeholder="Αναζήτηση..."
                                CancelButtonColor="{StaticResource BackGroundDark}"
                                PlaceholderColor="{StaticResource BackGroundDark}"
                                TextColor="{StaticResource PrimaryDark}"
                                TextTransform="Lowercase"
                                Text="{Binding SearchFilter}"
-                               IsFocused="{Binding IsFilterFocused,Mode=OneWayToSource}"
+                               SearchCommand="{Binding FilterCollectionCommand}"
                                HorizontalTextAlignment="Center"
                                FontSize="Medium"
                                FontAttributes="Italic" />
-            <Button Text="Φίλτρα" FontSize="17" Clicked="OpenPopUp_Clicked" HorizontalOptions="Start" Margin="5" CornerRadius="10" HeightRequest="40" 
-                    TextColor="{StaticResource Primary}" BackgroundColor="{StaticResource BackGround}"/>
+                <ImageButton Clicked="OpenPopUp_Clicked" Source="filter.png" 
+                             HorizontalOptions="FillAndExpand" Padding="5"
+                             BackgroundColor="{StaticResource BackGround}"/>
+            </StackLayout>
             <RefreshView IsRefreshing="{Binding IsBusy,Mode=TwoWay}" Command="{Binding LoadPostItemsCommand}">
-                <CollectionView x:Name="PostCollectionView" ItemsSource="{Binding PostItems}" RemainingItemsThreshold="6" RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}" EmptyView="Δέν βρέθηκαν αγγελίες για εσάς">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <SwipeView>
-                                <SwipeView.LeftItems>
-                                    <SwipeItems>
-                                        <SwipeItem Text="Αγαπημένα" BackgroundColor="{StaticResource PrimaryDark}" />
-                                    </SwipeItems>
-                                </SwipeView.LeftItems>
-                                <SwipeView.RightItems>
-                                    <SwipeItems>
-                                        <SwipeItem Text="Απάντησε" BackgroundColor="{StaticResource AnalogousDark}" Invoked="SwipeItem_Invoked"/>
-                                    </SwipeItems>
-                                </SwipeView.RightItems>
-                                <!-- Content -->
-                                <Frame BorderColor="{StaticResource BackGround}" Padding="10">
-                                    <Grid x:DataType="model:Post">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="33"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Frame Padding="10" BackgroundColor="{Binding BackGround}" CornerRadius="5" HasShadow="False">
-                                            <Label Text="{Binding Type}" TextColor="{Binding TextColor}" FontSize="18" FontAttributes="Bold"/>
-                                        </Frame>
-                                        <Grid Grid.Column="1">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="40*"/>
-                                                <RowDefinition Height="50*"/>
-                                                <RowDefinition Height="20"/>
-                                            </Grid.RowDefinitions>
-                                            <Label Text="{Binding TitleInfo}" FontSize="16" FontAttributes="Bold" HorizontalOptions="StartAndExpand"/>
-                                            <Label Grid.Column="1" Text="{Binding company_name,StringFormat='{0}'}" HorizontalOptions="EndAndExpand"/>
-                                            <Label Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Description}"/>
-                                            <Label Grid.Row="2" Text="{Binding Date}" TextColor="{StaticResource BackGroundDark}" HorizontalOptions="StartAndExpand"/>
-                                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Id}" FontAttributes="Bold" WidthRequest="51" HorizontalOptions="EndAndExpand"/>
-                                        </Grid>
-                                    </Grid>
-                                </Frame>
-                            </SwipeView>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                <CollectionView x:Name="PostCollectionView" 
+                                ItemsSource="{Binding PostItems}" 
+                                ItemTemplate="{StaticResource post_template}"
+                                RemainingItemsThreshold="2" 
+                                RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}" 
+                                EmptyView="Δέν βρέθηκαν αγγελίες για εσάς"
+                                FooterTemplate="{StaticResource footer_template}"/>
             </RefreshView>
         </StackLayout>
-        <Button Command="{Binding NewAdCommand}" Text="+" FontSize="30" Padding="0" Margin="20" BackgroundColor="{StaticResource Complementary}" CornerRadius="30" WidthRequest="60" HeightRequest="60" HorizontalOptions="End" VerticalOptions="End"/>
+        <Button Command="{Binding NewAdCommand}" 
+                Text="+" 
+                FontSize="30" Padding="0" Margin="20" 
+                BackgroundColor="{StaticResource Complementary}"
+                CornerRadius="30" WidthRequest="60" HeightRequest="60" 
+                HorizontalOptions="End" VerticalOptions="End"/>
     </Grid>
 </ContentPage>

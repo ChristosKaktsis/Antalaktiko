@@ -15,20 +15,12 @@ namespace Antalaktiko.ViewModels
         public List<Post> SourcePostItems { get; set; }
         public Command LoadPostItemsCommand { get; }
         public Command LoadMoreCommand { get; }
-        public Command AnswerCommand { get; }
-
         public MyPostAnsweredViewModel()
         {
             PostItems = new ObservableCollection<Post>();
             SourcePostItems = new List<Post>();
             LoadPostItemsCommand = new Command(async () => await ExecuteLoadPostItemsCommand());
             LoadMoreCommand = new Command(async () => await ExecuteLoadMoreCommand());
-            AnswerCommand = new Command(ExecuteAnswerCommand);
-        }
-        private async void ExecuteAnswerCommand(object obj)
-        {
-            var item = obj as Post;
-            await Shell.Current.GoToAsync($"{nameof(AnswerPage)}?{nameof(AnswerViewModel.ItemId)}={item.Id}");
         }
         private async Task ExecuteLoadPostItemsCommand()
         {
@@ -41,7 +33,7 @@ namespace Antalaktiko.ViewModels
                 var items = await postManager.GetMyAnsweredWithUid(LogedUser);
                 foreach (var item in items)
                 {
-                    item.TitleInfo = await SetPostTitleInfo(item.Info);
+                    //item.TitleInfo = await SetPostTitleInfo(item.Info);
                     PostItems.Add(item);
                 }
 
@@ -61,8 +53,8 @@ namespace Antalaktiko.ViewModels
                 return await Task.FromResult(string.Empty);
             string title = string.Empty;
 
-            var chronology = info.Chronology;
-            title = $"{info.Brand_Name} {info.Model_Name} {chronology}";
+            //var chronology = info.Chronology;
+            //title = $"{info.Brand_Name} {info.Model_Name} {chronology}";
             return await Task.FromResult(title);
         }
         private async Task ExecuteLoadMoreCommand()
@@ -78,7 +70,7 @@ namespace Antalaktiko.ViewModels
                 var items = await postManager.GetMoreMyAnsweredWithUid(LogedUser);
                 foreach (var item in items)
                 {
-                    item.TitleInfo = await SetPostTitleInfo(item.Info);
+                    //item.TitleInfo = await SetPostTitleInfo(item.Info);
                     PostItems.Add(item);
                 }
 

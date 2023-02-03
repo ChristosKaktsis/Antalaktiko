@@ -1,4 +1,5 @@
-﻿using Antalaktiko.ViewModels;
+﻿using Antalaktiko.Models;
+using Antalaktiko.ViewModels;
 using DevExpress.XamarinForms.Editors;
 using System;
 using System.Collections.Generic;
@@ -67,7 +68,7 @@ namespace Antalaktiko.Views
                 return new StackLayout();
             Label companyLabel = new Label
             {
-                Text = item.Author_Name,
+                Text = item.Author_string,
                 FontSize = 20,
                 FontAttributes = FontAttributes.Bold,
                 HorizontalOptions = LayoutOptions.StartAndExpand
@@ -189,6 +190,18 @@ namespace Antalaktiko.Views
             await _viewModel.AnswerComment(comId, desc);
             //unsub the event 
             button.Clicked -= AnswerButton_Clicked;
+        }
+
+        private void open_popup_Clicked(object sender, EventArgs e)
+        {
+            var img = carousel_view.CurrentItem as Models.Image;
+            image_popup.Content.BindingContext = img;
+            image_popup.IsOpen = true;
+        }
+
+        private void close_popup_Clicked(object sender, EventArgs e)
+        {
+            image_popup.IsOpen = false;
         }
 
         //private async void AnswerButton_Clicked(object sender, EventArgs e)

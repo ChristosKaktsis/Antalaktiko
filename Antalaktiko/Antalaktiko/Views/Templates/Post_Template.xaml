@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:model="clr-namespace:Antalaktiko.Models"
+             x:Class="Antalaktiko.Views.Templates.Post_Template">
+    <!-- Content -->
+    <Frame BorderColor="{StaticResource BackGround}"  Padding="0" CornerRadius="10" Margin="10,5,10,5">
+        <StackLayout x:DataType="model:Post">
+            <Frame Padding="10" BackgroundColor="{Binding BackGround}" CornerRadius="0" HasShadow="False">
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="{Binding Type}" TextColor="{Binding TextColor}" FontSize="18" FontAttributes="Bold"/>
+                    <Label Text="{Binding Id}"
+                           HorizontalOptions="EndAndExpand" VerticalOptions="Center" 
+                           FontAttributes="Bold"/>
+                </StackLayout>
+            </Frame>
+            <Frame Grid.Row="1" HasShadow="False" Padding="5">
+                <!--<WebView Source="{Binding Data.Desc}"/>-->
+                <Label Text="{Binding Data.Desc}"
+                       FontAttributes="Bold" FontSize="15"/>
+            </Frame>
+            <StackLayout Margin="5,0,5,5" >
+                <StackLayout Orientation="Horizontal" >
+                    <Label Text="{Binding Data.Company_name}"/>
+                    <Label Text="{Binding Data.Lname}"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" >
+                    <Label Text="{Binding Data.Brand_name}"/>
+                    <Label Text="{Binding Data.Model_name}"/>
+                    <Label Text="{Binding Data.Date_from}"/>
+                    <Label Text="{Binding Data.Fuel}"/>
+                </StackLayout>
+                <Label Text="{Binding Data.Cat_name}"/>
+                <Label x:Name="state_label"/>
+                <!--<Label Text="{Binding Data.State_string}"/>-->
+            </StackLayout>
+            <FlexLayout x:Name="flexLayout" 
+                        Wrap="Wrap"
+                        JustifyContent="Start"/>
+            <StackLayout Orientation="Horizontal">
+                <Frame>
+                    <Label Text="{Binding Comments,StringFormat='Σχόλια: {0}'}"/>
+                </Frame>
+                <Button Text="Απάντησε"
+                        HorizontalOptions="EndAndExpand" Margin="10"
+                        Clicked="Button_Clicked"/>
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</ContentView>

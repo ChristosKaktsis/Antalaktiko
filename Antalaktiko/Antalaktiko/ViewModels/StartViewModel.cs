@@ -27,7 +27,6 @@ namespace Antalaktiko.ViewModels
 
         public Command NewAdCommand { get; }
         public ObservableCollection<Post> PostItems { get; set; }
-        public List<Post> SourcePostItems { get; set; }
         public List<User> UserItems { get; set; }
         public ObservableCollection<Brand> BrandItems { get; }
         public ObservableCollection<Model> ModelItems { get; }
@@ -38,11 +37,9 @@ namespace Antalaktiko.ViewModels
         public Command LoadPartItemsCommand { get; }
         public Command FilterCollectionCommand { get; }
         public Command LoadMoreCommand { get; }
-        public Command AnswerCommand { get; }
         public StartViewModel()
         {
             NewAdCommand = new Command(OnNewAdPressed);
-            SourcePostItems = new List<Post>();
             UserItems = new List<User>();
             PostItems = new ObservableCollection<Post>();
             BrandItems = new ObservableCollection<Brand>();
@@ -54,16 +51,7 @@ namespace Antalaktiko.ViewModels
             LoadBrandItemsCommand = new Command(async () => await ExecuteLoadBrandItemsCommand());
             LoadPartItemsCommand = new Command(async () => await ExecuteLoadPartsCommand());
             FilterCollectionCommand = new Command(ExecuteFilterCollectionCommand);
-            AnswerCommand = new Command(ExecuteAnswerCommand);
-            
         }
-
-        private async void ExecuteAnswerCommand(object obj)
-        {
-            var item = obj as Post;
-            await Shell.Current.GoToAsync($"{nameof(AnswerPage)}?{nameof(AnswerViewModel.ItemId)}={item.Id}");
-        }
-
         private async Task ExecuteLoadBrandItemsCommand()
         {
             var stopwatch = Stopwatch.StartNew();
@@ -105,23 +93,6 @@ namespace Antalaktiko.ViewModels
             }
             return Task.FromResult(true);
         }
-
-        private async Task ExecuteLoadUserItemsCommand()
-        {
-            try
-            {
-                var items = await userManager.GetAll();
-                foreach (var item in items)
-                {
-                    if (!UserItems.Contains(item))
-                        UserItems.Add(item);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-        }
         private async Task ExecuteLoadPostItemsCommand()
         {
             if (IsRefresing)
@@ -130,20 +101,13 @@ namespace Antalaktiko.ViewModels
             IsBusy = true;
             try
             {
-                SourcePostItems.Clear();
                 PostItems.Clear();
-                await Task.WhenAll(
-                    ExecuteLoadBrandItemsCommand());
-
-                var items = await postManager.GetAll();
+                var items = await postManager.GetAll(
+                    brand: SelectedBrand?.Id.ToString(),
+                    model: SelectedModel?.Id.ToString(),
+                    search:SearchFilter);
                 foreach (var item in items)
-                {
-                    item.TitleInfo = await SetPostTitleInfo(item.Info);
                     PostItems.Add(item);
-                    //there is a Post with null and we cant filter it with out info 
-                    if (item.Info != null)
-                        SourcePostItems.Add(item);
-                }
                 stopwatch.Stop();
 
                 var elapsed = stopwatch.Elapsed;
@@ -169,17 +133,12 @@ namespace Antalaktiko.ViewModels
             {
                 IsRefresing = true;
 
-                var items = await postManager.GetMore();
+                var items = await postManager.GetMore(
+                    brand: SelectedBrand?.Id.ToString(),
+                    model: SelectedModel?.Id.ToString(),
+                    search: SearchFilter);
                 foreach (var item in items)
-                {
-                   
-                    item.TitleInfo = await SetPostTitleInfo(item.Info);
                     PostItems.Add(item);
-                    //there is a Post with null and we cant filter it with out info 
-                    if (item.Info != null)
-                        SourcePostItems.Add(item);
-                }
-                
             }
             catch (Exception ex)
             {
@@ -189,16 +148,6 @@ namespace Antalaktiko.ViewModels
             {
                 IsRefresing = false;
             }
-        }
-        private async Task<string> SetPostTitleInfo(PostInfo info)
-        {
-            if(info==null)
-                return await Task.FromResult(string.Empty);
-            string title = string.Empty;
-            
-            var chronology = info.Chronology;
-            title = $"{info.Brand_Name} {info.Model_Name} {chronology}";
-            return await Task.FromResult(title);
         }
         private async Task ExecuteLoadPartsCommand()
         {          
@@ -300,74 +249,18 @@ namespace Antalaktiko.ViewModels
             var howmanyyears = maxyearint - minyearint + 1;
             return Enumerable.Range(minyearint, howmanyyears).OrderByDescending(i => i).ToList();
         }
-        public string SearchFilter
+        public string SearchFilter{get; set;}
+        public bool IsFilterFocused{get;set;}
+        public void ExecuteFilterCollectionCommand()
         {
-            get => searchFilter;
-            set
-            {
-                SetProperty(ref searchFilter, value);             
-            }
-        }
-        public bool IsFilterFocused
-        {
-            get => isFilterFocused;
-            set
-            {
-                SetProperty(ref isFilterFocused, value);
-            }
-        }
-        public async void ExecuteFilterCollectionCommand()
-        {
-            var buysell = SelectedChipIndex + 1;
-            var brandid = SelectedBrand == null ? string.Empty : SelectedBrand.Id.ToString();
-            var modelid = SelectedModel == null ? string.Empty : SelectedModel.Id.ToString();
-            var partid = SelectedPart == null ? string.Empty : SelectedPart.Id.ToString();
-            var yearfrom = string.IsNullOrEmpty(SelectedYearFrom) ? string.Empty : SelectedYearFrom;
-            var yearto = string.IsNullOrEmpty(SelectedYearTo) ? string.Empty : SelectedYearTo;
-            //var fuel = string.IsNullOrEmpty(selectedFuelType) ? string.Empty : SelectedFuelType;
-            var fuel = SelectedFuelTypeIndex + 1;
-            var filteritem = new
-            {
-                buysell,
-                brandid,
-                modelid,
-                partid,
-                yearfrom,
-                yearto,
-                fuel,
-                page = "0",
-                num = "15"
-            };
-            await ExecuteLoadFilteredPostItemsCommand(filteritem);
-        }
-        private async Task ExecuteLoadFilteredPostItemsCommand(object filteritem)
-        {
-            IsRefresing = true;
+            //var buysell = SelectedChipIndex + 1;
+            //var partid = SelectedPart == null ? string.Empty : SelectedPart.Id.ToString();
+            //var yearfrom = string.IsNullOrEmpty(SelectedYearFrom) ? string.Empty : SelectedYearFrom;
+            //var yearto = string.IsNullOrEmpty(SelectedYearTo) ? string.Empty : SelectedYearTo;
+            //var fuel = SelectedFuelTypeIndex + 1;
             IsBusy = true;
-            try
-            {
-                SourcePostItems.Clear();
-                PostItems.Clear();
-                var items = await postManager.FilterSearch(filteritem);
-                foreach (var item in items)
-                {
-                    item.TitleInfo = await SetPostTitleInfo(item.Info);
-                    PostItems.Add(item);
-                    //there is a Post with null and we cant filter it with out info 
-                    if (item.Info != null)
-                        SourcePostItems.Add(item);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsRefresing = IsBusy = false;
-            }
         }
-        public  void OnAppearing()
+        public void OnAppearing()
         {
             IsBusy = true;
         }

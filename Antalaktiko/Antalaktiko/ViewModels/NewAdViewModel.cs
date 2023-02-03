@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,18 +19,6 @@ namespace Antalaktiko.ViewModels
         private string selectedModelName = "Μοντέλο";
         private string selectedBrandName = "Μάρκα";
         private ImageSource imageSource;
-        private int selectedbuysell;
-        private int selectedDoor;
-        private string selectedfuel;
-        private Part selectedPart;
-        private int selectedPartType;
-        private string partCode;
-        private string bikeCode;
-        private string spaceNumber;
-        private string description;
-        private int selectedYearFrom;
-        private int selectedYearTo;
-
         public ObservableCollection<Brand> BrandItems { get; }
         public ObservableCollection<Model> ModelItems { get; }
         public ObservableCollection<Part> PartItems { get; }
@@ -51,41 +40,48 @@ namespace Antalaktiko.ViewModels
             RegisterAdCommand = new Command(ExecuteRegisterCommand);
             YearsFrom = SetYears();
         }
-
         private async void ExecuteRegisterCommand()
         {
             try
             {
                 var door = SelectedDoor + 2;
-                var brand = SelectedBrand == null ? string.Empty : SelectedBrand.Id.ToString();
-                var model = SelectedModel == null ? string.Empty : SelectedModel.Id.ToString();
-                var part = selectedPart == null ? string.Empty : SelectedPart.Id.ToString();
-
-                var post = new
+                var brand = SelectedBrand == null ? string.Empty : SelectedBrand?.Id.ToString();
+                var model = SelectedModel == null ? string.Empty : SelectedModel?.Id.ToString();
+                var part = SelectedPart == null ? string.Empty : SelectedPart?.Id.ToString();
+                var cat = SelectedPartType;
+                var post = new Post
                 {
-                    BuySell,
-                    brand,
-                    model,
-                    SelectedYearFrom,
-                    SelectedYearTo,
-                    door,
-                    SelectedFuel,
-                    part,
-                    PartType,
-                    PartCode,
-                    BikeCode,
-                    SpaceNumber,
-                    Description,
-                    ImageSources
+                    Type = BuySell,
+                    Data = new PostInfo
+                    {
+                        Desc = Description,
+                        User_id = App.LogedUser.Id,
+                        Fname = App.LogedUser?.Data?.FName,
+                        Company_id = App.LogedUser?.Data?.Cid,
+                        Fuel = SelectedFuel,
+                        Brand = brand,
+                        Brand_name = SelectedBrand?.Name,
+                        Model = model,
+                        Model_name = SelectedModel?.Name,
+                        Date_from = SelectedYearFrom.ToString(),
+                        Date_to = SelectedYearTo.ToString(),
+                        Cat = part,
+                        Cat_name = SelectedPart?.Title.ToString(),
+                        Doors = (SelectedDoor + 2).ToString(),
+                        Vin = SpaceNumber,
+                        Engine_code = EngineCode,
+                        Part_number = PartCode,
+                        Price = "2",
+                        Qnt= "2",
+                        State = SelectedPartType.ToList()
+                    }
                 };
-                await postManager.RegisterPost(post);
+                await postManager.RegisterPost(post,ImageSources);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.WriteLine(ex);
             }
-            
-           
         }
 
         private async Task ExecuteLoadPartItemsCommand()
@@ -103,7 +99,7 @@ namespace Antalaktiko.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.WriteLine(ex);
             }
             finally
             {
@@ -130,7 +126,7 @@ namespace Antalaktiko.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.WriteLine(ex);
             }
             finally
             {
@@ -202,135 +198,25 @@ namespace Antalaktiko.ViewModels
                 SetProperty(ref selectedModelName, value);
             }
         }
-        public int SelectedBuySell
-        {
-            get => selectedbuysell;
-            set
-            {
-                SetProperty(ref selectedbuysell, value);
-            }
-        }
+        public int SelectedBuySell { get; set; }
+        
         public string BuySell
         {
             get
             {
-                string buysell = string.Empty;
-                if (SelectedBuySell != 1)
-                    buysell = "θέλω να αγοράσω";
-                else
-                {
-                    buysell = "Θέλω να πουλήσω";
-                }
-                return buysell;
+                return SelectedBuySell == 1? "Θέλω να πουλήσω": "Θέλω να αγοράσω";
             }
         }
-        public int SelectedYearFrom
-
-        {
-            get => selectedYearFrom;
-            set
-            {
-                SetProperty(ref selectedYearFrom, value);
-            }
-        }
-        public int SelectedYearTo
-
-        {
-            get => selectedYearTo;
-            set
-            {
-                SetProperty(ref selectedYearTo, value);
-            }
-        }
-        public int SelectedDoor
-
-        {
-            get => selectedDoor;
-            set
-            {
-                SetProperty(ref selectedDoor, value);
-            }
-        }
-        public string SelectedFuel
-        {
-            get => selectedfuel;
-            set
-            {
-                SetProperty(ref selectedfuel, value);
-            }
-        }
-        public Part SelectedPart
-        {
-            get => selectedPart;
-            set
-            {
-                SetProperty(ref selectedPart, value);
-            }
-        }
-        public int SelectedPartType
-        {
-            get => selectedPartType;
-            set
-            {
-                SetProperty(ref selectedPartType, value);
-            }
-        }
-        public string PartType
-        {
-            get
-            {
-                string part = string.Empty;
-                switch (SelectedPartType)
-                {
-                    case 0:
-                        part = "Καινούριο";
-                        break;
-                    case 1:
-                        part = "Μεταχειρισμένο";
-                        break;
-                    case 2:
-                        part = "Ιμιτασιόν";
-                        break;
-                    case 3:
-                        part = "Ανακατασκευασμένο";
-                        break;
-
-                }
-                return part;
-            }
-        }
-        public string PartCode
-        {
-            get => partCode;
-            set
-            {
-                SetProperty(ref partCode, value);
-            }
-        }
-        public string BikeCode
-        {
-            get => bikeCode;
-            set
-            {
-                SetProperty(ref bikeCode, value);
-            }
-        }
-        public string SpaceNumber
-        {
-            get => spaceNumber;
-            set
-            {
-                SetProperty(ref spaceNumber, value);
-            }
-        }
-        public string Description
-        {
-            get => description;
-            set
-            {
-                SetProperty(ref description, value);
-            }
-        }
+        public int SelectedYearFrom { get; set; }
+        public int SelectedYearTo { get; set; }
+        public int SelectedDoor { get; set; }
+        public string SelectedFuel { get; set; }
+        public Part SelectedPart { get; set; }
+        public IList<int> SelectedPartType { get; set; }
+        public string PartCode { get; set; } 
+        public string EngineCode { get; set; }  
+        public string SpaceNumber { get; set; } 
+        public string Description { get; set; }
         public void OnAppearing()
         {
             LoadBrandsCommand.Execute(null);
@@ -358,6 +244,30 @@ namespace Antalaktiko.ViewModels
 
         public string PhotoPath { get; private set; }
 
+        public async Task PickPhotoAsync()
+        {
+            try
+            {
+                imageSource = null;
+                var photo = await MediaPicker.PickPhotoAsync();
+                await LoadPhotoAsync(photo);
+                Debug.WriteLine($"CapturePhotoAsync COMPLETED: {PhotoPath}");
+            }
+            catch (FeatureNotSupportedException fnsEx)
+            {
+                // Feature is not supported on the device
+                Debug.WriteLine($"CapturePhotoAsync THREW: {fnsEx.Message}");
+            }
+            catch (PermissionException pEx)
+            {
+                // Permissions not granted
+                Debug.WriteLine($"CapturePhotoAsync THREW: {pEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"CapturePhotoAsync THREW: {ex.Message}");
+            }
+        }
         public async Task TakePhotoAsync()
         {
             try
@@ -365,21 +275,21 @@ namespace Antalaktiko.ViewModels
                 imageSource = null;
                 var photo = await MediaPicker.CapturePhotoAsync();
                 await LoadPhotoAsync(photo);
-                Console.WriteLine($"CapturePhotoAsync COMPLETED: {PhotoPath}");
+                Debug.WriteLine($"CapturePhotoAsync COMPLETED: {PhotoPath}");
             }
             catch (FeatureNotSupportedException fnsEx)
             {
                 // Feature is not supported on the device
-                Console.WriteLine($"CapturePhotoAsync THREW: {fnsEx.Message}");
+                Debug.WriteLine($"CapturePhotoAsync THREW: {fnsEx.Message}");
             }
             catch (PermissionException pEx)
             {
                 // Permissions not granted
-                Console.WriteLine($"CapturePhotoAsync THREW: {pEx.Message}");
+                Debug.WriteLine($"CapturePhotoAsync THREW: {pEx.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"CapturePhotoAsync THREW: {ex.Message}");
+                Debug.WriteLine($"CapturePhotoAsync THREW: {ex.Message}");
             }
         }
 
@@ -401,12 +311,12 @@ namespace Antalaktiko.ViewModels
             ImageSource = ImageSource.FromFile(newFile);
             ConvertImage(PhotoPath);
         }
-        void ConvertImage(string p)
+        void ConvertImage(string path)
         {
-            if (string.IsNullOrEmpty(p))
+            if (string.IsNullOrEmpty(path))
                 return;
-            byte[] imageByte = File.ReadAllBytes(p);
-            ImageSources.Add(Convert.ToBase64String(imageByte));
+            byte[] imageByte = File.ReadAllBytes(path);
+            ImageSources.Add(path);
         }
     }
 }

@@ -49,9 +49,15 @@
                         <editors:TextEdit PlaceholderText="ΟΔΟΣ" StartIcon="address" IsReadOnly="True" Text="{Binding Address}"/>
                         <editors:TextEdit PlaceholderText="ΑΡΙΘΜΟΣ" StartIcon="address" IsReadOnly="True" Text="{Binding AddressNo}"/>
                         <StackLayout Orientation="Horizontal">
-                            <editors:ComboBoxEdit LabelText="ΤΑΧ. ΚΩΔΙΚΑΣ" IsReadOnly="True" ItemsSource="{Binding TKItems}" SelectedItem="{Binding SelectedTK,Mode=TwoWay}" DisplayMember="Ονοματκ" IsFilterEnabled="True" FilterMode="Contains"/>
-                            <editors:TextEdit PlaceholderText="ΠΕΡΙΟΧΗ" IsReadOnly="True" Text="{Binding SelectedRegion,Mode=OneWay}" HorizontalOptions="EndAndExpand"/>
+                            <editors:ComboBoxEdit LabelText="Χώρα" 
+                                                  ItemsSource="{Binding CountryItems,Mode=OneWay}"
+                                                  SelectedItem="{Binding Selected_Country,Mode=TwoWay}"
+                                                  DisplayMember="Name"/>
+                            <Button Text="{Binding SelectedRegionTitle,Mode=OneWay}" HorizontalOptions="FillAndExpand"
+                                    TextColor="Gray" BackgroundColor="White" BorderColor="Gray" CornerRadius="30"
+                                    Clicked="Region_Popup_Clicked"/>
                         </StackLayout>
+                        <editors:ComboBoxEdit LabelText="ΤΑΧ. ΚΩΔΙΚΑΣ" IsReadOnly="True" ItemsSource="{Binding TKItems}" SelectedItem="{Binding SelectedTK,Mode=TwoWay}" DisplayMember="Ονοματκ" IsFilterEnabled="True" FilterMode="Contains"/>
                         <editors:ComboBoxEdit LabelText="ΤΥΠΟΣ ΕΤΑΙΡΙΑΣ" SelectedItem="{Binding CompanyType}">
                             <editors:ComboBoxEdit.ItemsSource>
                                 <x:Array Type="{x:Type x:String}">
@@ -73,7 +79,6 @@
                                 </x:Array>
                             </editors:ComboBoxEdit.ItemsSource>
                         </editors:ComboBoxEdit>
-                        
                     </StackLayout>
                 </Frame>
                 <Frame Margin="12" Padding="0" CornerRadius="20">
@@ -81,27 +86,27 @@
                         <Label Text="Ανταλλακτικά που ενδιαφέρουν την εταιρία" FontAttributes="Bold" FontSize="17" Margin="0,0,0,10"/>
                         <StackLayout Orientation="Horizontal">
                             <Label Text="Όλα" VerticalOptions="Center"/>
-                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding AllChecked}"/>
+                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding AllChecked,Mode=OneWayToSource}"/>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal" >
                             <Label Text="Ιμιτασιόν" VerticalOptions="Center"/>
-                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding ImitationChecked}"/>
+                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding ImitationChecked,Mode=OneWayToSource}"/>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal" >
                             <Label Text="Καινούρια" VerticalOptions="Center"/>
-                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding NewChecked}"/>
+                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding NewChecked,Mode=OneWayToSource}"/>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal" >
 
                             <Label Text="Μεταχειρισμένα" VerticalOptions="Center"/>
-                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding UsedChecked}"/>
+                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding UsedChecked,Mode=OneWayToSource}"/>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal" >
                             <Label Text="Ανακατασκευασμένα" VerticalOptions="Center"/>
-                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding  RebuildChecked}"/>
+                            <CheckBox HorizontalOptions="EndAndExpand" IsChecked="{Binding  RebuildChecked,Mode=OneWayToSource}"/>
                         </StackLayout>
-                        <Button Command="{Binding OpenPopUpCommand}" Text="Επιλογή Μάρκας που ενδιαφέρουν την εταιρία"  TextColor="{StaticResource Primary}" BackgroundColor="White" CornerRadius="30" Margin="10"/>
-                        <Button Command="{Binding OpenPartsPopUpCommand}" Text="Επιλογή Ανταλλακτικών που ενδιαφέρουν την εταιρία"  TextColor="{StaticResource Primary}" BackgroundColor="White" CornerRadius="30" />
+                        <Button Command="{Binding OpenPopUpCommand}" Text="Επιλογή Μάρκας που ενδιαφέρουν την εταιρία" Style="{StaticResource reverse_button}" CornerRadius="30" Margin="10"/>
+                        <Button Command="{Binding OpenPartsPopUpCommand}" Text="Επιλογή Ανταλλακτικών που ενδιαφέρουν την εταιρία" Style="{StaticResource reverse_button}"  CornerRadius="30" />
                     </StackLayout>
                 </Frame>
                 <Frame  Margin="12" Padding="0" CornerRadius="20">
@@ -113,11 +118,23 @@
                         <editors:TextEdit PlaceholderText="EMAIL"  StartIcon="email" Text="{Binding UserMail}"/>
                         <editors:PasswordEdit PlaceholderText="ΚΩΔΙΚΟΣ"  StartIcon="password" Text="{Binding Password}"/>
                         <editors:PasswordEdit PlaceholderText="ΕΠΙΒΕΒΑΙΩΣΗ"  StartIcon="password"/>
+                        <StackLayout Orientation="Horizontal">
+                            <Button Text="Πολιτική Απορρήτου"
+                                    Style="{StaticResource reverse_button}"
+                                    Clicked="Privacy_Button_Clicked"/>
+                            <Button Text="Όρους χρήσης"
+                                    Style="{StaticResource reverse_button}"
+                                    Clicked="Terms_Button_Clicked"/>
+                        </StackLayout>
+                        <editors:CheckEdit Label="Έχω διαβάσει και συμφωνήσει με την Πολιτική Απορρήτου"
+                                           IsChecked="{Binding Privacy_Policy}"/>
+                        <editors:CheckEdit Label="Έχω διαβάσει και συμφωνήσει με τους Όρους χρήσης"
+                                           IsChecked="{Binding Terms_of_use}"/>
 
                         <Button Text="Αποθήκευση" Command="{Binding RegisterCommand}"  FontSize="17" CornerRadius="30"   Padding="15" Margin="10,30,10,0"/>
                         <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
                             <Label Text="Έχετε ήδη λογαριασμό;" TextColor="{StaticResource Primary}" VerticalOptions="Center"/>
-                            <Button Command="{Binding GoBackCommand}" Text="Κάνε σύνδεση εδώ"  TextColor="{StaticResource Primary}" BackgroundColor="White" CornerRadius="30"/>
+                            <Button Command="{Binding GoBackCommand}" Style="{StaticResource reverse_button}" Text="Κάνε σύνδεση εδώ" CornerRadius="30"/>
                         </StackLayout>
 
                     </StackLayout>
@@ -211,6 +228,49 @@
                     <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="20">
                         <Button Command="{Binding ClearSelectedPartsCommand}" Text="Καθαρισμός" TextColor="{StaticResource Primary}"  BackgroundColor="White"/>
                         <Button Command="{Binding OpenPartsPopUpCommand}" Text="OK"  CornerRadius="30"/>
+                    </StackLayout>
+                </StackLayout>
+            </dxp:DXPopup>
+            <!--RegionPopup-->
+            <dxp:DXPopup x:Name="RegionPopUp"
+                             AllowScrim="True"
+                             ScrimColor="{StaticResource BackGroundDarkTranc}"
+                             ShadowColor="Black"
+                             ShadowRadius="5"
+                             ShadowHorizontalOffset="5">
+                <StackLayout Margin="20" WidthRequest="300">
+                    <Label Text="Επιλογή Περιοχής" FontSize="20" FontAttributes="Bold"/>
+                    <editors:TextEdit x:Name="SearchRegionText" PlaceholderText="Αναζήτηση" CornerRadius="20" TextChanged="SearchRegionText_TextChanged"/>
+                    <dxcv:DXCollectionView x:Name="RegionCollection" HeightRequest="300"  Margin="10,0,10,10" 
+                                           ItemsSource="{Binding RegionItems,Mode=OneWay}"
+                                           SelectedItem="{Binding SelectedRegion,Mode=OneWayToSource}"
+                                           SelectionMode="Single">
+                        <dxcv:DXCollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5" x:DataType="model:Region">
+                                    <Frame BorderColor="{StaticResource BackGround}" Padding="5">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="{Binding Title}" FontSize="17" VerticalOptions="Center"/>
+                                        </StackLayout>
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </dxcv:DXCollectionView.ItemTemplate>
+                        <dxcv:DXCollectionView.SelectedItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5" x:DataType="model:Region">
+                                    <Frame BorderColor="{StaticResource Primary}" Padding="5">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="{Binding Title}" FontSize="17" VerticalOptions="Center"/>
+                                        </StackLayout>
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </dxcv:DXCollectionView.SelectedItemTemplate>
+                    </dxcv:DXCollectionView>
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="20">
+                        <Button Text="OK" CornerRadius="30"
+                                Clicked="Region_Popup_Clicked"/>
                     </StackLayout>
                 </StackLayout>
             </dxp:DXPopup>

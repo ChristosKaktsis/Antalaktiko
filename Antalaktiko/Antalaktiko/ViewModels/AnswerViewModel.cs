@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace Antalaktiko.ViewModels
 
         public ObservableCollection<Comment> CommentCollection { get; set; }
         public List<Comment> NewComments { get; set; }
+        public ObservableCollection<Models.Image> ImageList { get; set; } = new ObservableCollection<Models.Image>();
         public AnswerViewModel()
         {
             CommentCollection = new ObservableCollection<Comment>();
@@ -107,23 +109,25 @@ namespace Antalaktiko.ViewModels
             try
             {
                 var item = await postManager.GetItemWithId(itemId);
-                Author_Id = item.Author;
-                Description = item.Description;
-                Author_Name = item.author_name;
-                TitleInfo = item.Info.Brand_Name;
-                Brand = item.Info.Brand_Name;
-                Model = item.Info.Model_Name;
-                Company = item.company_name;
-                Chronology = item.Info.Chronology;
-                Type = item.Name;
-                Fuel = item.Info.Fuel;
-                Doors = item.Info.Doors;
-                PartType = item.Info.part_categories_name;
-                ItemState = item.Info.Item_State_Name;
+                //Author_Id = item.Author;
+                Description = item.Data.Desc;
+                //Author_Name = item.author_name;
+                TitleInfo = item.Data.Brand_name;
+                Brand = item.Data.Brand_name;
+                Model = item.Data.Model_name;
+                Company = item.Data.Company_name;
+                Chronology = item.Data.Date_from;
+                Type = item.Type;
+                Fuel = item.Data.Fuel;
+                Doors = item.Data.Doors;
+                PartType = item.Data.Cat_name;
+                //ItemState = item.Data.State_string;
+                await Task.Delay(1000);
+                item.Data?.Images?.ForEach(i => ImageList.Add(i));
             }
             catch (Exception)
             {
-                Console.WriteLine("Failed to Load Item");
+                Debug.WriteLine("Failed to Load Item");
             }
         }
         public async Task LoadComments()
@@ -153,19 +157,24 @@ namespace Antalaktiko.ViewModels
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.WriteLine(ex);
             }
         }
 
         private void AddChild(Comment c)
         {
-            if (c.Child != null)
-                return;
-            var child = CommentCollection.Where(x => x.Parent == c.Id).FirstOrDefault();
-            if (child == null)
-                return;
-            c.Child = child;
-            AddChild(child);
+            try
+            {
+                if (c.Child != null)
+                    return;
+                var child = CommentCollection.Where(x => x.Parent == c.Id).FirstOrDefault();
+                if (child == null)
+                    return;
+                c.Child = child;
+                AddChild(child);
+            }
+            catch { Debug.WriteLine("AddChild wrong"); }
+            
         }
 
         public async Task AnswerComment(string comId, string answer)
@@ -180,13 +189,13 @@ namespace Antalaktiko.ViewModels
                     Pid = itemId,
                     parent = comId
                 };
-                await commentManager.PutComment(comment);
+              //  await commentManager.PutComment(comment);
                 await Task.Delay(1);
                 //normaly we would return an comment after put to display in list
                 //temporary object creation
                 NewComments.Add(new Comment
                 {
-                    Author_Name = App.LogedUser.First_Name,
+                    Author_string = App.LogedUser?.Data?.FName,
                     Date = comment.Date,
                     Description = comment.Description
                 });
@@ -194,7 +203,7 @@ namespace Antalaktiko.ViewModels
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex);
+                Debug.WriteLine(ex);
             }
         }
     }

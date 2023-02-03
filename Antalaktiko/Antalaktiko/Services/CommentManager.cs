@@ -1,5 +1,6 @@
 ﻿using Antalaktiko.Models;
 using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -24,12 +25,14 @@ namespace Antalaktiko.Services
             result = System.Web.HttpUtility.HtmlDecode(result);//this is for the char that appears &amp
             return JsonConvert.DeserializeObject<IEnumerable<Comment>>(result);
         }
-        public async Task<bool> PutComment(object post)
+        public async Task<bool> PostComment(Comment item)
         {
-            var json = JsonConvert.SerializeObject(post);
-            var loginurl = $"{BaseAddress}?putData=Comment&data={json}";
-            HttpClient client = GetClient();
-            string result = await client.GetStringAsync(loginurl);
+            if (item == null) return false;
+            var client = GetRestClient();
+            var request = new RestRequest();
+            request.AlwaysMultipartFormData = true;
+            request.AddParameter("type", "comment");
+            var response = await client.PostAsync(request);
             return true;
         }
     }

@@ -14,14 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DevExpress.XamarinForms.CollectionView" Version="21.2.5" />
-    <PackageReference Include="DevExpress.XamarinForms.Editors" Version="21.2.5" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="DevExpress.XamarinForms.CollectionView" Version="22.1.7" />
+    <PackageReference Include="DevExpress.XamarinForms.Editors" Version="22.1.7" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="RestSharp" Version="108.0.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.0" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" />  
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.1" />  
-    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2337" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.5" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.4" />  
+    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2545" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,6 +60,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\StartPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Templates\Post_Template.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

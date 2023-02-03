@@ -26,7 +26,7 @@ namespace Antalaktiko.ViewModels
             App.IsLoggedIn = false;
             LoginCommand = new Command(OnLoginClicked);
             RegisterCommand = new Command(async ()=> await Shell.Current.GoToAsync(nameof(RegisterPage)));
-            ContactCommand = new Command(async () => await Shell.Current.GoToAsync(nameof(ContactPage)));
+            ContactCommand = new Command(async () => await Shell.Current.Navigation.PushAsync(new ContactPage("https://www.antalaktiko.gr/%ce%b5%cf%80%ce%b9%ce%ba%ce%bf%ce%b9%ce%bd%cf%89%ce%bd%ce%af%ce%b1/")));
         }
         public string UserMail
         {

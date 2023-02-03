@@ -3,10 +3,12 @@ using Antalaktiko.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace Antalaktiko.ViewModels
 {
@@ -14,7 +16,7 @@ namespace Antalaktiko.ViewModels
     {
         private bool isPopUpOpen, isPartsPopUpOpen, isAllChecked, isAllPartsChecked, isAfmPopUpOpen, afmHasError;      
         private TK selectedTK;
-        private string selectedRegion, afm, afmError, addressNo, address, companyName, tk;
+        private string afm, afmError, addressNo, address, companyName, tk;
         private string name, usermail, password, userphone, surname, mobilePhone, website, email, telephone, fax;
         private bool allChecked, imitationChecked, newChecked, usedChecked, rebuildChecked;
         private string compType;
@@ -26,10 +28,12 @@ namespace Antalaktiko.ViewModels
         public Command ClearSelectedPartsCommand { get; }
         public Command LoadFieldWithAFMCommand { get; }
         public Command RegisterCommand { get; }
-        public ObservableCollection<Brand> BrandItems { get; }
-        public ObservableCollection<Part> PartItems { get; }
-        public ObservableCollection<TK> TKItems { get; }
-        public List<int> PartType { get; }
+        public ObservableCollection<Brand> BrandItems { get; } = new ObservableCollection<Brand>();
+        public ObservableCollection<Part> PartItems { get; } = new ObservableCollection<Part>();
+        public ObservableCollection<TK> TKItems { get; } = new ObservableCollection<TK>();
+        public ObservableCollection<Country> CountryItems { get; } = new ObservableCollection<Country>();
+        public ObservableCollection<Models.Region> RegionItems { get; } = new ObservableCollection<Models.Region>();
+        public List<int> PartType { get; } = new List<int>();
         public RegisterViewModel()
         {
             GoBackCommand = new Command(OnGoBackClicked);
@@ -38,14 +42,9 @@ namespace Antalaktiko.ViewModels
             ClearSelectedBrandCommand = new Command(()=>CheckAllBrands(false));
             ClearSelectedPartsCommand = new Command(() => CheckAllParts(false));
             LoadFieldWithAFMCommand = new Command(async () => await ExecuteLoadFieldWithAFM());
-            RegisterCommand = new Command(ExecuteRegisterCommand);
-            BrandItems = new ObservableCollection<Brand>();
-            PartItems = new ObservableCollection<Part>();
-            TKItems = new ObservableCollection<TK>();
-            PartType = new List<int>();
+            RegisterCommand = new Command(Register);
         }
-
-        private async void ExecuteRegisterCommand(object obj)
+        private async void Register(object obj)
         {
             List<int> selectedbrands = new List<int>();
             List<int> selectedparts = new List<int>();
@@ -56,17 +55,39 @@ namespace Antalaktiko.ViewModels
             foreach (var partitem in PartItems)
                 if (partitem.IsChecked)
                     selectedparts.Add(partitem.Id);
-
-            var regitem = new 
+            try
             {
-                Afm, CompanyName, Website, Email, Telephone, MobilePhone,Fax,
-                Address,AddressNo,Tk=SelectedTK.Ονοματκ,SelectedRegion,
-                selectedbrands,selectedparts,PartType,CompanyType,
-                Name,Surname,Userphone,UserMail,Password
-            };
-            await userManger.Register(regitem);
+                var company = new CompanyInfo
+                {
+                    Cname = CompanyName,
+                    Website = Website,
+                    Company_Email = Email,
+                    Vat = Afm,
+                    Address = Address,
+                    Post_Code = SelectedTK.Ονοματκ,
+                    Region = SelectedRegion.Id.ToString(),
+                    Phone = Telephone,
+                    Mobile = MobilePhone,
+                    Country = Selected_Country.Name,
+                    Job_id = ""
+                };
+                var user = new UserInfo
+                {
+                    Email = UserMail,
+                    Password = Password,
+                    Mobile = Userphone,
+                    FName = Name,
+                    LName = Surname,
+                    Brands = selectedbrands,
+                    Parts = selectedparts,
+                    Condition = PartType,
+                    Terms_of_use = Terms_of_use ? "yes" : "no",
+                    Privacy_policy = Privacy_Policy ? "yes" : "no"
+                };
+               var result = await userManger.Register(user, company);
+            }
+            catch(Exception ex) { Debug.WriteLine(ex); }
         }
-
         private async Task ExecuteLoadFieldWithAFM()
         {
             IsBusy = true;
@@ -89,7 +110,6 @@ namespace Antalaktiko.ViewModels
                 IsBusy = false;
             }
         }
-
         private  void OnOpenPopUp(object obj)
         {
             //open pop up to select brands
@@ -153,6 +173,19 @@ namespace Antalaktiko.ViewModels
                 IsBusy = false;
             }
         }
+        private async Task LoadCountries()
+        {
+            try
+            {
+                CountryManager manager = new CountryManager();
+                var items = await manager.GetAll();
+                items.ForEach(Item =>
+                {
+                    CountryItems.Add(Item);
+                });
+            }
+            catch (Exception ex) { Debug.WriteLine(ex); }
+        }
         //company info
         public TK SelectedTK
         {
@@ -160,15 +193,27 @@ namespace Antalaktiko.ViewModels
             set 
             { 
                 SetProperty(ref selectedTK, value);
-                if (value != null)
-                    SelectedRegion = value.Περιοχή;
             } 
         }
-        public string SelectedRegion
+        private Models.Region selectedRegion;
+        public Models.Region SelectedRegion
         {
             get => selectedRegion;
-            set => SetProperty(ref selectedRegion, value);
+            set 
+            {
+                SetProperty(ref selectedRegion, value);
+                if (value == null) return;
+                SelectedRegionTitle = value.Title;
+            } 
         }
+        private string _SelectedRegionTitle = "Περιοχή";
+
+        public string SelectedRegionTitle
+        {
+            get { return _SelectedRegionTitle; }
+            set { SetProperty(ref _SelectedRegionTitle, value); }
+        }
+
         public bool IsAfmPopUpOpen
         {
             get => isAfmPopUpOpen;
@@ -207,20 +252,18 @@ namespace Antalaktiko.ViewModels
             get => allChecked;
             set 
             {
-                SetProperty(ref allChecked, value);
-                
                 if (value)
                     PartType.Add(0);
                 else
                     PartType.Remove(0);
             } 
         }
+        
         public bool ImitationChecked
         {
             get => imitationChecked;
             set 
             {
-                SetProperty(ref imitationChecked, value);
                 if (value)
                     PartType.Add(1);
                 else
@@ -328,51 +371,11 @@ namespace Antalaktiko.ViewModels
                 return;
             SelectedTK = TKItems.Where(x => x.Ονοματκ == value).FirstOrDefault();
         }
-        public string Website
-        {
-            get => website;
-            set
-            {
-                SetProperty(ref website, value);
-
-            }
-        }
-        public string Email
-        {
-            get => email;
-            set
-            {
-                SetProperty(ref email, value);
-
-            }
-        }
-        public string Telephone
-        {
-            get => telephone;
-            set
-            {
-                SetProperty(ref telephone, value);
-
-            }
-        }
-        public string Fax
-        {
-            get => fax;
-            set
-            {
-                SetProperty(ref fax, value);
-
-            }
-        }
-        public string MobilePhone
-        {
-            get => mobilePhone;
-            set
-            {
-                SetProperty(ref mobilePhone, value);
-
-            }
-        }
+        public string Website { get; set; }
+        public string Email { get; set; }
+        public string Telephone{get; set; }
+        public string Fax{get;set; }
+        public string MobilePhone { get; set; }
         public string CompanyType
         {
             get => compType;
@@ -393,59 +396,44 @@ namespace Antalaktiko.ViewModels
             foreach (var item in BrandItems)
                 item.IsChecked = value;
         }
-        
+        private Country country;
+        public Country Selected_Country 
+        { 
+            get=> country;
+            set
+            {
+                country = value;
+                LoadRegions(value);
+            } 
+        }
+        private void LoadRegions(Country value)
+        {
+            if (value == null) return;
+            try
+            {
+                RegionItems.Clear();
+                value.Regions.ForEach(region =>
+                {
+                    RegionItems.Add(region);
+                });
+            }
+            catch (Exception ex) { Debug.WriteLine(ex); }
+        }
         //user info
-        public string Name
-        {
-            get => name;
-            set
-            {
-                SetProperty(ref name, value);
-
-            }
-        }
-        public string Surname
-        {
-            get => surname;
-            set
-            {
-                SetProperty(ref surname, value);
-
-            }
-        }
-        public string Userphone
-        {
-            get => userphone;
-            set
-            {
-                SetProperty(ref userphone, value);
-
-            }
-        }
-        public string UserMail
-        {
-            get => usermail;
-            set
-            {
-                SetProperty(ref usermail, value);
-
-            }
-        }
-        public string Password
-        {
-            get => password;
-            set
-            {
-                SetProperty(ref password, value);
-
-            }
-        }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Userphone { get; set; }
+        public string UserMail { get; set; }
+        public string Password { get; set; }
+        public bool Terms_of_use { get; set; }
+        public bool Privacy_Policy { get; set; }
         public async void OnAppearing()
         {
             await Task.WhenAll
                 (ExecuteLoadBrandsCommand(),
                 ExecuteLoadPartsCommand(),
-                ExecuteLoadTKCommand()
+                ExecuteLoadTKCommand(),
+                LoadCountries()
                 );
             await Task.Delay(200);
             IsAfmPopUpOpen = true;

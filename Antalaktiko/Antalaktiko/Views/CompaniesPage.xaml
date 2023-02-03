@@ -66,10 +66,10 @@
                             <Frame x:DataType="model:Company" Padding="10"  CornerRadius="10">
                                 <StackLayout>
                                     <Label Text="{Binding Title}" FontSize="18" FontAttributes="Bold"/>
-                                    <Label Text="{Binding Info.Address1}"/>
+                                    <Label Text="{Binding Info.Address}"/>
                                     <Label Text="{Binding Info.Phone}"/>
                                     
-                                    <Label Text="{Binding Info.Company_Type}"/>
+                                    <Label Text="{Binding Info.Job_name}"/>
                                     <StackLayout.GestureRecognizers>
                                         <TapGestureRecognizer 
                                             NumberOfTapsRequired="1"

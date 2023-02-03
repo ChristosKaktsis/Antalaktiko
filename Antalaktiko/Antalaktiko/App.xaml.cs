@@ -70,12 +70,13 @@ namespace Antalaktiko
            
         }
 
-        public static async Task<User> GetUser(string username, string password)
+        public static async Task<User> GetUser(string email, string password)
         {
-            
-            var login = new { username, password };
+
+            var login = new { type ="login", email, password };
             UserManager userManager = new UserManager();
-            var user = await userManager.LogIn(login);
+            //var user = await userManager.LogIn(login);
+            var user = await userManager.Login(email, password);
             return user;
         }
        

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,75 +7,44 @@ namespace Antalaktiko.Models
 {
     public class CompanyInfo
     {
-        public string WebSite { get; set; }
+        [JsonProperty("cname")]
+        public string Cname { get; set; }
+        [JsonProperty("website")]
+        public string Website { get; set; }
+        [JsonProperty("cmail")]
         public string Company_Email { get; set; }
+        [JsonProperty("vat")]
         public string Vat { get; set; }
-        public string Parts_String { get; set; }
-        public string Address1 { get; set; }
+        [JsonProperty("country")]
+        public string Country { get; set; }
+        [JsonProperty("address")]
+        public string Address { get; set; }
+        [JsonProperty("pc")]
         public string Post_Code { get; set; }
+        [JsonProperty("phone")]
         public string Phone { get; set; }
+        [JsonProperty("mobile")]
         public string Mobile { get; set; }
+        [JsonProperty("sstart")]
         public string Subscription_Started { get; set; }
+        [JsonProperty("send")]
         public string Subscription_Ends { get; set; }
-        public string Item_Condition { get; set; }
-        public string Brands_String { get; set; }
-        public string Company_Job { get; set; }
-        public string Accepted { get; set; }
-        public string Active { get; set; }
+        [JsonProperty("seller")]
         public string Seller { get; set; }
-        public string Location { get; set; }
-        public string Company_Type 
-        {
-            get
-            {
-                string type = string.Empty;
-                switch (Company_Job)
-                {
-                    case "1":
-                        type = "ΑΝΤΑΛΛΑΚΤΙΚΑ ΑΥΤΟΚΙΝΗΤΩΝ";
-                        break;
-                    case "2":
-                        type = "ΑΝΤΑΛΛΑΚΤΙΚΑ AFTERMARKET";
-                        break;
-                    case "3":
-                        type = "ΑΝΤΑΛΛΑΚΤΙΚΑ ΙΜΙΤΑΣΙΟΝ";
-                        break;
-                    case "4":
-                        type = "ΑΝΤΑΛΛΑΚΤΙΚΑ ΜΕΤΑΧΕΙΡΣΜΕΝΑ";
-                        break;
-                    case "5":
-                        type = "ΑΝΤΙΠΡΟΣΩΠΕΙΑ";
-                        break;
-                    case "6":
-                        type = "ΑΣΦΑΛΙΣΤΙΚΗ ΕΤΑΙΡΙΑ";
-                        break;
-                    case "7":
-                        type = "ΒΑΦΕΙΟ";
-                        break;
-                    case "8":
-                        type = "ΕΤΑΙΡΙΑ ΕΝΟΙΚΙΑΣΕΩΝ";
-                        break;
-                    case "9":
-                        type = "ΗΛΕΚΤΡΟΛΟΓΕΙΟ-ΔΙΑΓΝΩΣΤΙΚΟ ΚΕΝΤΡΟ";
-                        break;
-                    case "10":
-                        type = "ΚΑΘΕΤΗ ΜΟΝΑΔΑ";
-                        break;
-                    case "11":
-                        type = "ΜΙΖΕΣ-ΔΥΝΑΜΟ";
-                        break;
-                    case "12":
-                        type = "ΣΥΝΕΡΓΕΙΟ ΑΥΤΟΚΙΝΗΤΩΝ";
-                        break;
-                    case "13":
-                        type = "ΦΑΝΟΠΟΙΕΙΟ";
-                        break;
-                    case "14":
-                        type = "ΨΥΓΕΙΑ ΑΥΤΟΚΙΝΗΤΩΝ";
-                        break;
-                }
-                return type;
-            } 
-        }
+        [JsonProperty("cjob")]
+        public string Job_id { get; set; }
+        [JsonProperty("cjobn")]
+        public string Job_name { get; set; }
+        [JsonProperty("region")]
+        public string Region { get; set; }
+        [JsonProperty("region_name")]
+        public string Region_name { get; set; }
+        [JsonProperty("accepted")]
+        public string Accepted { get; set; }
+        [JsonProperty("active")]
+        public string Active { get; set; }
+        [JsonProperty("users")]
+        public List<string> Users { get; set; }
+      
     }
 }

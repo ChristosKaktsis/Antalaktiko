@@ -71,12 +71,12 @@ namespace Antalaktiko.ViewModels
             Comp_Title = item.Title;
             if (item.Info == null)
                 return;
-            Website = item.Info.WebSite;
+            Website = item.Info.Website;
             Comp_Email = item.Info.Company_Email;
-            Address = item.Info.Address1;
+            Address = item.Info.Address;
             Phone = item.Info.Phone;
             Mobile = item.Info.Mobile;
-            Job = item.Info.Company_Type;
+            Job = item.Info.Job_name;
         }
         public void PlacePhoneCall(string number)
         {

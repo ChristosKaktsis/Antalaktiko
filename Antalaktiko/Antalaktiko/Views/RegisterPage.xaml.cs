@@ -34,6 +34,10 @@ namespace Antalaktiko.Views
         {
             PartsCollectionView.FilterString = "Contains([Title], '" + SearchPartText.Text + "')";
         }
+        private void SearchRegionText_TextChanged(object sender, EventArgs e)
+        {
+            RegionCollection.FilterString = "Contains([Title], '" + SearchRegionText.Text + "')";
+        }
 
         private void OpenAfmPopup_Clicked(object sender, EventArgs e)
         {
@@ -43,6 +47,21 @@ namespace Antalaktiko.Views
         private void CloseAfmPopUp_Clicked(object sender, EventArgs e)
         {
             afmpopup.IsOpen = false;
+        }
+
+        private async void Privacy_Button_Clicked(object sender, EventArgs e)
+        {
+            await Shell.Current.Navigation.PushAsync(new ContactPage("https://www.antalaktiko.gr/privacy-policy/"));
+        }
+
+        private async void Terms_Button_Clicked(object sender, EventArgs e)
+        {
+            await Shell.Current.Navigation.PushAsync(new ContactPage("https://www.antalaktiko.gr/terms_of_use/"));
+        }
+
+        private void Region_Popup_Clicked(object sender, EventArgs e)
+        {
+            RegionPopUp.IsOpen = !RegionPopUp.IsOpen;
         }
     }
 }

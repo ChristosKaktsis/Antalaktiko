@@ -26,11 +26,5 @@ namespace Antalaktiko.Views
             _viewModel.OnAppearing();
         }
 
-        private void SwipeItem_Invoked(object sender, EventArgs e)
-        {
-            var item = sender as SwipeItem;
-
-            _viewModel.AnswerCommand.Execute(item.BindingContext);
-        }
     }
 }

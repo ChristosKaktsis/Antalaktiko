@@ -12,14 +12,14 @@ namespace Antalaktiko.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class ContactPage : ContentPage
 	{
-		public ContactPage ()
+		public ContactPage (string url)
 		{
 			InitializeComponent ();
             WebView webView = new WebView
             {
                 Source = new UrlWebViewSource
                 {
-                    Url = "https://www.antalaktiko.gr/%ce%b5%cf%80%ce%b9%ce%ba%ce%bf%ce%b9%ce%bd%cf%89%ce%bd%ce%af%ce%b1/",
+                    Url = url,
                 },
                 VerticalOptions = LayoutOptions.FillAndExpand
             };

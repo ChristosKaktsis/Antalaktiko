@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors" xmlns:Model="clr-namespace:Antalaktiko.Models" xmlns:vm="clr-namespace:Antalaktiko.ViewModels"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors" 
+             xmlns:Model="clr-namespace:Antalaktiko.Models" 
+             xmlns:vm="clr-namespace:Antalaktiko.ViewModels" xmlns:dxp="http://schemas.devexpress.com/xamarin/2014/forms/popup"
              x:Class="Antalaktiko.Views.AnswerPage"
              Shell.TabBarIsVisible="False"
              Title="Στοιχεία αγγελίας">
@@ -10,12 +13,31 @@
             <Style TargetType="Label">
                 <Setter Property="FontSize" Value="16"/>
             </Style>
-            
+            <DataTemplate x:Key="image_template">
+                <Grid>
+                    <Image Source="{Binding Full}"/>
+                    <Button x:Name="open_popup" 
+                            Style="{StaticResource trans_button}"
+                            Clicked="open_popup_Clicked"/>
+                </Grid>
+            </DataTemplate>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentView x:DataType="vm:AnswerViewModel">
         <ScrollView>
             <Grid x:Name="maingrid">
+                <dxp:DXPopup x:Name="image_popup"
+                         AllowScrim="True"
+                         ScrimColor="{StaticResource BackGroundDarkTranc}">
+                    <Grid x:DataType="Model:Image" HeightRequest="500" WidthRequest="500">
+                        <Frame Padding="5">
+                            <Image Source="{Binding Full}"/>
+                        </Frame>
+                        <Button x:Name="close_popup" Text="X" TextColor="Gray" Style="{StaticResource trans_button}"
+                                    HorizontalOptions="End" VerticalOptions="Start"
+                                    Clicked="close_popup_Clicked"/>
+                    </Grid>
+                </dxp:DXPopup>
                 <FlexLayout x:Name="MainFlexLayout" Direction="Column">
                     <Frame Padding="10" Margin="5" CornerRadius="5">
                         <StackLayout>
@@ -23,6 +45,13 @@
                             <Label Text="{Binding Description,Mode=OneWay}" />
                         </StackLayout>
                     </Frame>
+                    <StackLayout>
+                        <CarouselView x:Name="carousel_view" 
+                                      ItemsSource="{Binding ImageList}"
+                                      ItemTemplate="{StaticResource image_template}"
+                                      Loop="False"
+                                  HeightRequest="200"/>
+                    </StackLayout>
                     <Frame Padding="0" Margin="5" CornerRadius="5">
                         <StackLayout >
                             <!--<Label Text="{Binding TitleInfo,Mode=OneWay}" FontSize="26" FontAttributes="Bold"/>-->

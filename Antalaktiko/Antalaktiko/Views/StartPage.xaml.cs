@@ -28,7 +28,7 @@ namespace Antalaktiko.Views
         private void OpenPopUp_Clicked(object sender, EventArgs e)
         {
             filterpopup.IsOpen = true;
-            
+            _viewModel.LoadBrandItemsCommand.Execute(null);
             _viewModel.LoadPartItemsCommand.Execute(null);
         }
 
@@ -57,12 +57,6 @@ namespace Antalaktiko.Views
                 return;
             
         }
-
-        private void SwipeItem_Invoked(object sender, EventArgs e)
-        {
-            var item = sender as SwipeItem;
-             
-            _viewModel.AnswerCommand.Execute(item.BindingContext);
-        }
+      
     }
 }

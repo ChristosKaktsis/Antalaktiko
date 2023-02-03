@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:editors="http://schemas.devexpress.com/xamarin/2014/forms/editors" 
              xmlns:vm="clr-namespace:Antalaktiko.ViewModels" 
-             xmlns:dxp="http://schemas.devexpress.com/xamarin/2014/forms/popup" xmlns:dxcv="http://schemas.devexpress.com/xamarin/2014/forms/collectionview" xmlns:model="clr-namespace:Antalaktiko.Models"
+             xmlns:dxp="http://schemas.devexpress.com/xamarin/2014/forms/popup" 
+             xmlns:dxcv="http://schemas.devexpress.com/xamarin/2014/forms/collectionview" 
+             xmlns:model="clr-namespace:Antalaktiko.Models"
              x:Class="Antalaktiko.Views.NewAdPage"
              Shell.TabBarIsVisible="False"
              Title="Καταχώρηση Αγγελίας">
@@ -98,7 +100,7 @@
                 <editors:Chip Text="4"/>
                 <editors:Chip Text="5"/>
             </editors:ChoiceChipGroup>
-            <editors:ComboBoxEdit   LabelText="Τύπος Καυσίμου" SelectedItem="{Binding SelectedFuel}">
+            <editors:ComboBoxEdit   LabelText="Τύπος Καυσίμου" SelectedItem="{Binding SelectedFuel,Mode=OneWayToSource}">
                 <editors:ComboBoxEdit.ItemsSource>
                     <x:Array Type="{x:Type x:String}">
                         <x:String>Βενζίνη</x:String>
@@ -111,22 +113,26 @@
             </editors:ComboBoxEdit>
             <editors:ComboBoxEdit LabelText="Κατηγoρία ανταλλακτικού" 
                                   ItemsSource="{Binding PartItems}" 
-                                  SelectedItem="{Binding SelectedPart}"
+                                  SelectedItem="{Binding SelectedPart,Mode=OneWayToSource}"
                                   DisplayMember="Title"/>
             <Label  Text="Κατάσταση ανταλλακτικού:" FontSize="18" Margin="10,10,10,0"/>
-            <editors:ChoiceChipGroup 
+            <!--<editors:Chip Text="Καινούριο" IsSelected="True"/>
+            <editors:Chip Text="Μεταχειρισμένο"/>
+            <editors:Chip Text="Ιμιτασιόν"/>
+            <editors:Chip Text="Ανακατασκευασμένο"/>-->
+            <editors:FilterChipGroup 
                      BackgroundColor="Transparent" 
-                     SelectedIndex="{Binding SelectedPartType}"
+                     SelectedIndexes="{Binding SelectedPartType,Mode=OneWayToSource}"
                      IsMultiline="True">
-                <editors:Chip Text="Καινούριο"/>
-                <editors:Chip Text="Μεταχειρισμένο"/>
+                <editors:Chip Text="Καινούριο" />
+                <editors:Chip Text="Μεταχειρισμένο" />
                 <editors:Chip Text="Ιμιτασιόν"/>
                 <editors:Chip Text="Ανακατασκευασμένο"/>
-            </editors:ChoiceChipGroup>
-            <editors:TextEdit  LabelText="Κωδικός Ανταλλακτικού:"  Text="{Binding PartCode}"/>
-            <editors:TextEdit  LabelText="Κωδικός Μηχανής:" Text="{Binding BikeCode}"/>
-            <editors:TextEdit  LabelText="Αριθμός Πλαισίου" Text="{Binding SpaceNumber}"/>
-            <editors:MultilineEdit  LabelText="Περιγραφή" HeightRequest="150" Text="{Binding Description}"/>
+            </editors:FilterChipGroup>
+            <editors:TextEdit  LabelText="Κωδικός Ανταλλακτικού:"  Text="{Binding PartCode,Mode=OneWayToSource}"/>
+            <editors:TextEdit  LabelText="Κωδικός Μηχανής:" Text="{Binding EngineCode,Mode=OneWayToSource}"/>
+            <editors:TextEdit  LabelText="Αριθμός Πλαισίου" Text="{Binding SpaceNumber,Mode=OneWayToSource}"/>
+            <editors:MultilineEdit  LabelText="Περιγραφή" HeightRequest="150" Text="{Binding Description,Mode=OneWayToSource}"/>
             <StackLayout Orientation="Horizontal" >
                 <Button x:Name="RemovePhotoButton" Text="Delete" Clicked="Button_Clicked_1"  CornerRadius="10" />
                 <Button x:Name="PickPhotoButton"  ImageSource="gallery" Text="pick photo" Clicked="PickPhotoButton_Clicked" CornerRadius="10" HorizontalOptions="EndAndExpand"/>

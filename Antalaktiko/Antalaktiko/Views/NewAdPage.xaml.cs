@@ -59,19 +59,7 @@ namespace Antalaktiko.Views
             ModelsCollectionView.FilterString = "Contains([Name], '" + SearchTextModels.Text + "')";
         }
 
-        private async void PickPhotoButton_Clicked(object sender, EventArgs e)
-        {
-            
-            (sender as Button).IsEnabled = false;
-
-            Stream stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
-            if (stream != null)
-            {
-                var imageSource = ImageSource.FromStream(() => stream);
-                AddImageToLayout(imageSource);
-            }
-            (sender as Button).IsEnabled = true;
-        }
+       
         //Stopwatch stopwatch = new Stopwatch();
         
 
@@ -129,7 +117,21 @@ namespace Antalaktiko.Views
             if (!gridForRemove.Any())
                 RemovePhotoButton.IsVisible = false;
         }
+        private async void PickPhotoButton_Clicked(object sender, EventArgs e)
+        {
 
+            // (sender as Button).IsEnabled = false;
+
+            // Stream stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
+            // if (stream != null)
+            // {
+            //     var imageSource = ImageSource.FromStream(() => stream);
+            //     AddImageToLayout(imageSource);
+            // }
+            //(sender as Button).IsEnabled = true;
+            await _viewModel.PickPhotoAsync();
+            AddImageToLayout(_viewModel.ImageSource);
+        }
         private async void TakePhotoButton_Clicked(object sender, EventArgs e)
         {
             await _viewModel.TakePhotoAsync();
